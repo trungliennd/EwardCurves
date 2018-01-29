@@ -173,7 +173,7 @@ namespace Cryptography {
     class EllipticCurve {
         public:
             ZZ P;
-            typedef FiniteFieldElement ffe_t;
+            0;
         class Point {
             public:
             ZZ P;
