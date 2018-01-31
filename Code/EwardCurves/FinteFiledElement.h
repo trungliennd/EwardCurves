@@ -3,6 +3,9 @@
 #include <gmp.h>
 #include <cstdlib>
 
+mpz_t ZERO
+mpzt_init(ZERO);
+
 namespace Cryptography {
 
     class FiniteFieldElement {
@@ -29,6 +32,16 @@ namespace Cryptography {
             }
             mpz_mod(this->i_, this->i_, P);
 
+        }
+
+        void init() {
+            mpz_init(this->i_);
+            mpz_init(this->P);
+        }
+
+        void init(mpz_t i, mpz_t p) {
+            mpz_set(this->P, p);
+            assign(i);
         }
 
         // Contructor no parameters
@@ -134,7 +147,7 @@ namespace Cryptography {
             if(mpz_cmp(ffe1.P, ffe2.P) == 0) {
                 mpz_t rs;
                 mpz_init(rs);
-                mpz_sub(rs, ffe1, ffe2);
+                mpz_sub(rs, ffe1.i_, ffe2.i_);
                 mpz_set(this->P, ffe1.P);
                 assign(rs);
             }else {
@@ -183,8 +196,61 @@ namespace Cryptography {
             mpz_t P;
             typedef FiniteFieldElement ffe_t;
         class Point {
+            public:
+                mpz_t P;
+                friend class EdwardsCurve;
+                typedef FiniteFieldElement ffe_t;
+                ffe_t x_;  // coordinates x
+                ffe_t y_;  // coordinates y
+                EdwardsCurve *ec;
+                // constructor point
+                Point(): x_(), y_(), ec(0) {
+                    mpz_init(P);
+                }
+
+                Point(mpz_t x, mpz_t y, mpz_t s): x_(x, s), y_(y, s), ec(0) {
+                    mpz_init(P);
+                    mpz_set(P, s);
+                }
+
+                Point(const ffe_t& x, const ffe_t& y): x_(x), y_(y), ec(0) {
+                    mpz_init(P);
+                    mpz_set(this->P, x.P);
+                    }
+
+                Point(mpz_t x, mpz_t y, EdwardsCurve& ec) {
+                    mpz_t rs;
+                    mpz_init(rs);
+                    ec.Degree(rs);
+                    x_.init(x, rs);
+                    y_.init(y, rs);
+                    this->ec = &ec;
+                }
+
+                Point(const ffe_t& x,const ffe_t& y,EdwardsCurve& ec): x_(x), y_(y), ec(&ec) {
+                    mpz_set(this->P, x.P);
+                }
+
+                Point(const Point& e) {
+                    x_.assignFiniteFieldElement(e.x_);
+                    y_.assignFiniteFieldElement(e.y_);
+                    mpz_set(this->P, e.P);
+                    ec = e.ec;
+                }
+
+
+                // operation add (x1, y1) + (x2, y2) on Edwards Curve
+                void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
+
+                }
 
         };
+
+        void Degree(mpz_t rs) {
+            mpz_set(rs, this->P);
+        }
+
+
     };
 
 }
