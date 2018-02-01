@@ -3,9 +3,6 @@
 #include <gmp.h>
 #include <cstdlib>
 
-mpz_t ZERO
-mpzt_init(ZERO);
-
 namespace Cryptography {
 
     class FiniteFieldElement {
@@ -240,11 +237,28 @@ namespace Cryptography {
 
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
+
                 void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
 
                 }
 
         };
+
+        // Edwards Curves thuc hien
+        typedef EdwardsCurve this_t;
+        typedef class EdwardsCurve::Point point_t;
+
+        // return a
+        FiniteFieldElement a() const {
+            return a_;
+        }
+
+        private:
+            FiniteFieldElement a_; // tham so a cua duong cong
+            FiniteFieldElement d_; // tham so d cuar duong cong
+            typedef vector<Point> table_t;
+            table_t m_table_t;     // chua cac diem cua duong cong
+            bool table_filled;      // neu bang da tinh
 
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
