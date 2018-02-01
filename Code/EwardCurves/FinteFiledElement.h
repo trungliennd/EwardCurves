@@ -6,9 +6,7 @@
 namespace Cryptography {
 
     class FiniteFieldElement {
-        public:
-            :
 
-    }
+    };
 
 }

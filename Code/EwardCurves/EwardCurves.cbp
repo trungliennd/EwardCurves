@@ -30,6 +30,7 @@
 		</Compiler>
 		<Unit filename="EwardCurves.cpp" />
 		<Unit filename="EwardCurves.h" />
+		<Unit filename="FinteFiledElement.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
