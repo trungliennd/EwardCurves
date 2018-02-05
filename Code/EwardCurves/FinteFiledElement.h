@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <cstdlib>
-
+using namespace std;
 namespace Cryptography {
 
     class FiniteFieldElement {
+
         public:
             mpz_t P;
             mpz_t i_;
@@ -79,6 +80,10 @@ namespace Cryptography {
         void negative() {
             mpz_neg(i_,i_);
             assign(i_);
+        }
+
+        void negative(mpz_t i){
+            mpz_neg(i,i_);
         }
 
         void assignFiniteFieldElement(const FiniteFieldElement& ffe) {
@@ -213,7 +218,7 @@ namespace Cryptography {
                 Point(const ffe_t& x, const ffe_t& y): x_(x), y_(y), ec(0) {
                     mpz_init(P);
                     mpz_set(this->P, x.P);
-                    }
+                }
 
                 Point(mpz_t x, mpz_t y, EdwardsCurve& ec) {
                     mpz_t rs;
@@ -239,6 +244,35 @@ namespace Cryptography {
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
 
                 void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
+                    mpz_t ZERO,ONE;
+                    mpz_init(ZERO);
+                    mpz_init(ONE);
+                    mpz_set_str(ONE,"1",10);
+                    // (0, 1) + (x2, y2)
+                    if(x1.compareEqual(ZERO) && y1.compareEqual(ONE)) {
+                        xR.assignFiniteFieldElement(x2);
+                        yR.assignFiniteFieldElement(y2);
+                        return;
+                    }
+                    // (x1, y1) + (0, 1)
+                    if(x2.comparEqual(ZERO) && y2.compareEqual(ONE)) {
+                        xR.assignFiniteFieldElement(x1);
+                        yR.assignFiniteFieldElement(y1);
+                        return;
+                    }
+
+                    // (x1, y1) + (x1, -y1) hay P + (-P) = (0, 1)
+                    mpz_t neg;
+                    mpz_init(neg);
+                    x2.negative(neg);
+                    if(x1.compareEqual(neg) && y1.compareEqual(y2)){
+                        mpz_init(xR);
+                        mpz_init(yR);
+                        return;
+                    }
+
+                    // add (x1, y1) + (x2, y2) = (x3, y3)
+
 
                 }
 
@@ -253,6 +287,10 @@ namespace Cryptography {
             return a_;
         }
 
+        FiniteFieldElement b() const {
+            return b_;
+        }
+
         private:
             FiniteFieldElement a_; // tham so a cua duong cong
             FiniteFieldElement d_; // tham so d cuar duong cong
@@ -263,7 +301,6 @@ namespace Cryptography {
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
         }
-
 
     };
 
