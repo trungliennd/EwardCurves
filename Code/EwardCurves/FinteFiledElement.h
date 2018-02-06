@@ -3,6 +3,7 @@
 #include <gmp.h>
 #include <cstdlib>
 using namespace std;
+
 namespace Cryptography {
 
     class FiniteFieldElement {
@@ -64,6 +65,11 @@ namespace Cryptography {
             mpz_set(this->i_, ffe1.i_);
         }
 
+        ~FiniteFieldElement() {
+            mpz_clear(this->i_);
+            mpz_clear(this->P);
+        }
+
         // return i_, P
         void i(mpz_t rs) {
             mpz_set(rs, i_);
@@ -111,7 +117,7 @@ namespace Cryptography {
             return false;
         }
 
-        bool compareEqual(mpz_t i) {
+        bool compareEqual(mpz_t& i) {
             if(mpz_cmp(this->i_, i) == 0) {
                 return true;
             }
@@ -158,7 +164,15 @@ namespace Cryptography {
             }
         }
 
-        void addFiniteFieldElement(const FiniteFieldElement& ffe1, mpz_t i) {
+        void subFiniteFieldElement(mpz_t& a, const FiniteFieldElement& ffe) {
+            mpz_t rs;
+            mpz_init(rs);
+            mpz_sub(rs, a, ffe.i_);
+            mpz_set(this->P, ffe.P);
+            assign(rs);
+        }
+
+        void addFiniteFieldElement(const FiniteFieldElement& ffe1, mpz_t& i) {
             mpz_t rs;
             mpz_init(rs);
             mpz_add(rs, ffe1.i_, i);
@@ -166,7 +180,7 @@ namespace Cryptography {
             assign(rs);
         }
 
-        void mulFiniteFieldElement(const FiniteFieldElement& ffe1, mpz_t i) {
+        void mulFiniteFieldElement(const FiniteFieldElement& ffe1, mpz_t& i) {
             mpz_t rs;
             mpz_init(rs);
             mpz_mul(rs, ffe1.i_, i);
@@ -242,7 +256,8 @@ namespace Cryptography {
 
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
-
+                // a*x^2 + y^2 = 1 + dx^2y^2
+                // is compelete if a is a square in k and d is a nonsquare in k
                 void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
                     mpz_t ZERO,ONE;
                     mpz_init(ZERO);
@@ -255,7 +270,7 @@ namespace Cryptography {
                         return;
                     }
                     // (x1, y1) + (0, 1)
-                    if(x2.comparEqual(ZERO) && y2.compareEqual(ONE)) {
+                    if(x2.compareEqual(ZERO) && y2.compareEqual(ONE)) {
                         xR.assignFiniteFieldElement(x1);
                         yR.assignFiniteFieldElement(y1);
                         return;
@@ -266,13 +281,73 @@ namespace Cryptography {
                     mpz_init(neg);
                     x2.negative(neg);
                     if(x1.compareEqual(neg) && y1.compareEqual(y2)){
-                        mpz_init(xR);
-                        mpz_init(yR);
+                        xR.init(ZERO,this->P);
+                        yR.init(ONE,this->P);
                         return;
                     }
 
                     // add (x1, y1) + (x2, y2) = (x3, y3)
+                    // x3 = (x1*y2 + y1*x2)/(1 + d*x1*x2*y1*y2)
+                    // (x1*y2 + y1*x2)
+                    ffe_t x3_temp,x3_temp1,x3_temp2,x3_temp3,x3_temp4;
+                    x3_temp.mulFiniteFieldElement(x1,y2); // x1*y2
+                    x3_temp1.mulFiniteFieldElement(y1,x2); // y1*x2
+                    x3_temp2.addFiniteFieldElement(x3_temp, x3_temp1); // x1*y2 + y1*x2
+                    x3_temp3.mulFiniteFieldElement(x3_temp,x3_temp1); // x1*x2*y1*y2
+                    x3_temp3.mulFiniteFieldElement(x3_temp3,ec->d()); //x1*x2*y1*y2*d
+                    x3_temp4.addFiniteFieldElement(x3_temp3, ONE); //x1*x2*y1*y2*d + 1
 
+                    xR.divFiniteFieldElement(x3_temp2, x3_temp4);
+
+                    // y3 = (y1*y2 - a*x1*x2)/(1 - d*x1*x2*y1*y2)
+                    ffe_t y3_temp,y3_temp1,y3_temp2,y3_temp3;
+                    y3_temp.mulFiniteFieldElement(y1,y2); // y1*y2
+                    y3_temp1.mulFiniteFieldElement(x1,x2); // x1*x2;
+                    y3_temp1.mulFiniteFieldElement(y3_temp1, ec->a()); // a*x1*x2;
+                    y3_temp2.subFiniteFieldElement(y3_temp, y3_temp1); // y1*y2 - a*x1*x2;
+                    y3_temp3.subFiniteFieldElement(ONE, x3_temp3); // 1 - d*x1*x2*y1*y2;
+                    yR.divFiniteFieldElement(y3_temp2, y3_temp3);
+                }
+
+                void Doubling(ffe_t x, ffe_t y, ffe_t xR, ffe_t yR) {
+
+                    mpz_t ZERO,ONE,TWO;
+                    mpz_init(ZERO);
+                    mpz_init(ONE);
+                    mpz_init(TWO);
+                    mpz_set_str(ONE, "1", 10);
+                    mpz_set_str(TWO, "2", 10);
+                    // (0, 1)*(0, 1)
+                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
+                        xR.init(ZERO,this->P);
+                        yR.init(ONE,this->P);
+                        return;
+                    }
+
+                    // formula 2[P] x = 2*x1*y1/(a*x1^2 + y1^2);
+                    ffe_t x3_temp,x3_temp1,x3_temp2,x3_temp3,y3_temp,y3_temp2;
+                    x3_temp.mulFiniteFieldElement(x, y); // x*y
+                    x3_temp.mulFiniteFieldElement(x3_temp, TWO); // 2*x*y
+                    x3_temp1.mulFiniteFieldElement(x, x);  // x^2
+                    x3_temp1.mulFiniteFieldElement(x3_temp1, ec->a()); // a*x^2;
+                    x3_temp2.mulFiniteFieldElement(y, y); // y^2
+                    x3_temp3.addFiniteFieldElement(x3_temp1, x3_temp2); // a*x^2 + y^2;
+                    xR.divFiniteFieldElement(x3_temp, x3_temp3);
+
+                    // formula 2[P] y = (y^2 - a*x^2)/(2 - a*x^2 - y^2)
+                    y3_temp.subFiniteFieldElement(x3_temp2, x3_temp1);  // (y^2 - a*x^2)
+                    y3_temp2.addFiniteFieldElement(x3_temp1, x3_temp2); // (a*x^2 + y^2)
+                    y3_temp2.subFiniteFieldElement(TWO, y3_temp2); // (2 - a*x^2 + y^2);
+                    yR.divFiniteFieldElement(y3_temp, y3_temp2);
+
+                }
+
+
+                // (X^2 + aY2)Z^2 = Z^4 + dX^2Y^2.
+                // projective coordinates
+                void addProjectCoordinates(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
+
+                    ffe_t A,B,C,D,E,F,G;
 
                 }
 
@@ -287,8 +362,8 @@ namespace Cryptography {
             return a_;
         }
 
-        FiniteFieldElement b() const {
-            return b_;
+        FiniteFieldElement d() const {
+            return d_;
         }
 
         private:
