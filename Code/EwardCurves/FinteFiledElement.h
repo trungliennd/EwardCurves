@@ -309,7 +309,7 @@ namespace Cryptography {
                     yR.divFiniteFieldElement(y3_temp2, y3_temp3);
                 }
 
-                void Doubling(ffe_t x, ffe_t y, ffe_t xR, ffe_t yR) {
+                void doubling(ffe_t x, ffe_t y, ffe_t xR, ffe_t yR) {
 
                     mpz_t ZERO,ONE,TWO;
                     mpz_init(ZERO);
@@ -361,6 +361,8 @@ namespace Cryptography {
                     mpz_init(temp);
                     mpz_init(temp1);
 
+
+
                     mpz_mul(A, x1.P, x2.P); // A = Z1 * Z2
                     mpz_mul(B, (ec->d()).i_, A); // d*A
                     mpz_mul(B, B, A); // B = d*A^2
@@ -370,6 +372,7 @@ namespace Cryptography {
                     mpz_mul(E, E, D); // E = dC*D;
                     mpz_sub(F, B, E); // F = B - E;
                     mpz_add(G, B, E); // G = B + E;
+
                     // X3 = A * F *((X1 + Y1)*(X2 + Y2) - C - D)
                     mpz_add(temp, X1.i_, Y1.i_);
                     mpz_add(temp1, X2.i_, Y2.i_);
@@ -378,13 +381,52 @@ namespace Cryptography {
                     mpz_sub(temp, temp, D);
                     mpz_mul(temp, temp, F);
                     mpz_mul(X3, temp, A);
-                    // Y3 = A * G * (D - a*C)
 
+                    // Y3 = A * G * (D - a*C)
                     mpz_mul(temp, (ec->a()).i_, C);
                     mpz_sub(temp, D, temp);
                     mpz_mul(temp, temp, G);
+                    mpz_mul(Y3, temp, A);
 
+                    // Z3 = F*G
+                    mpz_mul(Z3, F, G);
 
+                }
+
+                void doublingaProjectCoordinates(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
+
+                    mpz_t B,C,D,E,F,H,J,X3,Y3,Z3,temp,TWO;
+                    mpz_init(B);
+                    mpz_init(C);
+                    mpz_init(D);
+                    mpz_init(E);
+                    mpz_init(F);
+                    mpz_init(H);
+                    mpz_init(J);
+                    mpz_init(X3);
+                    mpz_init(Y3);
+                    mpz_init(Z3);
+                    mpz_init(temp);
+                    mpz_init(TWO);
+                    mpz_set_str(TWO, "2", 10);
+
+                    mpz_add(B, x1.i_, y1.i_);
+                    mpz_mul(B, B, B); // (X1 + Y1)^2
+                    mpz_mul(C, x1.i_, x1.i_); // X1^2
+                    mpz_mul(D, y1.i_, y1.i_); // Y1^2
+                    mpz_mul(E, (ec->a()).i_, D) //aC
+                    mpz_add(F, E, D); // F = E + D
+                    mpz_mul(H, x1.P, x1.P); // H = Z1^2
+                    mpz_mul(temp, TWO, H);
+                    mpz_sub(J, F ,temp); // J = F - 2*H
+                    mpz_add(temp, C, D);
+                    mpz_sub(temp , B, temp);
+                    mpz_mul(X3, temp, J); // X3 = (B - C - D)*J
+
+                    mpz_sub(temp, E - D);
+                    mpz_mul(Y3, temp, F); // Y3 = F*(E - D);
+
+                    mpz_mul(Z3, F, J); // Z3 = F * J
 
                 }
 
