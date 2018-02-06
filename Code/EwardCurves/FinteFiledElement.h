@@ -347,7 +347,44 @@ namespace Cryptography {
                 // projective coordinates
                 void addProjectCoordinates(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
 
-                    ffe_t A,B,C,D,E,F,G;
+                    mpz_t A,B,C,D,E,F,G,X3,Y3,Z3,temp,temp1;
+                    mpz_init(A);
+                    mpz_init(B);
+                    mpz_init(C);
+                    mpz_init(D);
+                    mpz_init(E);
+                    mpz_init(F);
+                    mpz_init(G);
+                    mpz_init(X3);
+                    mpz_init(Y3);
+                    mpz_init(Z3);
+                    mpz_init(temp);
+                    mpz_init(temp1);
+
+                    mpz_mul(A, x1.P, x2.P); // A = Z1 * Z2
+                    mpz_mul(B, (ec->d()).i_, A); // d*A
+                    mpz_mul(B, B, A); // B = d*A^2
+                    mpz_mul(C, x1.i_, x2.i_); // C = X1* X2
+                    mpz_mul(D, y1.i_, y2.i_); // D = y1 * Y2
+                    mpz_mul(E, (ec->d()).i_, C);
+                    mpz_mul(E, E, D); // E = dC*D;
+                    mpz_sub(F, B, E); // F = B - E;
+                    mpz_add(G, B, E); // G = B + E;
+                    // X3 = A * F *((X1 + Y1)*(X2 + Y2) - C - D)
+                    mpz_add(temp, X1.i_, Y1.i_);
+                    mpz_add(temp1, X2.i_, Y2.i_);
+                    mpz_mul(temp, temp, temp1);
+                    mpz_sub(temp, temp, C);
+                    mpz_sub(temp, temp, D);
+                    mpz_mul(temp, temp, F);
+                    mpz_mul(X3, temp, A);
+                    // Y3 = A * G * (D - a*C)
+
+                    mpz_mul(temp, (ec->a()).i_, C);
+                    mpz_sub(temp, D, temp);
+                    mpz_mul(temp, temp, G);
+
+
 
                 }
 
