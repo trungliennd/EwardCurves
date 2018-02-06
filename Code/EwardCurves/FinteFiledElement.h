@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <cstdlib>
+
 using namespace std;
 
 namespace Cryptography {
@@ -374,8 +375,8 @@ namespace Cryptography {
                     mpz_add(G, B, E); // G = B + E;
 
                     // X3 = A * F *((X1 + Y1)*(X2 + Y2) - C - D)
-                    mpz_add(temp, X1.i_, Y1.i_);
-                    mpz_add(temp1, X2.i_, Y2.i_);
+                    mpz_add(temp, x1.i_, y1.i_);
+                    mpz_add(temp1, x2.i_, x2.i_);
                     mpz_mul(temp, temp, temp1);
                     mpz_sub(temp, temp, C);
                     mpz_sub(temp, temp, D);
@@ -414,7 +415,7 @@ namespace Cryptography {
                     mpz_mul(B, B, B); // (X1 + Y1)^2
                     mpz_mul(C, x1.i_, x1.i_); // X1^2
                     mpz_mul(D, y1.i_, y1.i_); // Y1^2
-                    mpz_mul(E, (ec->a()).i_, D) //aC
+                    mpz_mul(E, (ec->a()).i_, D); //aC
                     mpz_add(F, E, D); // F = E + D
                     mpz_mul(H, x1.P, x1.P); // H = Z1^2
                     mpz_mul(temp, TWO, H);
@@ -423,7 +424,7 @@ namespace Cryptography {
                     mpz_sub(temp , B, temp);
                     mpz_mul(X3, temp, J); // X3 = (B - C - D)*J
 
-                    mpz_sub(temp, E - D);
+                    mpz_sub(temp, E, D);
                     mpz_mul(Y3, temp, F); // Y3 = F*(E - D);
 
                     mpz_mul(Z3, F, J); // Z3 = F * J
