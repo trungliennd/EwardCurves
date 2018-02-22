@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <gmp.h>
 #include <cstdlib>
+
 using namespace std;
 
 namespace Cryptography {
@@ -208,6 +209,7 @@ namespace Cryptography {
 
 
     class EdwardsCurve {
+
         public:
             mpz_t P;
             typedef FiniteFieldElement ffe_t;
@@ -374,8 +376,8 @@ namespace Cryptography {
                     mpz_add(G, B, E); // G = B + E;
 
                     // X3 = A * F *((X1 + Y1)*(X2 + Y2) - C - D)
-                    mpz_add(temp, X1.i_, Y1.i_);
-                    mpz_add(temp1, X2.i_, Y2.i_);
+                    mpz_add(temp, x1.i_, y1.i_);
+                    mpz_add(temp1, x2.i_, y2.i_);
                     mpz_mul(temp, temp, temp1);
                     mpz_sub(temp, temp, C);
                     mpz_sub(temp, temp, D);
@@ -414,7 +416,7 @@ namespace Cryptography {
                     mpz_mul(B, B, B); // (X1 + Y1)^2
                     mpz_mul(C, x1.i_, x1.i_); // X1^2
                     mpz_mul(D, y1.i_, y1.i_); // Y1^2
-                    mpz_mul(E, (ec->a()).i_, D) //aC
+                    mpz_mul(E, (ec->a()).i_, D); //aC
                     mpz_add(F, E, D); // F = E + D
                     mpz_mul(H, x1.P, x1.P); // H = Z1^2
                     mpz_mul(temp, TWO, H);
@@ -423,7 +425,7 @@ namespace Cryptography {
                     mpz_sub(temp , B, temp);
                     mpz_mul(X3, temp, J); // X3 = (B - C - D)*J
 
-                    mpz_sub(temp, E - D);
+                    mpz_sub(temp, E, D);
                     mpz_mul(Y3, temp, F); // Y3 = F*(E - D);
 
                     mpz_mul(Z3, F, J); // Z3 = F * J
@@ -445,16 +447,48 @@ namespace Cryptography {
             return d_;
         }
 
+        // equation twist curves Ewards
+        // a*x^2 + y^2 = 1 + d*x^2*y^2;
+
+        void randomNumber(mpz_t rs,int bits) {
+            unsigned long seed = 11232545123134;
+            gmp_randstate_t r_state;
+            mpz_init(rs);
+            gmp_randinit_default(r_state);
+            gmp_randseed_ui(r_state, seed);
+            mpz_urandomb(rs,r_state,bits);
+            gmp_randclear(r_state);
+        }
+
+
+        bool checkPoint(ffe_t x, ffe_t y) {
+            ffe_t xx, yy,temp1, temp2;
+            mpz_t ONE;
+            mpz_init(ONE);
+            mpz_set_str(ONE, "1", 10);
+            xx.mulFiniteFieldElement(x,x);
+            yy.mulFiniteFieldElement(y,y);
+            temp1.mulFiniteFieldElement(xx, this->a_);
+            temp1.addFiniteFieldElement(temp1, yy);
+            temp2.mulFiniteFieldElement(xx,yy);
+            temp2.mulFiniteFieldElement(temp2, this->d_);
+            temp2.addFiniteFieldElement(temp2, ONE);
+            if(temp1.compareEqual(temp2)) {
+                return true;
+            }
+            return false;
+        }
+
+        void Degree(mpz_t rs) {
+            mpz_set(rs, this->P);
+        }
+
         private:
             FiniteFieldElement a_; // tham so a cua duong cong
             FiniteFieldElement d_; // tham so d cuar duong cong
             typedef vector<Point> table_t;
             table_t m_table_t;     // chua cac diem cua duong cong
             bool table_filled;      // neu bang da tinh
-
-        void Degree(mpz_t rs) {
-            mpz_set(rs, this->P);
-        }
 
     };
 
