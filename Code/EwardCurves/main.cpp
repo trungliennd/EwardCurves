@@ -31,5 +31,7 @@ int main() {
     for(int i = 1;i <= 256;i++) {
         mpz_mul(p, p, two);
     }
-    gmp_printf("%Zd\n",p);
+  //  gmp_printf("%Zd\n",p);
+   // unsigned long test = randomSeed();
+    //printf("\nTest is: %lu\n",test);
 }
