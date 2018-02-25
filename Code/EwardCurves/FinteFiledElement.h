@@ -1,11 +1,31 @@
 #include <vector>
+#include <time.h>
 #include <stdio.h>
 #include <gmp.h>
+#include <stdlib.h>
 #include <cstdlib>
 
 using namespace std;
 
 namespace Cryptography {
+
+    unsigned long randomSeed() {
+        bool check = true;
+        unsigned long rand1,rand2;
+        while(check) {
+            time_t t1;
+            srand((unsigned)time(&t1));
+            rand1 = abs(rand());
+            time_t t2;
+            srand((unsigned)time(&t2));
+            rand2 = abs(rand());
+            if(rand1 == rand2) continue;
+            check = false;
+        }
+        rand1 = rand1 << (sizeof(int) * 8);
+        unsigned long randRS = (rand1 | rand2);
+        return randRS;
+    }
 
     class FiniteFieldElement {
 
@@ -209,6 +229,7 @@ namespace Cryptography {
 
 
     class EdwardsCurve {
+
         public:
             mpz_t P;
             typedef FiniteFieldElement ffe_t;
@@ -376,7 +397,7 @@ namespace Cryptography {
 
                     // X3 = A * F *((X1 + Y1)*(X2 + Y2) - C - D)
                     mpz_add(temp, x1.i_, y1.i_);
-                    mpz_add(temp1, x2.i_, x2.i_);
+                    mpz_add(temp1, x2.i_, y2.i_);
                     mpz_mul(temp, temp, temp1);
                     mpz_sub(temp, temp, C);
                     mpz_sub(temp, temp, D);
@@ -446,16 +467,52 @@ namespace Cryptography {
             return d_;
         }
 
+        // equation twist curves Ewards
+        // a*x^2 + y^2 = 1 + d*x^2*y^2;
+
+        void randomNumber(mpz_t rs,int bits) {
+            unsigned long seed = randomSeed();
+            gmp_randstate_t r_state;
+            mpz_init(rs);
+            gmp_randinit_default(r_state);
+            gmp_randseed_ui(r_state, seed);
+     //       for(int i = 0; i < 10; ++i) {
+                mpz_urandomb(rs,r_state,bits);
+     //           gmp_printf("%Zd\n", rs);
+      //      }
+            mpz_urandomb(rs,r_state,bits);
+            gmp_randclear(r_state);
+        }
+
+
+        bool checkPoint(ffe_t x, ffe_t y) {
+            ffe_t xx, yy,temp1, temp2;
+            mpz_t ONE;
+            mpz_init(ONE);
+            mpz_set_str(ONE, "1", 10);
+            xx.mulFiniteFieldElement(x,x);
+            yy.mulFiniteFieldElement(y,y);
+            temp1.mulFiniteFieldElement(xx, this->a_);
+            temp1.addFiniteFieldElement(temp1, yy);
+            temp2.mulFiniteFieldElement(xx,yy);
+            temp2.mulFiniteFieldElement(temp2, this->d_);
+            temp2.addFiniteFieldElement(temp2, ONE);
+            if(temp1.compareEqual(temp2)) {
+                return true;
+            }
+            return false;
+        }
+
+        void Degree(mpz_t rs) {
+            mpz_set(rs, this->P);
+        }
+
         private:
             FiniteFieldElement a_; // tham so a cua duong cong
             FiniteFieldElement d_; // tham so d cuar duong cong
             typedef vector<Point> table_t;
             table_t m_table_t;     // chua cac diem cua duong cong
             bool table_filled;      // neu bang da tinh
-
-        void Degree(mpz_t rs) {
-            mpz_set(rs, this->P);
-        }
 
     };
 
