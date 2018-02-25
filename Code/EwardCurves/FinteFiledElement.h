@@ -379,6 +379,7 @@ namespace Cryptography {
                     mpz_set(ZERO,"0",10);
                     int rs = mpz_cmp(m,ZERO);
                     if(rs > 0) {
+                        Point r(ace);
 
                     }
                 }
