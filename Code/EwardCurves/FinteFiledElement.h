@@ -276,11 +276,18 @@ namespace Cryptography {
                     ec = e.ec;
                 }
 
+                void assignPoint(const Point &rp) {
+                    x_.assignFiniteFieldElement(rp.x_);
+                    y_.assignFiniteFieldElement(rp.y_);
+                    mpz_set(this.P, rp.P);
+                    ec = rp.ec;
+                }
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
                 // a*x^2 + y^2 = 1 + dx^2y^2
                 // is compelete if a is a square in k and d is a nonsquare in k
                 void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
+
                     mpz_t ZERO,ONE;
                     mpz_init(ZERO);
                     mpz_init(ONE);
@@ -329,6 +336,7 @@ namespace Cryptography {
                     y3_temp2.subFiniteFieldElement(y3_temp, y3_temp1); // y1*y2 - a*x1*x2;
                     y3_temp3.subFiniteFieldElement(ONE, x3_temp3); // 1 - d*x1*x2*y1*y2;
                     yR.divFiniteFieldElement(y3_temp2, y3_temp3);
+
                 }
 
                 void doubling(ffe_t x, ffe_t y, ffe_t xR, ffe_t yR) {
@@ -364,6 +372,21 @@ namespace Cryptography {
 
                 }
 
+                // add double return (2^m) mod P
+                void addDouble(mpz_t m, Point &ace) {
+                    mpz_t ZERO;
+                    mpz_init(ZERO);
+                    mpz_set(ZERO,"0",10);
+                    int rs = mpz_cmp(m,ZERO);
+                    if(rs > 0) {
+
+                    }
+                }
+
+                // scalar Point
+                void scalarMultiply(mpz_t k, const Point &a) {
+
+                }
 
                 // (X^2 + aY2)Z^2 = Z^4 + dX^2Y^2.
                 // projective coordinates
