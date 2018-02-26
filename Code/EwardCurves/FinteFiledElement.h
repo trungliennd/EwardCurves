@@ -262,6 +262,7 @@ namespace Cryptography {
                     ec.Degree(rs);
                     x_.init(x, rs);
                     y_.init(y, rs);
+                    mpz_set(this->P, ec.P);
                     this->ec = &ec;
                 }
 
@@ -276,16 +277,22 @@ namespace Cryptography {
                     ec = e.ec;
                 }
 
+                ~Point() {
+                    mpz_clear(this->P);
+                    this->ec = NULL;
+                }
+
                 void assignPoint(const Point &rp) {
                     x_.assignFiniteFieldElement(rp.x_);
                     y_.assignFiniteFieldElement(rp.y_);
-                    mpz_set(this.P, rp.P);
+                    mpz_set(this->P, rp.P);
                     ec = rp.ec;
                 }
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
                 // a*x^2 + y^2 = 1 + dx^2y^2
                 // is compelete if a is a square in k and d is a nonsquare in k
+                // P # Q
                 void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
 
                     mpz_t ZERO,ONE;
@@ -336,7 +343,63 @@ namespace Cryptography {
                     y3_temp2.subFiniteFieldElement(y3_temp, y3_temp1); // y1*y2 - a*x1*x2;
                     y3_temp3.subFiniteFieldElement(ONE, x3_temp3); // 1 - d*x1*x2*y1*y2;
                     yR.divFiniteFieldElement(y3_temp2, y3_temp3);
+                    mpz_clears(ZERO, ONE, neg);
+                }
+                    // P # Q
+                 void add(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2) {
 
+                    mpz_t ZERO,ONE;
+                    mpz_init(ZERO);
+                    mpz_init(ONE);
+                    mpz_set_str(ONE,"1",10);
+                    // (0, 1) + (x2, y2)
+                    if(x1.compareEqual(ZERO) && y1.compareEqual(ONE)) {
+                        x_.assignFiniteFieldElement(x2);
+                        y_.assignFiniteFieldElement(y2);
+                        mpz_set(P, x1.P);
+                        return;
+                    }
+                    // (x1, y1) + (0, 1)
+                    if(x2.compareEqual(ZERO) && y2.compareEqual(ONE)) {
+                        x_.assignFiniteFieldElement(x1);
+                        y_.assignFiniteFieldElement(y1);
+                        mpz_set(P, x2.P);
+                        return;
+                    }
+
+                    // (x1, y1) + (x1, -y1) hay P + (-P) = (0, 1)
+                    mpz_t neg;
+                    mpz_init(neg);
+                    x2.negative(neg);
+                    if(x1.compareEqual(neg) && y1.compareEqual(y2)){
+                        x_.init(ZERO,this->P);
+                        y_.init(ONE,this->P);
+                        mpz_set(P, x1.P);
+                        return;
+                    }
+
+                    // add (x1, y1) + (x2, y2) = (x3, y3)
+                    // x3 = (x1*y2 + y1*x2)/(1 + d*x1*x2*y1*y2)
+                    // (x1*y2 + y1*x2)
+                    ffe_t x3_temp,x3_temp1,x3_temp2,x3_temp3,x3_temp4;
+                    x3_temp.mulFiniteFieldElement(x1,y2); // x1*y2
+                    x3_temp1.mulFiniteFieldElement(y1,x2); // y1*x2
+                    x3_temp2.addFiniteFieldElement(x3_temp, x3_temp1); // x1*y2 + y1*x2
+                    x3_temp3.mulFiniteFieldElement(x3_temp,x3_temp1); // x1*x2*y1*y2
+                    x3_temp3.mulFiniteFieldElement(x3_temp3,ec->d()); //x1*x2*y1*y2*d
+                    x3_temp4.addFiniteFieldElement(x3_temp3, ONE); //x1*x2*y1*y2*d + 1
+
+                    x_.divFiniteFieldElement(x3_temp2, x3_temp4);
+
+                    // y3 = (y1*y2 - a*x1*x2)/(1 - d*x1*x2*y1*y2)
+                    ffe_t y3_temp,y3_temp1,y3_temp2,y3_temp3;
+                    y3_temp.mulFiniteFieldElement(y1,y2); // y1*y2
+                    y3_temp1.mulFiniteFieldElement(x1,x2); // x1*x2;
+                    y3_temp1.mulFiniteFieldElement(y3_temp1, ec->a()); // a*x1*x2;
+                    y3_temp2.subFiniteFieldElement(y3_temp, y3_temp1); // y1*y2 - a*x1*x2;
+                    y3_temp3.subFiniteFieldElement(ONE, x3_temp3); // 1 - d*x1*x2*y1*y2;
+                    y_.divFiniteFieldElement(y3_temp2, y3_temp3);
+                    mpz_set(P, x1.P);
                 }
 
                 void doubling(ffe_t x, ffe_t y, ffe_t xR, ffe_t yR) {
@@ -372,20 +435,91 @@ namespace Cryptography {
 
                 }
 
+                void doubling(ffe_t x, ffe_t y) {
+
+                    mpz_t ZERO,ONE,TWO;
+                    mpz_init(ZERO);
+                    mpz_init(ONE);
+                    mpz_init(TWO);
+                    mpz_set_str(ONE, "1", 10);
+                    mpz_set_str(TWO, "2", 10);
+                    // (0, 1)*(0, 1)
+                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
+                        x_.init(ZERO,this->P);
+                        y_.init(ONE,this->P);
+                        mpz_set(P, x.P);
+                        return;
+                    }
+
+                    // formula 2[P] x = 2*x1*y1/(a*x1^2 + y1^2);
+                    ffe_t x3_temp,x3_temp1,x3_temp2,x3_temp3,y3_temp,y3_temp2;
+                    x3_temp.mulFiniteFieldElement(x, y); // x*y
+                    x3_temp.mulFiniteFieldElement(x3_temp, TWO); // 2*x*y
+                    x3_temp1.mulFiniteFieldElement(x, x);  // x^2
+                    x3_temp1.mulFiniteFieldElement(x3_temp1, ec->a()); // a*x^2;
+                    x3_temp2.mulFiniteFieldElement(y, y); // y^2
+                    x3_temp3.addFiniteFieldElement(x3_temp1, x3_temp2); // a*x^2 + y^2;
+                    x_.divFiniteFieldElement(x3_temp, x3_temp3);
+
+                    // formula 2[P] y = (y^2 - a*x^2)/(2 - a*x^2 - y^2)
+                    y3_temp.subFiniteFieldElement(x3_temp2, x3_temp1);  // (y^2 - a*x^2)
+                    y3_temp2.addFiniteFieldElement(x3_temp1, x3_temp2); // (a*x^2 + y^2)
+                    y3_temp2.subFiniteFieldElement(TWO, y3_temp2); // (2 - a*x^2 + y^2);
+                    y_.divFiniteFieldElement(y3_temp, y3_temp2);
+                    mpz_set(P, x.P);
+
+                }
+
                 // add double return (2^m) mod P
                 void addDouble(mpz_t m, Point &ace) {
-                    mpz_t ZERO;
+                    mpz_t ZERO,ONE,i;
                     mpz_init(ZERO);
-                    mpz_set(ZERO,"0",10);
+                    mpz_init(ONE);
+                    mpz_init(i);
+                    mpz_set_str(ZERO, "0", 10);
+                    mpz_set_str(ONE, "1", 10);
                     int rs = mpz_cmp(m,ZERO);
                     if(rs > 0) {
                         Point r(ace);
-
+                        int cmp = mpz_cmp(m,i);
+                        while(cmp > 0) {
+                            r.doubling(ace.x_,ace.y_);
+                            mpz_add(i,i,ONE);
+                        }
+                        ace.assignPoint(r);
                     }
                 }
 
                 // scalar Point
                 void scalarMultiply(mpz_t k, const Point &a) {
+
+                    Point acc(a);
+                    mpz_t ZERO,i,j, b,ONE;
+                    mpz_init(ZERO);
+                    mpz_init(ONE);
+                    mpz_set_str(ONE, "1", 10);
+                    mpz_init(i);
+                    mpz_init(j);
+                    mpz_init(b);
+                    Point res(ZERO, ONE, a->ec);
+                    mpz_set(b, k);
+                    int check = mpz_cmp(b, ZERO);
+                    while(check > 0) {
+                        mpz_t rs;
+                        mpz_init(rs);
+                        mpz_and(rs, b, ONE);
+                        int check_even_odd = mpz_cmp(rs, ZERO);
+                        if(check_even_odd != 0) {
+                            mpz_sub(rs, i, j);
+                            addDouble(rs, acc);
+                            res.add(acc.x_, acc_y, res.x_, res_y);
+                            mpz_set(j , i);
+                        }
+                        mpz_
+                        mpz_clear(rs);
+                    }
+
+
 
                 }
 
