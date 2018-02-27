@@ -494,14 +494,16 @@ namespace Cryptography {
                 void scalarMultiply(mpz_t k, const Point &a) {
 
                     Point acc(a);
-                    mpz_t ZERO,i,j, b,ONE;
+                    mpz_t ZERO, i, j, b, ONE, TWO;
                     mpz_init(ZERO);
                     mpz_init(ONE);
                     mpz_set_str(ONE, "1", 10);
+                    mpz_init(TWO);
+                    mpz_set_str(TWO, "2", 10);
                     mpz_init(i);
                     mpz_init(j);
                     mpz_init(b);
-                    Point res(ZERO, ONE, a->ec);
+                    Point res(ZERO, ONE, *(a.ec));
                     mpz_set(b, k);
                     int check = mpz_cmp(b, ZERO);
                     while(check > 0) {
@@ -512,15 +514,15 @@ namespace Cryptography {
                         if(check_even_odd != 0) {
                             mpz_sub(rs, i, j);
                             addDouble(rs, acc);
-                            res.add(acc.x_, acc_y, res.x_, res_y);
+                            res.add(acc.x_, acc.y_, res.x_, res.y_);
                             mpz_set(j , i);
                         }
-                        mpz_
+                        mpz_cdiv_q(b, b, TWO);
+                        mpz_add(i, i , ONE);
                         mpz_clear(rs);
                     }
-
-
-
+                    assignPoint(res);
+                    mpz_clears(ZERO, i, j, b, ONE, TWO);
                 }
 
                 // (X^2 + aY2)Z^2 = Z^4 + dX^2Y^2.

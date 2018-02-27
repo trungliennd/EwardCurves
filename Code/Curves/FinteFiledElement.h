@@ -8,7 +8,11 @@ using namespace NTL;
 
 
 namespace Cryptography {
-
+    /*
+    * point generator
+        x = 547c4350219f5e19dd26a3d6668b74346a8eb726eb2396e1228cfa397ffe6bd4
+        y = 6666666666666666666666666666666666666666666666666666666666666658
+    */
     ZZ EGCD(ZZ a, ZZ b, ZZ& u, ZZ &v)
             {
                 u = ZZ(1);
