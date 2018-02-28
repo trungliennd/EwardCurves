@@ -223,7 +223,7 @@ namespace Cryptography {
         }
 
        void printElement() {
-            gmp_printf("%Zd",this->i_);
+            gmp_printf("%Zd\n",this->i_);
        }
     };
 
@@ -287,6 +287,13 @@ namespace Cryptography {
                     y_.assignFiniteFieldElement(rp.y_);
                     mpz_set(this->P, rp.P);
                     ec = rp.ec;
+                }
+
+                void assignPoint(ffe_t x, ffe_t y, mpz_t P, EdwardsCurve &e) {
+                    x_.assignFiniteFieldElement(x);
+                    y_.assignFiniteFieldElement(y);
+                    mpz_set(this->P, P);
+                    ec = &e;
                 }
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
@@ -400,6 +407,8 @@ namespace Cryptography {
                     y3_temp3.subFiniteFieldElement(ONE, x3_temp3); // 1 - d*x1*x2*y1*y2;
                     y_.divFiniteFieldElement(y3_temp2, y3_temp3);
                     mpz_set(P, x1.P);
+
+                    mpz_clears(ZERO, ONE, neg);
                 }
 
                 void doubling(ffe_t x, ffe_t y, ffe_t xR, ffe_t yR) {
@@ -433,6 +442,7 @@ namespace Cryptography {
                     y3_temp2.subFiniteFieldElement(TWO, y3_temp2); // (2 - a*x^2 + y^2);
                     yR.divFiniteFieldElement(y3_temp, y3_temp2);
 
+                    mpz_clears(ZERO, ONE, TWO);
                 }
 
                 void doubling(ffe_t x, ffe_t y) {
@@ -468,6 +478,8 @@ namespace Cryptography {
                     y_.divFiniteFieldElement(y3_temp, y3_temp2);
                     mpz_set(P, x.P);
 
+                    mpz_clears(ZERO, ONE, TWO);
+
                 }
 
                 // add double return (2^m) mod P
@@ -488,6 +500,7 @@ namespace Cryptography {
                         }
                         ace.assignPoint(r);
                     }
+                    mpz_clears(ZERO, ONE,i);
                 }
 
                 // scalar Point
@@ -573,6 +586,7 @@ namespace Cryptography {
                     // Z3 = F*G
                     mpz_mul(Z3, F, G);
 
+                    mpz_clears(A,B,C,D,E,F,G,temp,temp1);
                 }
 
                 void doublingaProjectCoordinates(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
@@ -610,6 +624,7 @@ namespace Cryptography {
 
                     mpz_mul(Z3, F, J); // Z3 = F * J
 
+                    mpz_clears(B,C,D,E,F,H,J,temp,TWO);
                 }
 
         };
@@ -652,14 +667,15 @@ namespace Cryptography {
             mpz_set_str(ONE, "1", 10);
             xx.mulFiniteFieldElement(x,x);
             yy.mulFiniteFieldElement(y,y);
-            temp1.mulFiniteFieldElement(xx, this->a_);
+            a_.printElement();
+          /*  temp1.mulFiniteFieldElement(xx, this->a_);
             temp1.addFiniteFieldElement(temp1, yy);
             temp2.mulFiniteFieldElement(xx,yy);
             temp2.mulFiniteFieldElement(temp2, this->d_);
             temp2.addFiniteFieldElement(temp2, ONE);
             if(temp1.compareEqual(temp2)) {
                 return true;
-            }
+            }*/
             return false;
         }
 
@@ -667,13 +683,98 @@ namespace Cryptography {
             mpz_set(rs, this->P);
         }
 
+        void setGenerator(const Point& gx) {
+            this->Gx.assignPoint(gx);
+        }
+
+        void setGenerator(ffe_t x, ffe_t y, mpz_t p, EdwardsCurve &a) {
+            this->Gx.assignPoint(x, y, p, a);
+        }
+
+        void setParamester(ffe_t a, ffe_t d) {
+            this->a_.assignFiniteFieldElement(a);
+            this->d_.assignFiniteFieldElement(d);
+        }
+
+        // delete
+        ~EdwardsCurve() {
+            mpz_clear(this->P);
+        }
+        //constructors
+        EdwardsCurve(mpz_t p) {
+            mpz_init(this->P);
+            mpz_set(this->P, p);
+        }
+
+        EdwardsCurve() {
+            mpz_init(this->P);
+        }
+
+       // EdwardsCurve* returnSelft() {
+        //    return this;
+        //}
+        void printEd25519() {
+
+        }
         private:
             FiniteFieldElement a_; // tham so a cua duong cong
             FiniteFieldElement d_; // tham so d cuar duong cong
-            typedef vector<Point> table_t;
-            table_t m_table_t;     // chua cac diem cua duong cong
-            bool table_filled;      // neu bang da tinh
+            Point Gx;
+         //   typedef vector<Point> table_t;
+          //  table_t m_table_t;     // chua cac diem cua duong cong
+          //  bool table_filled;      // neu bang da tinh
 
     };
+    /*
+    *
+    * Curve25519 is defined by the following equation:
+            v^2 = u^3 + 486662*u^2 + u
+      Montgomery curves
+            B*v^2 = u^3 + A*u^2 + u
+      Twist Ewards curves
+            a*x^2 + y^2 = 1 + d*x^2*y^2 with a = (A + 2)/B and d = (A - 2)/B
+    *
+    */
+
+     /*
+      *
+        point generator G(x,y)
+            x = 547c4350219f5e19dd26a3d6668b74346a8eb726eb2396e1228cfa397ffe6bd4
+            y = 6666666666666666666666666666666666666666666666666666666666666658
+
+        Finite Fp
+            p = 2^255 - 19 = 57896044618658097711785492504343953926634992332820282019728792003956564819949
+
+        paramester
+            a = 486664 and d = 486660
+
+      */
+      typedef EdwardsCurve ed25519;
+      typedef FiniteFieldElement ffe_t;
+      ed25519 *Ed_curves25519;
+
+      void curveTwistEwards25519() {
+        mpz_t p,gx,gy,a,d;
+        mpz_init(p);
+        mpz_init(gx);
+        mpz_init(gy);
+        mpz_init(a);
+        mpz_init(d);
+        mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
+        mpz_set_str(gx, "547c4350219f5e19dd26a3d6668b74346a8eb726eb2396e1228cfa397ffe6bd4", 16);
+        mpz_set_str(gx, "6666666666666666666666666666666666666666666666666666666666666658", 16);
+        mpz_set_str(a, "486664", 10);
+        mpz_set_str(d, "486660", 10);
+        ffe_t fgx(gx, p);
+        ffe_t fgy(gy, p);
+        ffe_t fa(a, p);
+        ffe_t fd(d, p);
+        Ed_curves25519 = new ed25519(p);
+        Ed_curves25519->setGenerator(fgx, fgy, p, *Ed_curves25519);
+        Ed_curves25519->setParamester(a,d);
+        bool check = Ed_curves25519->checkPoint(gx,gy);
+        if(check) printf("Point in Curves");
+      }
+
 
 }
