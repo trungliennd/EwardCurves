@@ -118,6 +118,11 @@ namespace Cryptography {
             mpz_set(this->P, ffe.P);
         }
 
+        void assignFiniteFieldElement(mpz_t i, mpz_t p) {
+            mpz_set(this->P, p);
+            assign(i);
+        }
+
         void mulAssign(const FiniteFieldElement& ffe2) {
             // if ffe1.P = ffe2.P
             if(mpz_cmp(this->P, ffe2.P) == 0) {
@@ -556,8 +561,6 @@ namespace Cryptography {
                     mpz_init(temp);
                     mpz_init(temp1);
 
-
-
                     mpz_mul(A, x1.P, x2.P); // A = Z1 * Z2
                     mpz_mul(B, (ec->d()).i_, A); // d*A
                     mpz_mul(B, B, A); // B = d*A^2
@@ -627,6 +630,12 @@ namespace Cryptography {
                     mpz_clears(B,C,D,E,F,H,J,temp,TWO);
                 }
 
+                void printPoint() {
+                    printf("\nPoint (x, y) is: \n");
+                    gmp_printf("x = %Zd\n", x_.i_);
+                    gmp_printf("y = %zd\n", y_.i_);
+                }
+
         };
 
         // Edwards Curves thuc hien
@@ -667,15 +676,14 @@ namespace Cryptography {
             mpz_set_str(ONE, "1", 10);
             xx.mulFiniteFieldElement(x,x);
             yy.mulFiniteFieldElement(y,y);
-            a_.printElement();
-          /*  temp1.mulFiniteFieldElement(xx, this->a_);
+            temp1.mulFiniteFieldElement(xx, this->a_);
             temp1.addFiniteFieldElement(temp1, yy);
             temp2.mulFiniteFieldElement(xx,yy);
             temp2.mulFiniteFieldElement(temp2, this->d_);
             temp2.addFiniteFieldElement(temp2, ONE);
             if(temp1.compareEqual(temp2)) {
                 return true;
-            }*/
+            }
             return false;
         }
 
@@ -762,7 +770,7 @@ namespace Cryptography {
         mpz_init(d);
         mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
         mpz_set_str(gx, "547c4350219f5e19dd26a3d6668b74346a8eb726eb2396e1228cfa397ffe6bd4", 16);
-        mpz_set_str(gx, "6666666666666666666666666666666666666666666666666666666666666658", 16);
+        mpz_set_str(gy, "6666666666666666666666666666666666666666666666666666666666666658", 16);
         mpz_set_str(a, "486664", 10);
         mpz_set_str(d, "486660", 10);
         ffe_t fgx(gx, p);
@@ -771,8 +779,8 @@ namespace Cryptography {
         ffe_t fd(d, p);
         Ed_curves25519 = new ed25519(p);
         Ed_curves25519->setGenerator(fgx, fgy, p, *Ed_curves25519);
-        Ed_curves25519->setParamester(a,d);
-        bool check = Ed_curves25519->checkPoint(gx,gy);
+        Ed_curves25519->setParamester(fa,fd);
+        bool check = Ed_curves25519->checkPoint(fgx,fgy);
         if(check) printf("Point in Curves");
       }
 
