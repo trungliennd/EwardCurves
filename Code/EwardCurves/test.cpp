@@ -1,3 +1,4 @@
+
 #include <vector>
 #include <time.h>
 #include <stdio.h>
@@ -101,6 +102,10 @@ namespace Cryptography {
             mpz_set(this->i_, ffe1.i_);
         }
 
+        ~FiniteFieldElement() {
+            mpz_clear(this->i_);
+            mpz_clear(this->P);
+        }
 
         // return i_, P
         void i(mpz_t rs) {
@@ -287,14 +292,17 @@ namespace Cryptography {
                     mpz_set(this->P, x.P);
                 }
 
-                Point(Point& e) {
+                Point(const Point& e) {
                     x_.assignFiniteFieldElement(e.x());
                     y_.assignFiniteFieldElement(e.y());
                     mpz_set(this->P, e.P);
                     ec = e.ec;
-              //      ec.printEd25519();
                 }
 
+                ~Point() {
+                    mpz_clear(this->P);
+                    this->ec = NULL;
+                }
 
                 void assignPoint(const Point &rp) {
                     x_.assignFiniteFieldElement(rp.x_);
@@ -478,10 +486,10 @@ namespace Cryptography {
                     mpz_set_str(ONE, "1", 10);
                     mpz_set_str(TWO, "2", 10);
                     // (0, 1)*(0, 1)
-/*                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
-                         mpz_set(P, x.P);
+                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
                         x_.init(ZERO,this->P);
                         y_.init(ONE,this->P);
+                        mpz_set(P, x.P);
                         return;
                     }
 
@@ -504,43 +512,37 @@ namespace Cryptography {
                     // Free the space occupied
                     mpz_clear(ZERO);
                     mpz_clear(ONE);
-                    mpz_clear(TWO);*/
+                    mpz_clear(TWO);
                 }
 
                 // add double return (2^m) mod P
-                void addDouble(mpz_t m,Point &ace) {
-                    Point r;
-                    r.assignPoint(ace);
+                void addDouble(mpz_t m, Point &ace) {
                     mpz_t ZERO,ONE,i;
                     mpz_init(ZERO);
                     mpz_init(ONE);
                     mpz_init(i);
                     mpz_set_str(ZERO, "0", 10);
                     mpz_set_str(ONE, "1", 10);
-                    mpz_set(i, ZERO);
                     int rs = mpz_cmp(m,ZERO);
                     if(rs > 0) {
+                        Point r(ace);
                         int cmp = mpz_cmp(m,i);
                         while(cmp > 0) {
-                            r.doubling(r.x_,r.y_);
-                            gmp_printf("\ni is: %Zd",i);
+                            r.doubling(ace.x_,ace.y_);
                             mpz_add(i,i,ONE);
-                            cmp = mpz_cmp(m,i);
                         }
-                      //  ace.assignPoint(r);
+                        ace.assignPoint(r);
                     }
                     // Free the space occupied
-                   // mpz_clear(ZERO);
-                   // mpz_clear(ONE);
-                    //mpz_clear(i);
+                    mpz_clear(ZERO);
+                    mpz_clear(ONE);
+                    mpz_clear(i);
                 }
 
                 // scalar Point
                 void scalarMultiply(mpz_t k,const Point &a) {
 
-                    Point acc;
-                    acc.assignPoint(a);
-                    mpz_t ZERO, i, j, b, ONE, TWO;
+            /*      mpz_t ZERO, i, j, b, ONE, TWO;
                     mpz_init(ZERO);
                     mpz_init(ONE);
                     mpz_set_str(ONE, "1", 10);
@@ -549,10 +551,7 @@ namespace Cryptography {
                     mpz_init(i);
                     mpz_init(j);
                     mpz_init(b);
-                    Point res;
-                    res.assignPoint(a);
-                    res.setX(ZERO);
-                    res.setY(ONE);
+                    Point res(ZERO, ONE, *(a.ec));
                     mpz_set(b, k);
                     int check = mpz_cmp(b, ZERO);
                     while(check > 0) {
@@ -568,12 +567,16 @@ namespace Cryptography {
                         }
                         mpz_cdiv_q(b, b, TWO);
                         mpz_add(i, i , ONE);
-                        check = mpz_cmp(b, ZERO);
                         mpz_clear(rs);
                     }
-
                     assignPoint(res);
                     // Free the space occupied
+                    mpz_clear(ZERO);
+                    mpz_clear(i);
+                    mpz_clear(j);
+                    mpz_clear(b);
+                    mpz_clear(ONE);
+                    mpz_clear(TWO);*/
                 }
 
                 // (X^2 + aY2)Z^2 = Z^4 + dX^2Y^2.
@@ -633,7 +636,7 @@ namespace Cryptography {
                     mpz_clear(temp1);
                 }
 
-                void doublingProjectCoordinates(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
+                void doublingaProjectCoordinates(ffe_t x1, ffe_t y1, ffe_t x2, ffe_t y2, ffe_t xR, ffe_t yR) {
 
                     mpz_t B,C,D,E,F,H,J,X3,Y3,Z3,temp,TWO;
                     mpz_init(B);
@@ -689,17 +692,9 @@ namespace Cryptography {
                     return this->x_;
                 }
 
-                void setX(mpz_t x) {
-                    mpz_set(this->x_.i_, x);
-                }
-
 
                 FiniteFieldElement y() const {
                     return this->y_;
-                }
-
-                void setY(mpz_t y) {
-                    mpz_set(y_.i_, y);
                 }
 
         };
@@ -756,6 +751,10 @@ namespace Cryptography {
             this->d_.assignFiniteFieldElement(d);
         }
 
+        // delete
+        ~EdwardsCurve() {
+            mpz_clear(this->P);
+        }
         //constructors
         EdwardsCurve(mpz_t p) {
             mpz_init(this->P);
@@ -764,10 +763,6 @@ namespace Cryptography {
 
         EdwardsCurve() {
             mpz_init(this->P);
-        }
-
-        EdwardsCurve(const EdwardsCurve &e) {
-
         }
 
        // EdwardsCurve* returnSelft() {
@@ -851,13 +846,10 @@ namespace Cryptography {
       // test
       void test() {
         mpz_t n;
-        mpz_init(n);
-        mpz_set_str(n,"4", 10);
-      //  randomNumber(n, 255);
+        randomNumber(n, 255);
         ffe_t fn(n,Ed_curves25519->P);
-        ed25519::Point q(Ed_curves25519->returnGx()),b(q);
-        b.addDouble(n, q);
-     //   b.printPoint();
+        ed25519::Point q(Ed_curves25519->returnGx().x(),Ed_curves25519->returnGx().y(), *Ed_curves25519);
+        printf("\nDONE!!\n");
       }
 
 
