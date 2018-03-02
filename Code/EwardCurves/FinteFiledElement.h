@@ -4,10 +4,21 @@
 #include <gmp.h>
 #include <stdlib.h>
 #include <cstdlib>
+#include "EwardCurves.h"
 
 using namespace std;
 
 namespace Cryptography {
+
+    const unsigned int crypto_sign_ed25519_PUBLICKEYBYTES = 32;
+    const unsigned int crypto_sign_ed25519_SECRETKEYBYTES = 32;
+
+    void str_copy(unsigned char des[], unsigned char src[], int len) {
+        for(int i = 0;i < len;i++) {
+            des[i] = src[i];
+        }
+        des[len] = '\0';
+    }
 
     unsigned long randomSeed() {
         bool check = true;
@@ -33,13 +44,11 @@ namespace Cryptography {
             mpz_init(rs);
             gmp_randinit_default(r_state);
             gmp_randseed_ui(r_state, seed);
-     //       for(int i = 0; i < 10; ++i) {
-      //          mpz_urandomb(rs,r_state,bits);
-     //           gmp_printf("%Zd\n", rs);
-      //      }
             mpz_urandomb(rs,r_state,bits);
             gmp_randclear(r_state);
     }
+
+
 
 
     class FiniteFieldElement {
@@ -478,7 +487,7 @@ namespace Cryptography {
                     mpz_set_str(ONE, "1", 10);
                     mpz_set_str(TWO, "2", 10);
                     // (0, 1)*(0, 1)
-/*                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
+                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
                          mpz_set(P, x.P);
                         x_.init(ZERO,this->P);
                         y_.init(ONE,this->P);
@@ -504,13 +513,11 @@ namespace Cryptography {
                     // Free the space occupied
                     mpz_clear(ZERO);
                     mpz_clear(ONE);
-                    mpz_clear(TWO);*/
+                    mpz_clear(TWO);
                 }
 
                 // add double return (2^m) mod P
                 void addDouble(mpz_t m,Point &ace) {
-                    Point r;
-                    r.assignPoint(ace);
                     mpz_t ZERO,ONE,i;
                     mpz_init(ZERO);
                     mpz_init(ONE);
@@ -520,19 +527,21 @@ namespace Cryptography {
                     mpz_set(i, ZERO);
                     int rs = mpz_cmp(m,ZERO);
                     if(rs > 0) {
+                        Point r;
+                        r.assignPoint(ace);
                         int cmp = mpz_cmp(m,i);
                         while(cmp > 0) {
+                          //  gmp_printf("\n%Zd",i);
                             r.doubling(r.x_,r.y_);
-                            gmp_printf("\ni is: %Zd",i);
                             mpz_add(i,i,ONE);
                             cmp = mpz_cmp(m,i);
                         }
-                      //  ace.assignPoint(r);
+                        ace.assignPoint(r);
                     }
                     // Free the space occupied
-                   // mpz_clear(ZERO);
-                   // mpz_clear(ONE);
-                    //mpz_clear(i);
+                    mpz_clear(ZERO);
+                    mpz_clear(ONE);
+                    mpz_clear(i);
                 }
 
                 // scalar Point
@@ -566,7 +575,7 @@ namespace Cryptography {
                             res.add(acc.x_, acc.y_, res.x_, res.y_);
                             mpz_set(j , i);
                         }
-                        mpz_cdiv_q(b, b, TWO);
+                        mpz_fdiv_q(b, b, TWO);
                         mpz_add(i, i , ONE);
                         check = mpz_cmp(b, ZERO);
                         mpz_clear(rs);
@@ -848,16 +857,65 @@ namespace Cryptography {
         Ed_curves25519->printEd25519();
       }
 
+      void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[]) {
+
+      }
+
+      void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes) {
+         mpz_t q, r, t;
+         mpz_init(q);
+         mpz_init(r);
+         mpz_init(t);
+         // 1 byte = 8 bits
+         unsigned int bits = bytes << 3;
+         char t_char[bytes];
+         itoa(bits, t_char, 10);
+         mpz_set_str(t, t_char, 10);
+         mpz_set(q, num_encode);
+         for(int i = 0;i < bytes;i++) {
+            mpz_fdiv_qr(q, r, q, t);
+            encode[i] = (unsigned char) mpz_get_ui(r);
+         }
+         // free memory
+         mpz_clear(q);
+         mpz_clear(r);
+         mpz_clear(t);
+      }
+
+      void crypto_decode_ed225519_ClampC(unsigned char decode[], mpz_t &num_decode, unsigned int bytes) {
+        mpz_t t;
+        mpz_init(t);
+        unsigned int bits = bytes << 3;
+        char t_char[bytes];
+        itoa(bits, t_char, 10);
+        mpz_set_str(t, t_char, 10);
+        unsigned char temp[bytes];
+        str_copy(temp, decode, bytes);
+//        temp[0] = temp[0] - (temp[0] % 8);
+ //       temp[31] = 64 + (temp[31] % 64);
+        for(int i = 0; i < bytes;i++) {
+            mpz_t t1;
+            mpz_init(t1);
+            char tempp[1];
+            tempp[0] = decode[i];
+
+        }
+
+      }
+
+
+
       // test
       void test() {
-        mpz_t n;
+        mpz_t n,z;
         mpz_init(n);
-        mpz_set_str(n,"4", 10);
-      //  randomNumber(n, 255);
-        ffe_t fn(n,Ed_curves25519->P);
-        ed25519::Point q(Ed_curves25519->returnGx()),b(q);
-        b.addDouble(n, q);
-     //   b.printPoint();
+        mpz_init(z);
+       // mpz_set_str(n, "4096",10);
+        randomNumber(n, 255);
+        unsigned char encode[32];
+        crypto_encode_ed225519_ClampC(encode, n, 32);
+     //  crypto_decode_ed225519_ClampC(encode, z, 32);
+
       }
 
 
