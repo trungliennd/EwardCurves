@@ -11,6 +11,6 @@ int main() {
     mpz_set(p, i);
     mpz_clear(i);
    // gmp_printf("\n%Zd\n",p);
-    curveTwistEwards25519();
+    initCurveTwistEwards25519();
     test();
 }

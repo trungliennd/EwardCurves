@@ -9,6 +9,10 @@ using namespace std;
 
 namespace Cryptography {
 
+    const unsigned long crypto_sign_ed25519_PUBLICKEYBYTES = 32;
+    const unsigned long crypto_sign_ed25519_SECRETKEYBYTES = 32;
+
+
     unsigned long randomSeed() {
         bool check = true;
         unsigned long rand1,rand2;
@@ -478,7 +482,7 @@ namespace Cryptography {
                     mpz_set_str(ONE, "1", 10);
                     mpz_set_str(TWO, "2", 10);
                     // (0, 1)*(0, 1)
-/*                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
+                   if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
                          mpz_set(P, x.P);
                         x_.init(ZERO,this->P);
                         y_.init(ONE,this->P);
@@ -504,13 +508,11 @@ namespace Cryptography {
                     // Free the space occupied
                     mpz_clear(ZERO);
                     mpz_clear(ONE);
-                    mpz_clear(TWO);*/
+                    mpz_clear(TWO);
                 }
 
                 // add double return (2^m) mod P
                 void addDouble(mpz_t m,Point &ace) {
-                    Point r;
-                    r.assignPoint(ace);
                     mpz_t ZERO,ONE,i;
                     mpz_init(ZERO);
                     mpz_init(ONE);
@@ -520,24 +522,24 @@ namespace Cryptography {
                     mpz_set(i, ZERO);
                     int rs = mpz_cmp(m,ZERO);
                     if(rs > 0) {
+                        Point r;
+                        r.assignPoint(ace);
                         int cmp = mpz_cmp(m,i);
                         while(cmp > 0) {
                             r.doubling(r.x_,r.y_);
-                            gmp_printf("\ni is: %Zd",i);
                             mpz_add(i,i,ONE);
                             cmp = mpz_cmp(m,i);
                         }
-                      //  ace.assignPoint(r);
+                        ace.assignPoint(r);
                     }
                     // Free the space occupied
-                   // mpz_clear(ZERO);
-                   // mpz_clear(ONE);
-                    //mpz_clear(i);
+                    mpz_clear(ZERO);
+                    mpz_clear(ONE);
+                    mpz_clear(i);
                 }
 
                 // scalar Point
                 void scalarMultiply(mpz_t k,const Point &a) {
-
                     Point acc;
                     acc.assignPoint(a);
                     mpz_t ZERO, i, j, b, ONE, TWO;
@@ -566,7 +568,7 @@ namespace Cryptography {
                             res.add(acc.x_, acc.y_, res.x_, res.y_);
                             mpz_set(j , i);
                         }
-                        mpz_cdiv_q(b, b, TWO);
+                        mpz_fdiv_q(b, b, TWO);
                         mpz_add(i, i , ONE);
                         check = mpz_cmp(b, ZERO);
                         mpz_clear(rs);
@@ -574,6 +576,12 @@ namespace Cryptography {
 
                     assignPoint(res);
                     // Free the space occupied
+                    mpz_clear(ZERO);
+                    mpz_clear(ONE);
+                    mpz_clear(i);
+                    mpz_clear(j);
+                    mpz_clear(TWO);
+                    mpz_clear(b);
                 }
 
                 // (X^2 + aY2)Z^2 = Z^4 + dX^2Y^2.
@@ -704,7 +712,7 @@ namespace Cryptography {
 
         };
 
-        // Edwards Curves thuc hien
+        // Edwards Curves implements
         typedef EdwardsCurve this_t;
         typedef class EdwardsCurve::Point point_t;
 
@@ -765,11 +773,6 @@ namespace Cryptography {
         EdwardsCurve() {
             mpz_init(this->P);
         }
-
-        EdwardsCurve(const EdwardsCurve &e) {
-
-        }
-
        // EdwardsCurve* returnSelft() {
         //    return this;
         //}
@@ -821,10 +824,12 @@ namespace Cryptography {
       typedef EdwardsCurve ed25519;
       typedef FiniteFieldElement ffe_t;
       ed25519 *Ed_curves25519;
+      //mpz_t scret_key;
+
     /*
     * init curves 25519 Twist Edwards
     */
-      void curveTwistEwards25519() {
+      void initCurveTwistEwards25519() {
         mpz_t p,gx,gy,a,d;
         mpz_init(p);
         mpz_init(gx);
@@ -852,16 +857,15 @@ namespace Cryptography {
       void test() {
         mpz_t n;
         mpz_init(n);
-        mpz_set_str(n,"4", 10);
-      //  randomNumber(n, 255);
+        randomNumber(n, 255);
         ffe_t fn(n,Ed_curves25519->P);
         ed25519::Point q(Ed_curves25519->returnGx()),b(q);
-        b.addDouble(n, q);
-     //   b.printPoint();
+        b.scalarMultiply(n, q);
+        gmp_printf("\nN is: %Zd",n);
+        bool check = Ed_curves25519->checkPoint(b.x(),b.y());
+        if(check) printf("\nPoint in Curves\n");
+        b.printPoint();
       }
-
-
-
 
 
 }
