@@ -7,10 +7,21 @@ int main() {
     mpz_init(i);
     mpz_init(j);
     mpz_init(p);
-    mpz_set_str(i, "2",10);
+    mpz_set_str(i, "4872",10);
     mpz_set(p, i);
+<<<<<<< HEAD
     mpz_clear(i);
    // gmp_printf("\n%Zd\n",p);
     initCurveTwistEwards25519();
     test();
+=======
+    unsigned char k = {0x77};
+    char k1[32];
+    char *a = itoa((unsigned int)k, k1, 16);
+    printf("\na is: %s",a);
+    mpz_set_str(j, k1, 16);
+    gmp_printf("\n%ZX\n",j);
+  //  curveTwistEwards25519();
+    //test();
+>>>>>>> e732cc7dd0c588b7e8c38742a9d090354ae1b27c
 }
