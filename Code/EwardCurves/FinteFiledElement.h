@@ -9,7 +9,13 @@
 using namespace std;
 
 namespace Cryptography {
-
+    // Cac ham cua chuong trinh
+    void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes);
+    void crypto_decode_ed225519_ClampC(unsigned char decode[], mpz_t &num_decode, unsigned int bytes);
+    void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes);
+    /*
+        Hang so cua chuong trinh
+    */
     const unsigned int crypto_sign_ed25519_PUBLICKEYBYTES = 32;
     const unsigned int crypto_sign_ed25519_SECRETKEYBYTES = 32;
 
@@ -860,8 +866,15 @@ namespace Cryptography {
         Ed_curves25519->printEd25519();
       }
 
-      void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[]) {
-
+      void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes) {
+        mpz_t n;
+        mpz_init(n);
+        randomNumber(n, 255);
+        crypto_encode_ed225519_ClampC(secretKey, n, bytes);
+        // public key n*G(x,y)
+        ed25519::Point q;
+        q.scalarMultiply(n, Ed_curves25519->returnGx());
+        crypto_encode_ed225519_ClampC(publicKey, q.x_.i_, bytes);
       }
 
       void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes) {
@@ -894,19 +907,33 @@ namespace Cryptography {
         mpz_set_str(t, t_char, 10);
         unsigned char temp[bytes];
         str_copy(temp, decode, bytes);
-//        temp[0] = temp[0] - (temp[0] % 8);
- //       temp[31] = 64 + (temp[31] % 64);
         for(int i = 0; i < bytes;i++) {
-            mpz_t t1;
+            mpz_t t1,t2;
             mpz_init(t1);
-            char tempp[1];
-            tempp[0] = decode[i];
-
+            mpz_init(t2);
+            char tempp[2];
+            itoa((unsigned int) temp[i], tempp, 16);
+            mpz_set_str(t1, tempp, 16);
+            mpz_pow_ui(t2, t, i);
+            mpz_mul(t1, t1, t2);
+            mpz_add(num_decode, num_decode, t1);
+            mpz_clear(t1);
+            mpz_clear(t2);
         }
-
+        mpz_clear(t);
       }
 
-
+      // ham print khoa
+      void printKey(unsigned char keys[], unsigned int bytes) {
+        printf("\nKey is: \n");
+        for(int i = 0;i < bytes;i++) {
+            if((i != 0) && ((i % 8) == 0)) {
+                printf("\n");
+            }
+            printf("x%x\t", keys[i]);
+        }
+        printf("\n");
+      }
 
       // test
       void test() {
@@ -915,8 +942,19 @@ namespace Cryptography {
         mpz_init(z);
        // mpz_set_str(n, "4096",10);
         randomNumber(n, 255);
+      //  mpz_set_str(n,"4098",10);
+        gmp_printf("\nN is: %Zd\n", n);
         unsigned char encode[32];
         crypto_encode_ed225519_ClampC(encode, n, 32);
+        for(int i = 0;i < 32;i++) {
+            if((i!= 0) && (i % 8 == 0)) {
+                printf("\n");
+            }
+            printf("x%x\t", encode[i]);
+        }
+        printf("\n");
+        crypto_decode_ed225519_ClampC(encode, z, 32);
+        gmp_printf("\nN is: %Zd\n", z);
      //  crypto_decode_ed225519_ClampC(encode, z, 32)
       }
 
