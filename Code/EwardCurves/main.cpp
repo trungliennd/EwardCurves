@@ -2,7 +2,7 @@
 using namespace Cryptography;
 
 int main() {
-    printf("Hello World!!");
+  /*  printf("Hello World!!");
     mpz_t i,p,j;
     mpz_init(i);
     mpz_init(j);
@@ -17,8 +17,9 @@ int main() {
     crypto_sign_ed25519_keypair(publickey, secretkey, 32);
 
     printKey(publickey, 32);
-    printKey(secretkey, 32);
-   // test();
+    printKey(secretkey, 32);*/
+    test();
+
    // unsigned char k = {0x77};
    // char k1[32];
    // char *a = itoa((unsigned int)k, k1, 16);

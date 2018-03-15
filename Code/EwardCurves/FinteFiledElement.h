@@ -54,6 +54,158 @@ namespace Cryptography {
             gmp_randclear(r_state);
     }
 
+    // find x^2 = q mod n
+// return
+// -1 q is quadratic non-residue mod n
+//  1 q is quadratic residue mod n
+//  0 q is congruent to 0 mod n
+//
+    int quadratic_residue(mpz_t x,mpz_t q,mpz_t n)
+    {
+        int leg;
+        mpz_t tmp,ofac,nr,t,r,c,b;
+        unsigned int mod4;
+        mp_bitcnt_t twofac= 0,m,i,ix;
+
+        mod4=mpz_tstbit(n,0);
+        if(!mod4) // must be odd
+            return 0;
+
+        mod4+=2*mpz_tstbit(n,1);
+
+        leg=mpz_legendre(q,n);
+        if(leg!=1)
+            return leg;
+
+        mpz_init_set(tmp,n);
+
+        if(mod4==3) // directly, x = q^(n+1)/4 mod n
+            {
+            mpz_add_ui(tmp,tmp,1UL);
+            mpz_tdiv_q_2exp(tmp,tmp,2);
+            mpz_powm(x,q,tmp,n);
+            mpz_clear(tmp);
+            }
+        else // Tonelli-Shanks
+            {
+            mpz_inits(ofac,t,r,c,b,NULL);
+
+            // split n - 1 into odd number times power of 2 ofac*2^twofac
+            mpz_sub_ui(tmp,tmp,1UL);
+            twofac=mpz_scan1(tmp,twofac); // largest power of 2 divisor
+            if(twofac)
+                mpz_tdiv_q_2exp(ofac,tmp,twofac); // shift right
+
+            // look for non-residue
+            mpz_init_set_ui(nr,2UL);
+            while(mpz_legendre(nr,n)!=-1)
+                mpz_add_ui(nr,nr,1UL);
+
+            mpz_powm(c,nr,ofac,n); // c = nr^ofac mod n
+
+            mpz_add_ui(tmp,ofac,1UL);
+            mpz_tdiv_q_2exp(tmp,tmp,1);
+            mpz_powm(r,q,tmp,n); // r = q^(ofac+1)/2 mod n
+
+            mpz_powm(t,q,ofac,n);
+            mpz_mod(t,t,n); // t = q^ofac mod n
+
+            if(mpz_cmp_ui(t,1UL)!=0) // if t = 1 mod n we're done
+                {
+                m=twofac;
+                do
+                    {
+                    i=2;
+                    ix=1;
+                    while(ix<m)
+                        {
+                        // find lowest 0 < ix < m | t^2^ix = 1 mod n
+                        mpz_powm_ui(tmp,t,i,n); // repeatedly square t
+                        if(mpz_cmp_ui(tmp,1UL)==0)
+                            break;
+                        i<<=1; // i = 2, 4, 8, ...
+                        ix++; // ix is log2 i
+                        }
+                    mpz_powm_ui(b,c,1<<(m-ix-1),n); // b = c^2^(m-ix-1) mod n
+                    mpz_mul(r,r,b);
+                    mpz_mod(r,r,n); // r = r*b mod n
+                    mpz_mul(c,b,b);
+                    mpz_mod(c,c,n); // c = b^2 mod n
+                    mpz_mul(t,t,c);
+                    mpz_mod(t,t,n); // t = t b^2 mod n
+                    m=ix;
+                    }while(mpz_cmp_ui(t,1UL)!=0); // while t mod n != 1
+                }
+            mpz_set(x,r);
+            mpz_clears(tmp,ofac,nr,t,r,c,b,NULL);
+            }
+        return 1;
+    }
+
+    // https://gmplib.org/list-archives/gmp-devel/2006-May/000633.html
+    int mpz_sqrtm(mpz_t q, const mpz_t n, const mpz_t p) {
+        //gmp_printf("\nN is: %Zd",p);
+        mpz_t w, n_inv, y;
+        unsigned int i,s;
+
+        if(mpz_divisible_p(n, p)) {
+            mpz_set_ui(q, 0);
+            return 1;
+        }
+
+        if(mpz_legendre(n, p) != 1) {
+            return 0;
+        }
+
+        if(mpz_tstbit(p, 1) == 1) {
+            mpz_set(q, p);
+            mpz_add_ui(q, q, 1);
+            mpz_fdiv_q_2exp(q, q, 2);
+            mpz_powm(q, n, q, p);
+            return 1;
+        }
+        mpz_init(y);
+        mpz_init(w);
+        mpz_init(n_inv);
+        mpz_set(q, p);
+        mpz_sub_ui(q, q, 1); // q = p - 1
+        s = 0;
+        while(mpz_tstbit(q, s) == 0) s++;
+        mpz_fdiv_q_2exp(q, q, s);
+        mpz_set_ui(w, 2);
+        while(mpz_legendre(w, p) != -1)
+            mpz_add_ui(w, w, 1);
+
+        mpz_powm(w, w, q, p);
+        mpz_add_ui(q, q, 1);
+        mpz_fdiv_q_2exp(q, q, 1);
+        mpz_powm(q, n, q, p);
+        mpz_invert(n_inv, n, p);
+        for(;;) {
+            mpz_powm_ui(y, q, 2, p);
+            mpz_mul(y, y, n_inv);
+         //   gmp_printf("\nYY is: %Zd",y);
+            mpz_mod(y, y, p);
+         //   gmp_printf("\nY mod is: %Zd",y);
+            i = 0;
+            while(mpz_cmp_ui(y, 1) != 0) {
+                i++;
+                mpz_powm_ui(y, y, 2, p);
+            }
+            if(i == 0) {
+                return 1;
+            }
+
+            if(s - i == 1) {
+                mpz_mul(q, q, w);
+            }else {
+                mpz_powm_ui(y, w, 1 << (s - i - 1), p);
+                mpz_mul(q, q, y);
+            }
+            mpz_mod(q, q, p);
+        }
+    }
+
 
 
 
@@ -760,6 +912,28 @@ namespace Cryptography {
             return false;
         }
 
+        void takeY(ffe_t& rs, ffe_t& x, ffe_t& y) {
+            ffe_t xx, yy,temp1, temp2;
+            mpz_t ONE;
+            mpz_init(ONE);
+            mpz_set_str(ONE, "1", 10);
+            xx.mulFiniteFieldElement(x,x); // x^2
+            yy.mulFiniteFieldElement(y,y); // y^2
+            temp1.mulFiniteFieldElement(xx, this->a_); // a*x^2
+           // temp1.addFiniteFieldElement(temp1, yy); // a*x^2 + y^2
+            temp2.mulFiniteFieldElement(xx,yy); // x^2*y^2
+            temp2.mulFiniteFieldElement(temp2, this->d_); // d*x^2*y^2
+            temp2.addFiniteFieldElement(temp2, ONE); // 1 + d*x^2*y^2
+            temp2.subFiniteFieldElement(temp2, temp1);
+            //gmp_printf("\ny^2 = %Zd",yy.i_);
+            //gmp_printf("\ntemp2 = %Zd",temp2.i_);
+            mpz_t x1;
+            mpz_init(x1);
+            int z = mpz_sqrtm(x1, temp2.i_, temp2.P);
+           // gmp_printf("\n i is: %Zd", x1);
+            rs.assignFiniteFieldElement(x1, temp2.P);
+        }
+
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
         }
@@ -942,8 +1116,15 @@ namespace Cryptography {
         mpz_init(z);
        // mpz_set_str(n, "4096",10);
         randomNumber(n, 255);
+        initCurveTwistEwards25519();
+        ed25519::Point q,g(Ed_curves25519->returnGx());
+        q.scalarMultiply(n, Ed_curves25519->returnGx());
+        ffe_t rs;
+        q.printPoint();
+        Ed_curves25519->takeY(rs, q.x_,q.y_);
+        gmp_printf("y is: %Zd",rs.i_);
       //  mpz_set_str(n,"4098",10);
-        gmp_printf("\nN is: %Zd\n", n);
+   /*     gmp_printf("\nN is: %Zd\n", n);
         unsigned char encode[32];
         crypto_encode_ed225519_ClampC(encode, n, 32);
         for(int i = 0;i < 32;i++) {
@@ -955,7 +1136,7 @@ namespace Cryptography {
         printf("\n");
         crypto_decode_ed225519_ClampC(encode, z, 32);
         gmp_printf("\nN is: %Zd\n", z);
-     //  crypto_decode_ed225519_ClampC(encode, z, 32)
+     //  crypto_decode_ed225519_ClampC(encode, z, 32)*/
       }
 
 
