@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include "EwardCurves.h"
+#define PATH_DEV_URANDOM "/dev/urandom"
 
 using namespace std;
 
@@ -26,121 +27,38 @@ namespace Cryptography {
         des[len] = '\0';
     }
 
-    unsigned long randomSeed() {
-        bool check = true;
-        unsigned long rand1,rand2;
-        while(check) {
-            time_t t1;
-            srand((unsigned)time(&t1));
-            rand1 = abs(rand());
-            time_t t2;
-            srand((unsigned)time(&t2));
-            rand2 = abs(rand());
-            if(rand1 == rand2) continue;
-            check = false;
+    void randomNumber(mpz_t rs,unsigned int bytes) {
+        unsigned char rd[bytes];
+        // read 32 bytes into file /dev/urandom
+        FILE *fp;
+        fp = fopen(PATH_DEV_URANDOM, "r");
+        fread(&rd, 1, bytes, fp);
+        fclose(fp);
+        // process number
+        mpz_t base, pow_base;
+        mpz_init(base);
+        mpz_init(pow_base);
+        mpz_set_str(base, "256",10);
+        mpz_set_ui(pow_base, 1);
+
+        for(int i = 0;i < bytes;i++) {
+            mpz_t temp;
+            mpz_init(temp);
+            mpz_set_ui(temp, (unsigned int)rd[i]);
+            if(i == 0) {
+                mpz_add(rs, rs, temp);
+                continue;
+            }
+            mpz_mul(pow_base, pow_base, base);
+            mpz_mul(temp, temp, pow_base);
+            mpz_add(rs, rs, temp);
+            mpz_clear(temp);
         }
-        rand1 = rand1 << (sizeof(int) * 8);
-        unsigned long randRS = (rand1 | rand2);
-        return randRS;
+        mpz_clear(base);
+        mpz_clear(pow_base);
+   //     gmp_printf("\nran_dom is: %Zd", rs);
     }
 
-    void randomNumber(mpz_t rs,int bits) {
-            unsigned long seed = randomSeed();
-            gmp_randstate_t r_state;
-            mpz_init(rs);
-            gmp_randinit_default(r_state);
-            gmp_randseed_ui(r_state, seed);
-            mpz_urandomb(rs,r_state,bits);
-            gmp_randclear(r_state);
-    }
-
-    // find x^2 = q mod n
-// return
-// -1 q is quadratic non-residue mod n
-//  1 q is quadratic residue mod n
-//  0 q is congruent to 0 mod n
-//
-    int quadratic_residue(mpz_t x,mpz_t q,mpz_t n)
-    {
-        int leg;
-        mpz_t tmp,ofac,nr,t,r,c,b;
-        unsigned int mod4;
-        mp_bitcnt_t twofac= 0,m,i,ix;
-
-        mod4=mpz_tstbit(n,0);
-        if(!mod4) // must be odd
-            return 0;
-
-        mod4+=2*mpz_tstbit(n,1);
-
-        leg=mpz_legendre(q,n);
-        if(leg!=1)
-            return leg;
-
-        mpz_init_set(tmp,n);
-
-        if(mod4==3) // directly, x = q^(n+1)/4 mod n
-            {
-            mpz_add_ui(tmp,tmp,1UL);
-            mpz_tdiv_q_2exp(tmp,tmp,2);
-            mpz_powm(x,q,tmp,n);
-            mpz_clear(tmp);
-            }
-        else // Tonelli-Shanks
-            {
-            mpz_inits(ofac,t,r,c,b,NULL);
-
-            // split n - 1 into odd number times power of 2 ofac*2^twofac
-            mpz_sub_ui(tmp,tmp,1UL);
-            twofac=mpz_scan1(tmp,twofac); // largest power of 2 divisor
-            if(twofac)
-                mpz_tdiv_q_2exp(ofac,tmp,twofac); // shift right
-
-            // look for non-residue
-            mpz_init_set_ui(nr,2UL);
-            while(mpz_legendre(nr,n)!=-1)
-                mpz_add_ui(nr,nr,1UL);
-
-            mpz_powm(c,nr,ofac,n); // c = nr^ofac mod n
-
-            mpz_add_ui(tmp,ofac,1UL);
-            mpz_tdiv_q_2exp(tmp,tmp,1);
-            mpz_powm(r,q,tmp,n); // r = q^(ofac+1)/2 mod n
-
-            mpz_powm(t,q,ofac,n);
-            mpz_mod(t,t,n); // t = q^ofac mod n
-
-            if(mpz_cmp_ui(t,1UL)!=0) // if t = 1 mod n we're done
-                {
-                m=twofac;
-                do
-                    {
-                    i=2;
-                    ix=1;
-                    while(ix<m)
-                        {
-                        // find lowest 0 < ix < m | t^2^ix = 1 mod n
-                        mpz_powm_ui(tmp,t,i,n); // repeatedly square t
-                        if(mpz_cmp_ui(tmp,1UL)==0)
-                            break;
-                        i<<=1; // i = 2, 4, 8, ...
-                        ix++; // ix is log2 i
-                        }
-                    mpz_powm_ui(b,c,1<<(m-ix-1),n); // b = c^2^(m-ix-1) mod n
-                    mpz_mul(r,r,b);
-                    mpz_mod(r,r,n); // r = r*b mod n
-                    mpz_mul(c,b,b);
-                    mpz_mod(c,c,n); // c = b^2 mod n
-                    mpz_mul(t,t,c);
-                    mpz_mod(t,t,n); // t = t b^2 mod n
-                    m=ix;
-                    }while(mpz_cmp_ui(t,1UL)!=0); // while t mod n != 1
-                }
-            mpz_set(x,r);
-            mpz_clears(tmp,ofac,nr,t,r,c,b,NULL);
-            }
-        return 1;
-    }
 
     // https://gmplib.org/list-archives/gmp-devel/2006-May/000633.html
     int mpz_sqrtm(mpz_t q, const mpz_t n, const mpz_t p) {
@@ -984,6 +902,7 @@ namespace Cryptography {
           //  bool table_filled;      // neu bang da tinh
 
     };
+
     /*
     *
     * Curve25519 is defined by the following equation:
@@ -1058,9 +977,7 @@ namespace Cryptography {
          mpz_init(t);
          // 1 byte = 8 bits
          unsigned int bits = bytes << 3;
-         char t_char[bytes];
-         itoa(bits, t_char, 10);
-         mpz_set_str(t, t_char, 10);
+         mpz_set_ui(t, bits);
          mpz_set(q, num_encode);
          for(int i = 0;i < bytes;i++) {
             mpz_fdiv_qr(q, r, q, t);
@@ -1073,27 +990,38 @@ namespace Cryptography {
       }
 
       void crypto_decode_ed225519_ClampC(unsigned char decode[], mpz_t &num_decode, unsigned int bytes) {
-        mpz_t t;
+        mpz_t t,t2;
         mpz_init(t);
+        mpz_inti(t2);
         unsigned int bits = bytes << 3;
-        char t_char[bytes];
-        itoa(bits, t_char, 10);
-        mpz_set_str(t, t_char, 10);
+        //char t_char[bytes];
+        //itoa(bits, t_char, 10);
+        //mpz_set_str(t, t_char, 10);
+        mpz_set_ui(t, bits); // new
+        mpz_set_ui(t2, 1); // new
         unsigned char temp[bytes];
         str_copy(temp, decode, bytes);
         for(int i = 0; i < bytes;i++) {
-            mpz_t t1,t2;
+            mpz_t t1;
             mpz_init(t1);
             mpz_init(t2);
-            char tempp[2];
-            itoa((unsigned int) temp[i], tempp, 16);
-            mpz_set_str(t1, tempp, 16);
-            mpz_pow_ui(t2, t, i);
+           // char tempp[2];
+           // itoa((unsigned int) temp[i], tempp, 16);
+           // mpz_set_str(t1, tempp, 16);
+            mpz_set_ui(t1, (unsigned int)temp[i]);
+            if(i == 0) {
+                mpz_add(num_decode, num_decode, t1);
+                continue;
+            }
+           // mpz_pow_ui(t2, t, i);
+           // mpz_mul(t1, t1, t2);
+            mpz_mul(t2, t2, t);
             mpz_mul(t1, t1, t2);
             mpz_add(num_decode, num_decode, t1);
             mpz_clear(t1);
-            mpz_clear(t2);
+           // mpz_clear(t2);
         }
+        mpz_clear(t2);
         mpz_clear(t);
       }
 
@@ -1115,7 +1043,7 @@ namespace Cryptography {
         mpz_init(n);
         mpz_init(z);
        // mpz_set_str(n, "4096",10);
-        randomNumber(n, 255);
+        randomNumber(n, 254);
         initCurveTwistEwards25519();
         ed25519::Point q,g(Ed_curves25519->returnGx());
         q.scalarMultiply(n, Ed_curves25519->returnGx());
