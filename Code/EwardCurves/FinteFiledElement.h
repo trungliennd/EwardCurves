@@ -5,11 +5,24 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include "EwardCurves.h"
+#include <openssl/aes.h>
+#include <openssl/rand.h>
+#include <openssl/hmac.h>
+#include <openssl/buffer.h>
+#include <openssl/sha.h>
+
+#define PATH_DEV_URANDOM "/dev/urandom"
 
 using namespace std;
 
 namespace Cryptography {
-
+    // Cac ham cua chuong trinh
+    void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes);
+    void crypto_decode_ed225519_ClampC(unsigned char decode[], mpz_t &num_decode, unsigned int bytes);
+    void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes);
+    /*
+        Hang so cua chuong trinh
+    */
     const unsigned int crypto_sign_ed25519_PUBLICKEYBYTES = 32;
     const unsigned int crypto_sign_ed25519_SECRETKEYBYTES = 32;
 
@@ -20,32 +33,189 @@ namespace Cryptography {
         des[len] = '\0';
     }
 
-    unsigned long randomSeed() {
-        bool check = true;
-        unsigned long rand1,rand2;
-        while(check) {
-            time_t t1;
-            srand((unsigned)time(&t1));
-            rand1 = abs(rand());
-            time_t t2;
-            srand((unsigned)time(&t2));
-            rand2 = abs(rand());
-            if(rand1 == rand2) continue;
-            check = false;
+    void randomNumber(mpz_t rs,unsigned int bytes) {
+        unsigned char rd[bytes];
+        // read 32 bytes into file /dev/urandom
+        FILE *fp;
+        fp = fopen(PATH_DEV_URANDOM, "r");
+        fread(&rd, 1, bytes, fp);
+        fclose(fp);
+        // process number
+        mpz_t base, pow_base;
+        mpz_init(base);
+        mpz_init(pow_base);
+        mpz_set_str(base, "256",10);
+        mpz_set_ui(pow_base, 1);
+
+        for(int i = 0;i < bytes;i++) {
+            mpz_t temp;
+            mpz_init(temp);
+            mpz_set_ui(temp, (unsigned int)rd[i]);
+            if(i == 0) {
+                mpz_add(rs, rs, temp);
+                continue;
+            }
+            mpz_mul(pow_base, pow_base, base);
+            mpz_mul(temp, temp, pow_base);
+            mpz_add(rs, rs, temp);
+            mpz_clear(temp);
         }
-        rand1 = rand1 << (sizeof(int) * 8);
-        unsigned long randRS = (rand1 | rand2);
-        return randRS;
+        mpz_clear(base);
+        mpz_clear(pow_base);
+   //     gmp_printf("\nran_dom is: %Zd", rs);
     }
 
-    void randomNumber(mpz_t rs,int bits) {
-            unsigned long seed = randomSeed();
-            gmp_randstate_t r_state;
-            mpz_init(rs);
-            gmp_randinit_default(r_state);
-            gmp_randseed_ui(r_state, seed);
-            mpz_urandomb(rs,r_state,bits);
-            gmp_randclear(r_state);
+    // find x^2 = q mod n
+// return
+// -1 q is quadratic non-residue mod n
+//  1 q is quadratic residue mod n
+//  0 q is congruent to 0 mod n
+//
+    int quadratic_residue(mpz_t x,mpz_t q,mpz_t n)
+    {
+    int                        leg;
+    mpz_t                        tmp,ofac,nr,t,r,c,b;
+    unsigned int            mod4;
+    mp_bitcnt_t                twofac=0,m,i,ix;
+
+    mod4=mpz_tstbit(n,0);
+    if(!mod4) // must be odd
+        return 0;
+
+    mod4+=2*mpz_tstbit(n,1);
+
+    leg=mpz_legendre(q,n);
+    if(leg!=1)
+        return leg;
+
+    mpz_init_set(tmp,n);
+
+    if(mod4==3) // directly, x = q^(n+1)/4 mod n
+        {
+        mpz_add_ui(tmp,tmp,1UL);
+        mpz_tdiv_q_2exp(tmp,tmp,2);
+        mpz_powm(x,q,tmp,n);
+        mpz_clear(tmp);
+        }
+    else // Tonelli-Shanks
+        {
+        mpz_inits(ofac,t,r,c,b,NULL);
+
+        // split n - 1 into odd number times power of 2 ofac*2^twofac
+        mpz_sub_ui(tmp,tmp,1UL);
+        twofac=mpz_scan1(tmp,twofac); // largest power of 2 divisor
+        if(twofac)
+            mpz_tdiv_q_2exp(ofac,tmp,twofac); // shift right
+
+        // look for non-residue
+        mpz_init_set_ui(nr,2UL);
+        while(mpz_legendre(nr,n)!=-1)
+            mpz_add_ui(nr,nr,1UL);
+
+        mpz_powm(c,nr,ofac,n); // c = nr^ofac mod n
+
+        mpz_add_ui(tmp,ofac,1UL);
+        mpz_tdiv_q_2exp(tmp,tmp,1);
+        mpz_powm(r,q,tmp,n); // r = q^(ofac+1)/2 mod n
+
+        mpz_powm(t,q,ofac,n);
+        mpz_mod(t,t,n); // t = q^ofac mod n
+
+        if(mpz_cmp_ui(t,1UL)!=0) // if t = 1 mod n we're done
+            {
+            m=twofac;
+            do
+                {
+                i=2;
+                ix=1;
+                while(ix<m)
+                    {
+                    // find lowest 0 < ix < m | t^2^ix = 1 mod n
+                    mpz_powm_ui(tmp,t,i,n); // repeatedly square t
+                    if(mpz_cmp_ui(tmp,1UL)==0)
+                        break;
+                    i<<=1; // i = 2, 4, 8, ...
+                    ix++; // ix is log2 i
+                    }
+                mpz_powm_ui(b,c,1<<(m-ix-1),n); // b = c^2^(m-ix-1) mod n
+                mpz_mul(r,r,b);
+                mpz_mod(r,r,n); // r = r*b mod n
+                mpz_mul(c,b,b);
+                mpz_mod(c,c,n); // c = b^2 mod n
+                mpz_mul(t,t,c);
+                mpz_mod(t,t,n); // t = t b^2 mod n
+                m=ix;
+                }while(mpz_cmp_ui(t,1UL)!=0); // while t mod n != 1
+            }
+        mpz_set(x,r);
+        mpz_clears(tmp,ofac,nr,t,r,c,b,NULL);
+        }
+
+        return 1;
+    }
+
+    // https://gmplib.org/list-archives/gmp-devel/2006-May/000633.html
+    int mpz_sqrtm(mpz_t q, const mpz_t n, const mpz_t p) {
+        //gmp_printf("\nN is: %Zd",p);
+        mpz_t w, n_inv, y;
+        unsigned int i,s;
+
+        if(mpz_divisible_p(n, p)) {
+            mpz_set_ui(q, 0);
+            return 1;
+        }
+
+        if(mpz_legendre(n, p) != 1) {
+            return 0;
+        }
+
+        if(mpz_tstbit(p, 1) == 1) {
+            mpz_set(q, p);
+            mpz_add_ui(q, q, 1);
+            mpz_fdiv_q_2exp(q, q, 2);
+            mpz_powm(q, n, q, p);
+            return 1;
+        }
+        mpz_init(y);
+        mpz_init(w);
+        mpz_init(n_inv);
+        mpz_set(q, p);
+        mpz_sub_ui(q, q, 1); // q = p - 1
+        s = 0;
+        while(mpz_tstbit(q, s) == 0) s++;
+        mpz_fdiv_q_2exp(q, q, s);
+        mpz_set_ui(w, 2);
+        while(mpz_legendre(w, p) != -1)
+            mpz_add_ui(w, w, 1);
+
+        mpz_powm(w, w, q, p);
+        mpz_add_ui(q, q, 1);
+        mpz_fdiv_q_2exp(q, q, 1);
+        mpz_powm(q, n, q, p);
+        mpz_invert(n_inv, n, p);
+        for(;;) {
+            mpz_powm_ui(y, q, 2, p);
+            mpz_mul(y, y, n_inv);
+         //   gmp_printf("\nYY is: %Zd",y);
+            mpz_mod(y, y, p);
+         //   gmp_printf("\nY mod is: %Zd",y);
+            i = 0;
+            while(mpz_cmp_ui(y, 1) != 0) {
+                i++;
+                mpz_powm_ui(y, y, 2, p);
+            }
+            if(i == 0) {
+                return 1;
+            }
+
+            if(s - i == 1) {
+                mpz_mul(q, q, w);
+            }else {
+                mpz_powm_ui(y, w, 1 << (s - i - 1), p);
+                mpz_mul(q, q, y);
+            }
+            mpz_mod(q, q, p);
+        }
     }
 
 
@@ -218,6 +388,14 @@ namespace Cryptography {
             assign(rs);
         }
 
+        void subFiniteFieldElement(const FiniteFieldElement& ffe, mpz_t& a) {
+            mpz_t rs;
+            mpz_init(rs);
+            mpz_sub(rs, ffe.i_, a);
+            mpz_set(this->P, ffe.P);
+            assign(rs);
+        }
+
         void addFiniteFieldElement(const FiniteFieldElement& ffe1, mpz_t& i) {
             mpz_t rs;
             mpz_init(rs);
@@ -317,6 +495,10 @@ namespace Cryptography {
                     y_.assignFiniteFieldElement(y);
                     mpz_set(this->P, P);
                     ec = &e;
+                }
+
+                void negativePoint() {
+                    this->x_.negative();
                 }
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
@@ -487,7 +669,8 @@ namespace Cryptography {
                     mpz_set_str(ONE, "1", 10);
                     mpz_set_str(TWO, "2", 10);
                     // (0, 1)*(0, 1)
-                    if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
+                   if(x.compareEqual(ZERO) && y.compareEqual(ONE)) {
+
                          mpz_set(P, x.P);
                         x_.init(ZERO,this->P);
                         y_.init(ONE,this->P);
@@ -546,7 +729,6 @@ namespace Cryptography {
 
                 // scalar Point
                 void scalarMultiply(mpz_t k,const Point &a) {
-
                     Point acc;
                     acc.assignPoint(a);
                     mpz_t ZERO, i, j, b, ONE, TWO;
@@ -583,6 +765,12 @@ namespace Cryptography {
 
                     assignPoint(res);
                     // Free the space occupied
+                    mpz_clear(ZERO);
+                    mpz_clear(ONE);
+                    mpz_clear(i);
+                    mpz_clear(j);
+                    mpz_clear(TWO);
+                    mpz_clear(b);
                 }
 
                 // (X^2 + aY2)Z^2 = Z^4 + dX^2Y^2.
@@ -713,7 +901,7 @@ namespace Cryptography {
 
         };
 
-        // Edwards Curves thuc hien
+        // Edwards Curves implements
         typedef EdwardsCurve this_t;
         typedef class EdwardsCurve::Point point_t;
 
@@ -748,6 +936,43 @@ namespace Cryptography {
             return false;
         }
 
+        void takeY(ffe_t& rs, ffe_t& x) {
+            ffe_t xx, temp, temp1;
+            mpz_t ONE;
+            mpz_init(ONE);
+            mpz_set_str(ONE, "1", 10);
+            xx.mulFiniteFieldElement(x, x);
+            temp.mulFiniteFieldElement(xx, this->a_); // a*x^2;
+            temp.subFiniteFieldElement(temp, ONE);
+            temp1.mulFiniteFieldElement(xx, this->d_); // d*x^2;
+            temp1.subFiniteFieldElement(temp1, ONE);
+            temp.divFiniteFieldElement(temp, temp1);
+            mpz_t xz,p;
+            mpz_init(xz);
+            mpz_init(p);
+            mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
+            int k = quadratic_residue(xz,temp.i_,p);
+            rs.assignFiniteFieldElement(xz, p);
+        }
+
+        void takeX(ffe_t& rs, ffe_t& y) {
+            ffe_t yy, temp, temp1;
+            mpz_t ONE;
+            mpz_init(ONE);
+            mpz_set_str(ONE, "1", 10);
+            yy.mulFiniteFieldElement(y, y);
+            temp.mulFiniteFieldElement(yy, this->d_);
+            temp.subFiniteFieldElement(temp, this->a_);
+            temp1.subFiniteFieldElement(yy, ONE);
+            temp.divFiniteFieldElement(temp1, temp);
+            mpz_t xz,p;
+            mpz_init(xz);
+            mpz_init(p);
+            mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
+            int k = quadratic_residue(xz, temp.i_, p);
+            rs.assignFiniteFieldElement(xz, p);
+        }
+
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
         }
@@ -774,11 +999,6 @@ namespace Cryptography {
         EdwardsCurve() {
             mpz_init(this->P);
         }
-
-        EdwardsCurve(const EdwardsCurve &e) {
-
-        }
-
        // EdwardsCurve* returnSelft() {
         //    return this;
         //}
@@ -798,11 +1018,8 @@ namespace Cryptography {
             FiniteFieldElement a_; // tham so a cua duong cong
             FiniteFieldElement d_; // tham so d cuar duong cong
             Point Gx;
-         //   typedef vector<Point> table_t;
-          //  table_t m_table_t;     // chua cac diem cua duong cong
-          //  bool table_filled;      // neu bang da tinh
-
     };
+
     /*
     *
     * Curve25519 is defined by the following equation:
@@ -830,10 +1047,12 @@ namespace Cryptography {
       typedef EdwardsCurve ed25519;
       typedef FiniteFieldElement ffe_t;
       ed25519 *Ed_curves25519;
+      //mpz_t scret_key;
+
     /*
     * init curves 25519 Twist Edwards
     */
-      void curveTwistEwards25519() {
+      void initCurveTwistEwards25519() {
         mpz_t p,gx,gy,a,d;
         mpz_init(p);
         mpz_init(gx);
@@ -857,8 +1076,55 @@ namespace Cryptography {
         Ed_curves25519->printEd25519();
       }
 
-      void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[]) {
+      int crypto_scalarmult(unsigned char sharedKey[], unsigned char secretKey[], unsigned char publicKey[]) {
 
+            if(secretKey == NULL || publicKey == NULL) {
+                return -1;
+            }
+
+            if(Ed_curves25519 == NULL) {
+                printf("\n Curves have'nt init\n");
+                return -1;
+            }
+
+            mpz_t skey,pubkey;
+            mpz_init(skey);
+            mpz_init(pubkey);
+            crypto_decode_ed225519_ClampC(secretKey, skey, 32);
+            crypto_decode_ed225519_ClampC(publicKey, pubkey, 32);
+            ffe_t rs,pb(pubkey, Ed_curves25519->P);
+            Ed_curves25519->takeX(rs, pb);
+            ed25519::Point q(rs.i_, pubkey, Ed_curves25519->P);
+            q.scalarMultiply(skey, q);
+
+           // crypto_encode_ed225519_ClampC(sharedKey, temp.y_.i_, 32);
+      }
+
+
+      void randNumberSecretKey(mpz_t n) {
+        mpz_t key, const_paramters;
+        mpz_init(key);             //"57896044618658097711785492504343953926634992332820282019728792003956564819960"
+        mpz_init(const_paramters); //"28948022309329048855892746252171976963317496166410141009864396001978282409976"
+        mpz_set_str(const_paramters, "28948022309329048855892746252171976963317496166410141009864396001978282409984", 10);
+        randomNumber(key, 32); //  ---->
+        mpz_fdiv_q_ui(key, key, 32); // randon number in { 0, ,1, 2, ..., 2^251 - 1}
+        mpz_sub_ui(key, key , 1);// --->
+        mpz_mul_ui(key, key, 8); // 8*{ 0, ,1, 2, ..., 2^251 - 1}
+        mpz_add(key, key, const_paramters); // 2^254 _+ 8*{ 0, ,1, 2, ..., 2^251 - 1}
+        // return number n in 2^254 + 8*{0, 1, 2, ... , 2^251 - 1};
+        mpz_set(n, key);
+        mpz_clear(key);
+        mpz_clear(const_paramters);
+      }
+
+      void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes) {
+        mpz_t n;
+        mpz_init(n);
+        randNumberSecretKey(n);
+        crypto_encode_ed225519_ClampC(secretKey, n, bytes);
+        ed25519::Point q;
+        q.scalarMultiply(n, Ed_curves25519->returnGx());
+        crypto_encode_ed225519_ClampC(publicKey, q.y_.i_, bytes);
       }
 
       void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes) {
@@ -868,9 +1134,7 @@ namespace Cryptography {
          mpz_init(t);
          // 1 byte = 8 bits
          unsigned int bits = bytes << 3;
-         char t_char[bytes];
-         itoa(bits, t_char, 10);
-         mpz_set_str(t, t_char, 10);
+         mpz_set_ui(t, bits);
          mpz_set(q, num_encode);
          for(int i = 0;i < bytes;i++) {
             mpz_fdiv_qr(q, r, q, t);
@@ -883,46 +1147,71 @@ namespace Cryptography {
       }
 
       void crypto_decode_ed225519_ClampC(unsigned char decode[], mpz_t &num_decode, unsigned int bytes) {
-        mpz_t t;
+        mpz_t t,t2;
         mpz_init(t);
+        mpz_init(t2);
         unsigned int bits = bytes << 3;
-        char t_char[bytes];
-        itoa(bits, t_char, 10);
-        mpz_set_str(t, t_char, 10);
+        mpz_set_ui(t, bits);
+        mpz_set_ui(t2, 1);
         unsigned char temp[bytes];
         str_copy(temp, decode, bytes);
-//        temp[0] = temp[0] - (temp[0] % 8);
- //       temp[31] = 64 + (temp[31] % 64);
         for(int i = 0; i < bytes;i++) {
             mpz_t t1;
             mpz_init(t1);
-            char tempp[1];
-            tempp[0] = decode[i];
-
+            mpz_set_ui(t1, (unsigned int)temp[i]);
+            if(i == 0) {
+                mpz_add(num_decode, num_decode, t1);
+                continue;
+            }
+            mpz_mul(t2, t2, t);
+            mpz_mul(t1, t1, t2);
+            mpz_add(num_decode, num_decode, t1);
+            mpz_clear(t1);
         }
-
+        mpz_clear(t2);
+        mpz_clear(t);
       }
 
-
+      // ham print khoa
+      void printKey(unsigned char keys[], unsigned int bytes) {
+        printf("\nKey is: \n");
+        for(int i = 0;i < bytes;i++) {
+            if((i != 0) && ((i % 8) == 0)) {
+                printf("\n");
+            }
+            printf("x%x\t", keys[i]);
+        }
+        printf("\n");
+      }
 
       // test
       void test() {
-        mpz_t n,z;
-        mpz_init(n);
-        mpz_init(z);
-       // mpz_set_str(n, "4096",10);
-      //  randomNumber(n, 255);
-        mpz_set(n, "4912", 10);
-        unsigned char encode[32];
-        crypto_encode_ed225519_ClampC(encode, n, 32);
-     //  crypto_decode_ed225519_ClampC(encode, z, 32);
-        for(int i = 0;i < 32;i++) {
 
-        }
+        initCurveTwistEwards25519();
+        // Alice
+        unsigned char secretKeyAlice[32];
+        unsigned char publicKeyAlice[32];
+        unsigned char sharedKeyAlice[32];
+        crypto_sign_ed25519_keypair(publicKeyAlice, secretKeyAlice, 32);
+        // Bob
+        unsigned char secretKeyBob[32];
+        unsigned char publicKeyBob[32];
+        unsigned char sharedKeyBob[32];
+        crypto_sign_ed25519_keypair(publicKeyBob, secretKeyBob, 32);
+
+        // shared key of Alice
+        crypto_scalarmult(sharedKeyAlice, secretKeyAlice, publicKeyBob);
+
+        // shared key of Bob
+       // crypto_scalarmult(sharedKeyBob, secretKeyBob, publicKeyAlice);
+
+        // print
+       /* printf("\nAlice: \n");
+        printKey(sharedKeyAlice, 32);
+        printf("\n\n");
+        printf("\nBob: \n");
+            */
       }
-
-
-
 
 
 }
