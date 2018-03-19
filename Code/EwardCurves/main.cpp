@@ -18,17 +18,10 @@ int main() {
 
     printKey(publickey, 32);
     printKey(secretkey, 32);*/
-    //test();
-    mpz_t i,rs,p;
-    mpz_init(p);
-    mpz_init(i);
-    mpz_init(rs);
-    mpz_set_str(rs, "23332915997458265218400205037098669710608596188041950079527754443675692320696", 10);
-    mpz_set_str(i,"34563128621199832493385287467245284216026396144778331940201037560280872499253", 10);
-    mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
-    mpz_powm_ui(rs, rs, 2, p);
-    mpz_powm_ui(i, i, 2, p);
-    gmp_printf("\ni is: %Zd\n", i);
-    gmp_printf("\nrs is: %Zd\n",rs);
+    test();
+   // mpz_t i,rs,p;
+   // mpz_init(i);
+   // randNumberSecretKey(i);
+   // gmp_printf("\nN is: %Zd",i);
 
 }

@@ -5,6 +5,12 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include "EwardCurves.h"
+#include <openssl/aes.h>
+#include <openssl/rand.h>
+#include <openssl/hmac.h>
+#include <openssl/buffer.h>
+#include <openssl/sha.h>
+
 #define PATH_DEV_URANDOM "/dev/urandom"
 
 using namespace std;
@@ -382,6 +388,14 @@ namespace Cryptography {
             assign(rs);
         }
 
+        void subFiniteFieldElement(const FiniteFieldElement& ffe, mpz_t& a) {
+            mpz_t rs;
+            mpz_init(rs);
+            mpz_sub(rs, ffe.i_, a);
+            mpz_set(this->P, ffe.P);
+            assign(rs);
+        }
+
         void addFiniteFieldElement(const FiniteFieldElement& ffe1, mpz_t& i) {
             mpz_t rs;
             mpz_init(rs);
@@ -481,6 +495,10 @@ namespace Cryptography {
                     y_.assignFiniteFieldElement(y);
                     mpz_set(this->P, P);
                     ec = &e;
+                }
+
+                void negativePoint() {
+                    this->x_.negative();
                 }
 
                 // operation add (x1, y1) + (x2, y2) on Edwards Curve
@@ -918,26 +936,41 @@ namespace Cryptography {
             return false;
         }
 
-        void takeY(ffe_t& rs, ffe_t& x, ffe_t& y) {
-            ffe_t xx, yy,temp1, temp2;
+        void takeY(ffe_t& rs, ffe_t& x) {
+            ffe_t xx, temp, temp1;
             mpz_t ONE;
             mpz_init(ONE);
             mpz_set_str(ONE, "1", 10);
-            xx.mulFiniteFieldElement(x,x); // x^2
-            yy.mulFiniteFieldElement(y,y); // y^2
-            temp1.mulFiniteFieldElement(xx, this->a_); // a*x^2
-           // temp1.addFiniteFieldElement(temp1, yy); // a*x^2 + y^2
-            temp2.mulFiniteFieldElement(xx,yy); // x^2*y^2
-            temp2.mulFiniteFieldElement(temp2, this->d_); // d*x^2*y^2
-            temp2.addFiniteFieldElement(temp2, ONE); // 1 + d*x^2*y^2
-            temp2.subFiniteFieldElement(temp2, temp1);
-            //gmp_printf("\ny^2 = %Zd",yy.i_);
-            //gmp_printf("\ntemp2 = %Zd",temp2.i_);
-            mpz_t x1;
-            mpz_init(x1);
-            int z = quadratic_residue(x1, temp2.i_, temp2.P);
-           // gmp_printf("\n i is: %Zd", x1);
-            rs.assignFiniteFieldElement(x1, temp2.P);
+            xx.mulFiniteFieldElement(x, x);
+            temp.mulFiniteFieldElement(xx, this->a_); // a*x^2;
+            temp.subFiniteFieldElement(temp, ONE);
+            temp1.mulFiniteFieldElement(xx, this->d_); // d*x^2;
+            temp1.subFiniteFieldElement(temp1, ONE);
+            temp.divFiniteFieldElement(temp, temp1);
+            mpz_t xz,p;
+            mpz_init(xz);
+            mpz_init(p);
+            mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
+            int k = quadratic_residue(xz,temp.i_,p);
+            rs.assignFiniteFieldElement(xz, p);
+        }
+
+        void takeX(ffe_t& rs, ffe_t& y) {
+            ffe_t yy, temp, temp1;
+            mpz_t ONE;
+            mpz_init(ONE);
+            mpz_set_str(ONE, "1", 10);
+            yy.mulFiniteFieldElement(y, y);
+            temp.mulFiniteFieldElement(yy, this->d_);
+            temp.subFiniteFieldElement(temp, this->a_);
+            temp1.subFiniteFieldElement(yy, ONE);
+            temp.divFiniteFieldElement(temp1, temp);
+            mpz_t xz,p;
+            mpz_init(xz);
+            mpz_init(p);
+            mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
+            int k = quadratic_residue(xz, temp.i_, p);
+            rs.assignFiniteFieldElement(xz, p);
         }
 
         void Degree(mpz_t rs) {
@@ -1043,11 +1076,35 @@ namespace Cryptography {
         Ed_curves25519->printEd25519();
       }
 
+      int crypto_scalarmult(unsigned char sharedKey[], unsigned char secretKey[], unsigned char publicKey[]) {
+
+            if(secretKey == NULL || publicKey == NULL) {
+                return -1;
+            }
+
+            if(Ed_curves25519 == NULL) {
+                printf("\n Curves have'nt init\n");
+                return -1;
+            }
+
+            mpz_t skey,pubkey;
+            mpz_init(skey);
+            mpz_init(pubkey);
+            crypto_decode_ed225519_ClampC(secretKey, skey, 32);
+            crypto_decode_ed225519_ClampC(publicKey, pubkey, 32);
+            ffe_t rs,pb(pubkey, Ed_curves25519->P);
+            Ed_curves25519->takeX(rs, pb);
+            ed25519::Point q(rs.i_, pubkey, Ed_curves25519->P);
+            q.scalarMultiply(skey, q);
+
+           // crypto_encode_ed225519_ClampC(sharedKey, temp.y_.i_, 32);
+      }
+
 
       void randNumberSecretKey(mpz_t n) {
         mpz_t key, const_paramters;
-        mpz_init(key);
-        mpz_init(const_paramters);
+        mpz_init(key);             //"57896044618658097711785492504343953926634992332820282019728792003956564819960"
+        mpz_init(const_paramters); //"28948022309329048855892746252171976963317496166410141009864396001978282409976"
         mpz_set_str(const_paramters, "28948022309329048855892746252171976963317496166410141009864396001978282409984", 10);
         randomNumber(key, 32); //  ---->
         mpz_fdiv_q_ui(key, key, 32); // randon number in { 0, ,1, 2, ..., 2^251 - 1}
@@ -1063,11 +1120,11 @@ namespace Cryptography {
       void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes) {
         mpz_t n;
         mpz_init(n);
+        randNumberSecretKey(n);
         crypto_encode_ed225519_ClampC(secretKey, n, bytes);
-        // public key n*G(x,y)
         ed25519::Point q;
         q.scalarMultiply(n, Ed_curves25519->returnGx());
-        crypto_encode_ed225519_ClampC(publicKey, q.x_.i_, bytes);
+        crypto_encode_ed225519_ClampC(publicKey, q.y_.i_, bytes);
       }
 
       void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes) {
@@ -1129,32 +1186,31 @@ namespace Cryptography {
 
       // test
       void test() {
-        mpz_t n,z;
-        mpz_init(n);
-        mpz_init(z);
-       // mpz_set_str(n, "4096",10);
-        randNumberSecretKey(n);
+
         initCurveTwistEwards25519();
-        ed25519::Point q,g(Ed_curves25519->returnGx());
-        q.scalarMultiply(n, Ed_curves25519->returnGx());
-        ffe_t rs;
-        q.printPoint();
-        Ed_curves25519->takeY(rs, q.x_,q.y_);
-        gmp_printf("y is: %Zd",rs.i_);
-      //  mpz_set_str(n,"4098",10);
-       /* gmp_printf("\nN is: %Zd\n", n);
-        unsigned char encode[32];
-        crypto_encode_ed225519_ClampC(encode, n, 32);
-        for(int i = 0;i < 32;i++) {
-            if((i!= 0) && (i % 8 == 0)) {
-                printf("\n");
-            }
-            printf("x%x\t", encode[i]);
-        }
-        printf("\n");
-        crypto_decode_ed225519_ClampC(encode, z, 32);
-        gmp_printf("\nN is: %Zd\n", z);
-     //  crypto_decode_ed225519_ClampC(encode, z, 32)*/
+        // Alice
+        unsigned char secretKeyAlice[32];
+        unsigned char publicKeyAlice[32];
+        unsigned char sharedKeyAlice[32];
+        crypto_sign_ed25519_keypair(publicKeyAlice, secretKeyAlice, 32);
+        // Bob
+        unsigned char secretKeyBob[32];
+        unsigned char publicKeyBob[32];
+        unsigned char sharedKeyBob[32];
+        crypto_sign_ed25519_keypair(publicKeyBob, secretKeyBob, 32);
+
+        // shared key of Alice
+        crypto_scalarmult(sharedKeyAlice, secretKeyAlice, publicKeyBob);
+
+        // shared key of Bob
+       // crypto_scalarmult(sharedKeyBob, secretKeyBob, publicKeyAlice);
+
+        // print
+       /* printf("\nAlice: \n");
+        printKey(sharedKeyAlice, 32);
+        printf("\n\n");
+        printf("\nBob: \n");
+        printKey(sharedKeyBob, 32);*/
       }
 
 
