@@ -911,11 +911,14 @@ namespace Cryptography {
         mpz_init(n);
         mpz_init(z);
        // mpz_set_str(n, "4096",10);
-        randomNumber(n, 255);
+      //  randomNumber(n, 255);
+        mpz_set(n, "4912", 10);
         unsigned char encode[32];
         crypto_encode_ed225519_ClampC(encode, n, 32);
      //  crypto_decode_ed225519_ClampC(encode, z, 32);
+        for(int i = 0;i < 32;i++) {
 
+        }
       }
 
 

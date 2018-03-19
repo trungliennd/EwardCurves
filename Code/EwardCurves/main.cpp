@@ -2,7 +2,7 @@
 using namespace Cryptography;
 
 int main() {
-    printf("Hello World!!");
+  /*  printf("Hello World!!");
     mpz_t i,p,j;
     mpz_init(i);
     mpz_init(j);
@@ -14,7 +14,8 @@ int main() {
     char *a = itoa((unsigned int)k, k1, 16);
     printf("\na is: %s",a);
     mpz_set_str(j, k1, 16);
-    gmp_printf("\n%ZX\n",j);
+    gmp_printf("\n%ZX\n",j);*/
+    TMP_DECL;
   //  curveTwistEwards25519();
     //test();
 }
