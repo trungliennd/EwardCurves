@@ -4,7 +4,6 @@
 #include <gmp.h>
 #include <stdlib.h>
 #include <cstdlib>
-#include "EwardCurves.h"
 #include <openssl/aes.h>
 #include <openssl/rand.h>
 #include <openssl/hmac.h>
@@ -25,6 +24,10 @@ namespace Cryptography {
     */
     const unsigned int crypto_sign_ed25519_PUBLICKEYBYTES = 32;
     const unsigned int crypto_sign_ed25519_SECRETKEYBYTES = 32;
+    const unsigned int crypto_sign_ed25519_SHAREDKEYBYTES = 32;
+    const unsigned int crypto_secretbox_NONCEBYTES = 24;
+    const unsigned int crypto_aead_aes256gcm_ABYTES = 16;
+
 
     void str_copy(unsigned char des[], unsigned char src[], int len) {
         for(int i = 0;i < len;i++) {
@@ -1096,8 +1099,7 @@ namespace Cryptography {
             Ed_curves25519->takeX(rs, pb);
             ed25519::Point q(rs.i_, pubkey, *Ed_curves25519);
             q.scalarMultiply(skey, q);
-
-           // crypto_encode_ed225519_ClampC(sharedKey, temp.y_.i_, 32);
+            crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
       }
 
 
@@ -1203,14 +1205,14 @@ namespace Cryptography {
         crypto_scalarmult(sharedKeyAlice, secretKeyAlice, publicKeyBob);
 
         // shared key of Bob
-       // crypto_scalarmult(sharedKeyBob, secretKeyBob, publicKeyAlice);
+        crypto_scalarmult(sharedKeyBob, secretKeyBob, publicKeyAlice);
 
         // print
-       /* printf("\nAlice: \n");
+        printf("\nAlice: \n");
         printKey(sharedKeyAlice, 32);
         printf("\n\n");
         printf("\nBob: \n");
-        printKey(sharedKeyBob, 32);*/
+        printKey(sharedKeyBob, 32);
       }
 
 
