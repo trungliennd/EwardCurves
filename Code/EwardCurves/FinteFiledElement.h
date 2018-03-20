@@ -1094,7 +1094,7 @@ namespace Cryptography {
             crypto_decode_ed225519_ClampC(publicKey, pubkey, 32);
             ffe_t rs,pb(pubkey, Ed_curves25519->P);
             Ed_curves25519->takeX(rs, pb);
-            ed25519::Point q(rs.i_, pubkey, Ed_curves25519->P);
+            ed25519::Point q(rs.i_, pubkey, *Ed_curves25519);
             q.scalarMultiply(skey, q);
 
            // crypto_encode_ed225519_ClampC(sharedKey, temp.y_.i_, 32);
