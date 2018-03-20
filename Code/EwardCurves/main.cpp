@@ -1,4 +1,5 @@
 #include "FinteFiledElement.h"
+
 using namespace Cryptography;
 
 int main() {
@@ -15,4 +16,5 @@ int main() {
    // mpz_init(i);
    // randNumberSecretKey(i);
    // gmp_printf("\nN is: %Zd",i);*/
+   test();
 }
