@@ -31,6 +31,7 @@
 		<Unit filename="EwardCurves.cpp" />
 		<Unit filename="EwardCurves.h" />
 		<Unit filename="FinteFiledElement.h" />
+		<Unit filename="Makefile" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
