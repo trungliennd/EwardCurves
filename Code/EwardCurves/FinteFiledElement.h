@@ -470,6 +470,7 @@ namespace Cryptography {
                     mpz_t rs;
                     mpz_init(rs);
                     ec.Degree(rs);
+                    gmp_printf("\nZZ is: %Zd",rs);
                     x_.init(x, rs);
                     y_.init(y, rs);
                     mpz_set(this->P, ec.P);
@@ -981,6 +982,7 @@ namespace Cryptography {
 
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
+
         }
 
         void setGenerator(const Point& gx) {
@@ -1079,7 +1081,7 @@ namespace Cryptography {
         Ed_curves25519->setParamester(fa,fd);
         bool check = Ed_curves25519->checkPoint(fgx,fgy);
         if(check) printf("\nCurves is createds");
-        Ed_curves25519->printEd25519();
+  //          Ed_curves25519->printEd25519();
       }
 
       int crypto_scalarmult(unsigned char sharedKey[], unsigned char secretKey[], unsigned char publicKey[]) {
@@ -1101,8 +1103,9 @@ namespace Cryptography {
             ffe_t rs,pb(pubkey, Ed_curves25519->P);
             Ed_curves25519->takeX(rs, pb);
             ed25519::Point q(rs.i_, pubkey, *Ed_curves25519);
-            q.scalarMultiply(skey, q);
-            crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
+           // q.scalarMultiply(skey, q);
+           // crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
+            return 0;
       }
 
 

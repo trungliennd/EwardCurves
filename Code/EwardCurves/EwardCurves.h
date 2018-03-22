@@ -76,7 +76,7 @@ void encrypto_messages(char file_message[],char file_ciphertext[]) {
     fwrite(iv, 1, 16, writeFile); // IV bytes 1-8
     fwrite("\0\0\0\0\0\0\0\0", 1, 8, writeFile); // fill the last 4 with null bytes 25 - 32
 
-    if(AES_set_encrypt_key(secretKey25519, 256, &key) < 0) {
+    if(AES_set_encrypt_key(sharesKey25519, 256, &key) < 0) {
         printf("\n Could not set encryption key");
         exit(1);
     }
@@ -109,7 +109,7 @@ void decrypto_messages(char file_ciphertext[], char file_message[]) {
     }
 
     fread(iv, 1, 24, readFile);
-    if(AES_set_encrypt_key(secretKey25519,256,&key) < 0) {
+    if(AES_set_encrypt_key(sharesKey25519,256,&key) < 0) {
         printf("\n Could not set decryption key");
         exit(1);
     }
@@ -146,6 +146,8 @@ void loadKey(char secretKey[], char publicKey[]) {
         copyKey(secretKey25519,base64_decode(s).c_str(),crypto_scalarmult_curve25519_BYTES);
     }
     secretKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
+   // printf("\ns1 is: \n");
+    //printKey(secretKey25519, 32);
     fclose(readFile);
 
     // public key
@@ -165,6 +167,12 @@ void loadKey(char secretKey[], char publicKey[]) {
      publicKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
      fclose(readFile);
      printf("\n LOAD KEYS DONE!!!\n");
+    // initCurveTwistEwards25519();
+  /*   if(crypto_scalarmult(sharesKey25519, secretKey25519, publicKey25519) != 0){
+        printf("\nCan't calculation shareKey");
+        exit(1);
+     }*/
+   //  printKey(sharesKey25519 ,32);
 }
 
 void createPublicKeyAndSecretKey(char secretKey[],char publicKey[]) {
@@ -184,6 +192,8 @@ void createPublicKeyAndSecretKey(char secretKey[],char publicKey[]) {
         exit(1);
     }else {
         string secret = base64_encode(secretKeyEd25519,crypto_sign_ed25519_SECRETKEYBYTES);
+ //       printf("\nS is: \n");
+     //   printKey(secretKeyEd25519,32);
         int len = secret.length();
         fprintf(out,"---------------- SECERT KEY ----------------\n");
         fwrite(secret.c_str(),1,len,out);
@@ -201,9 +211,9 @@ void createPublicKeyAndSecretKey(char secretKey[],char publicKey[]) {
         fwrite(pub.c_str(),1,len,inp);
         fprintf(inp,"\n--------------------------------------------");
         // public key
-        printf("\n---------------- PUBLIC KEY ----------------\n");
+     /*   printf("\n---------------- PUBLIC KEY ----------------\n");
         printf("%s",pub.c_str());
-        printf("\n--------------------------------------------\n");
+        printf("\n--------------------------------------------\n");*/
     }
     fclose(inp);
 }
