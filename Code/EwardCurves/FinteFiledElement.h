@@ -27,7 +27,8 @@ namespace Cryptography {
     const unsigned int crypto_sign_ed25519_SHAREDKEYBYTES = 32;
     const unsigned int crypto_secretbox_NONCEBYTES = 24;
     const unsigned int crypto_aead_aes256gcm_ABYTES = 16;
-
+    const unsigned int crypto_scalarmult_curve25519_BYTES = 32;
+  //  const unsigned int AES_BLOCK_SIZE = 32;
 
     void str_copy(unsigned char des[], unsigned char src[], int len) {
         for(int i = 0;i < len;i++) {
@@ -67,6 +68,8 @@ namespace Cryptography {
         mpz_clear(pow_base);
    //     gmp_printf("\nran_dom is: %Zd", rs);
     }
+
+
 
     // find x^2 = q mod n
 // return
@@ -467,6 +470,7 @@ namespace Cryptography {
                     mpz_t rs;
                     mpz_init(rs);
                     ec.Degree(rs);
+                    gmp_printf("\nZZ is: %Zd",rs);
                     x_.init(x, rs);
                     y_.init(y, rs);
                     mpz_set(this->P, ec.P);
@@ -978,6 +982,7 @@ namespace Cryptography {
 
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
+
         }
 
         void setGenerator(const Point& gx) {
@@ -1076,7 +1081,7 @@ namespace Cryptography {
         Ed_curves25519->setParamester(fa,fd);
         bool check = Ed_curves25519->checkPoint(fgx,fgy);
         if(check) printf("\nCurves is createds");
-        Ed_curves25519->printEd25519();
+  //          Ed_curves25519->printEd25519();
       }
 
       int crypto_scalarmult(unsigned char sharedKey[], unsigned char secretKey[], unsigned char publicKey[]) {
@@ -1098,8 +1103,9 @@ namespace Cryptography {
             ffe_t rs,pb(pubkey, Ed_curves25519->P);
             Ed_curves25519->takeX(rs, pb);
             ed25519::Point q(rs.i_, pubkey, *Ed_curves25519);
-            q.scalarMultiply(skey, q);
-            crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
+           // q.scalarMultiply(skey, q);
+           // crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
+            return 0;
       }
 
 
@@ -1117,6 +1123,13 @@ namespace Cryptography {
         mpz_set(n, key);
         mpz_clear(key);
         mpz_clear(const_paramters);
+      }
+
+      void randNonce(unsigned char num[], unsigned int bytes) {
+        mpz_t rs;
+        mpz_init(rs);
+        randomNumber(rs, bytes);
+        crypto_encode_ed225519_ClampC(num, rs, bytes);
       }
 
       void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes) {
