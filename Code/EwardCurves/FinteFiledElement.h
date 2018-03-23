@@ -19,6 +19,7 @@ namespace Cryptography {
     void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes);
     void crypto_decode_ed225519_ClampC(unsigned char decode[], mpz_t &num_decode, unsigned int bytes);
     void crypto_sign_ed25519_keypair(unsigned char publicKey[], unsigned char secretKey[],unsigned int bytes);
+    void printKey(unsigned char keys[], unsigned int bytes);
     /*
         Hang so cua chuong trinh
     */
@@ -470,9 +471,9 @@ namespace Cryptography {
                     mpz_t rs;
                     mpz_init(rs);
                     ec.Degree(rs);
-                    gmp_printf("\nZZ is: %Zd",rs);
                     x_.init(x, rs);
                     y_.init(y, rs);
+                    mpz_init(this->P);
                     mpz_set(this->P, ec.P);
                     this->ec = &ec;
                 }
@@ -1085,7 +1086,8 @@ namespace Cryptography {
       }
 
       int crypto_scalarmult(unsigned char sharedKey[], unsigned char secretKey[], unsigned char publicKey[]) {
-
+          //  printKey(secretKey,32);
+           // printKey(publicKey,32);
             if(secretKey == NULL || publicKey == NULL) {
                 return -1;
             }
@@ -1103,8 +1105,9 @@ namespace Cryptography {
             ffe_t rs,pb(pubkey, Ed_curves25519->P);
             Ed_curves25519->takeX(rs, pb);
             ed25519::Point q(rs.i_, pubkey, *Ed_curves25519);
-           // q.scalarMultiply(skey, q);
-           // crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
+            q.scalarMultiply(skey, q);
+            q.printPoint();
+            crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
             return 0;
       }
 
@@ -1140,6 +1143,8 @@ namespace Cryptography {
         ed25519::Point q;
         q.scalarMultiply(n, Ed_curves25519->returnGx());
         crypto_encode_ed225519_ClampC(publicKey, q.y_.i_, bytes);
+        gmp_printf("\n N is: %Zd",n);
+        printKey(publicKey, 32);
       }
 
       void crypto_encode_ed225519_ClampC(unsigned char encode[], mpz_t &num_encode, unsigned int bytes) {

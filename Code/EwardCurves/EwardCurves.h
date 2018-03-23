@@ -50,9 +50,6 @@ int init_ctr(struct ctr_state* state, const unsigned char iv[32]) {
     memcpy(state->ivec, iv, 16);
 }
 
-FILE* readFile;
-FILE* writeFile;
-
 void copyKey(unsigned char *a,const char* b,int len) {
     for(int i =0 ;i < len;i++) {
         a[i] = b[i];
@@ -61,8 +58,8 @@ void copyKey(unsigned char *a,const char* b,int len) {
 
 void encrypto_messages(char file_message[],char file_ciphertext[]) {
     randNonce(iv, 24);
-    readFile = fopen(file_message, "rb");
-    writeFile = fopen(file_ciphertext, "wb");
+    FILE* readFile = fopen(file_message, "rb");
+    FILE* writeFile = fopen(file_ciphertext, "wb");
 
     if(readFile == NULL) {
         printf("\n Read file is null");
@@ -101,8 +98,8 @@ void encrypto_messages(char file_message[],char file_ciphertext[]) {
 }
 
 void decrypto_messages(char file_ciphertext[], char file_message[]) {
-    readFile = fopen(file_ciphertext, "rb");
-    writeFile = fopen(file_message, "w");
+    FILE* readFile = fopen(file_ciphertext, "rb");
+    FILE* writeFile = fopen(file_message, "w");
     if(readFile == NULL || writeFile == NULL) {
         printf("\nCan't decrypto ciphertext");
         exit(EXIT_FAILURE);
@@ -132,7 +129,7 @@ void decrypto_messages(char file_ciphertext[], char file_message[]) {
 
 void loadKey(char secretKey[], char publicKey[]) {
     // secret key
-    readFile = fopen(secretKey, "r");
+    FILE* readFile = fopen(secretKey, "r");
     if(readFile == NULL) {
         printf("\nCan't read secretKey");
         exit(EXIT_FAILURE);
@@ -145,34 +142,36 @@ void loadKey(char secretKey[], char publicKey[]) {
         string s((char*)secret);
         copyKey(secretKey25519,base64_decode(s).c_str(),crypto_scalarmult_curve25519_BYTES);
     }
-    secretKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
+//    secretKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
    // printf("\ns1 is: \n");
     //printKey(secretKey25519, 32);
     fclose(readFile);
 
     // public key
-    readFile = fopen(publicKey, "r");
-    if(readFile == NULL) {
+    FILE* readFile1 = fopen(publicKey, "r");
+    if(readFile1 == NULL) {
         printf("\nCan't read publicKey");
         exit(EXIT_FAILURE);
     }else {
         unsigned char pub[BASE64_LEN];
-        fread(pub,1,BASE64_LEN,readFile);
-        fscanf(readFile,"%c",&pub[BASE64_LEN - 1]);
-        fread(pub,1,BASE64_LEN,readFile);
+        fread(pub,1,BASE64_LEN,readFile1);
+        fscanf(readFile1,"%c",&pub[BASE64_LEN - 1]);
+        fread(pub,1,BASE64_LEN,readFile1);
         pub[BASE64_LEN] = '\0';
         string s((char*)pub);
         copyKey(publicKey25519,base64_decode(s).c_str(),crypto_scalarmult_curve25519_BYTES);
     }
-     publicKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
-     fclose(readFile);
+ //    publicKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
+     fclose(readFile1);
      printf("\n LOAD KEYS DONE!!!\n");
-    // initCurveTwistEwards25519();
-  /*   if(crypto_scalarmult(sharesKey25519, secretKey25519, publicKey25519) != 0){
+     printf("\npublic is: ");
+  //   printKey(publicKey25519, 32);
+     initCurveTwistEwards25519();
+     if(crypto_scalarmult(sharesKey25519, secretKey25519, publicKey25519) != 0){
         printf("\nCan't calculation shareKey");
         exit(1);
-     }*/
-   //  printKey(sharesKey25519 ,32);
+     }
+     printKey(sharesKey25519 ,32);
 }
 
 void createPublicKeyAndSecretKey(char secretKey[],char publicKey[]) {
