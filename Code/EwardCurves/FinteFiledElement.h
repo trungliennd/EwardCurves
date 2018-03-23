@@ -982,7 +982,7 @@ namespace Cryptography {
 
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
-
+            gmp
         }
 
         void setGenerator(const Point& gx) {
