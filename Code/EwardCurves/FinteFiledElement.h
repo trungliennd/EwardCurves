@@ -983,7 +983,6 @@ namespace Cryptography {
 
         void Degree(mpz_t rs) {
             mpz_set(rs, this->P);
-            gmp
         }
 
         void setGenerator(const Point& gx) {
@@ -1051,7 +1050,8 @@ namespace Cryptography {
 
         paramester
             a = 486664 and d = 486660
-
+        order
+            n = 2^252 + 27742317777372353535851937790883648493
       */
       typedef EdwardsCurve ed25519;
       typedef FiniteFieldElement ffe_t;
