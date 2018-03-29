@@ -6,6 +6,8 @@ using namespace Cryptography;
 void sha256(char *string, unsigned char hash_code[32]);
 void HashModul(char *string, mpz_t rs, unsigned int hash_bits, unsigned int modul_bits, void(*function)(char *string, char *out));
 void stringToInteger(unsigned char decode[], mpz_t &num_decode, unsigned int bytes);
+void cert_Request(char identity[]);
+void ellipticCurvePointToString(mpz_t x, mpz_t y, mpz_t p);
 
 void str_inv_copy(unsigned char des[], unsigned char src[], int len) {
         for(int i = 0;i < len;i++) {
@@ -41,4 +43,13 @@ void stringToInteger(unsigned char hash[], mpz_t &num_decode, unsigned int bytes
     }
     out[64] = 0;
     mpz_set_str(num_decode,out, 16);
+}
+
+
+void cert_Request(char identity[]) {
+
+}
+
+void ellipticCurvePointToString(mpz_t x, mpz_t y, mpz_t p) {
+
 }
