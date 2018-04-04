@@ -1175,6 +1175,7 @@ namespace Cryptography {
         mpz_set_ui(t2, 1);
         unsigned char temp[bytes];
         str_copy(temp, decode, bytes);
+        printKey(temp,32);
         for(int i = 0; i < bytes;i++) {
             mpz_t t1;
             mpz_init(t1);
