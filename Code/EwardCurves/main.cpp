@@ -1,7 +1,7 @@
 #include "ImplicitCertificate.h"
 
 int main() {
-  mpz_t t,t1,rs,temp1,temp2;
+ /* mpz_t t,t1,rs,temp1,temp2;
   mpz_init(t);
   mpz_init(temp1);
   mpz_init(temp2);
@@ -19,6 +19,7 @@ int main() {
   }
   printf("\n");
   stringToEllipticCurvePoint(temp1, temp2, point, 64);
-  gmp_printf("\ny  is: %Zd\n",temp2);
+  gmp_printf("\ny  is: %Zd\n",temp2);*/
+  createPairKey_ku_vs_Ru((char*)"key",(char*)"key.pub");
   //test();
 }

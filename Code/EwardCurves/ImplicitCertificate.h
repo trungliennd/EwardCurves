@@ -1,5 +1,6 @@
 #include <math.h>
 #include "FinteFiledElement.h"
+#include "base64.h"
 #include <string.h>
 using namespace Cryptography;
 
@@ -67,8 +68,34 @@ void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru) {
     ed25519::Point q;
     q.scalarMultiply(ku, Ed_curves25519->returnGx());
     unsigned char key_Ru[64];
-    ellipticCurvePointToString(q.x_.i_, q.y_.i_, key_Ru, 32);
-
+    ellipticCurvePointToString(q.x_.i_, q.y_.i_, key_Ru, 64);
+    FILE* out1 = fopen(file_ku, "w");
+    if(out1 == NULL) {
+        printf("\nWrite secretKey Fail");
+        exit(1);
+    }else {
+        string secret = base64_encode(key_ku,crypto_sign_ed25519_SECRETKEYBYTES);
+ //       printf("\nS is: \n");
+     //   printKey(secretKeyEd25519,32);
+        int len = secret.length();
+        fprintf(out1,"---------------- SECERT KEY ----------------\n");
+        fwrite(secret.c_str(),1,len,out1);
+        fprintf(out1,"\n--------------------------------------------");
+    }
+    fclose(out1);
+    FILE* out2 = fopen(file_Ru, "w");
+    if(out2 == NULL) {
+        printf("\nWrite pubKey Fail");
+        exit(1);
+    }else {
+        string pubkey = base64_encode(key_Ru,crypto_sign_ed25519_SECRETKEYBYTES);
+ //       printf("\nS is: \n");
+     //   printKey(secretKeyEd25519,32);
+        int len = pubkey.length();
+        fprintf(out2,"---------------- PUBLIC KEY ----------------\n");
+        fwrite(pubkey.c_str(),1,len,out2);
+        fprintf(out2,"\n--------------------------------------------");
+    }
 }
 
 
