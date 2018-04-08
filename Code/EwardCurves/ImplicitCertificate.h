@@ -175,5 +175,3 @@ void stringToEllipticCurvePoint(mpz_t& x, mpz_t& y, unsigned char string_point[]
     crypto_decode_ed225519_ClampC(point_y, y, 32);
 }
 
-
-
