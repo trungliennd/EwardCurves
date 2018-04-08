@@ -13,7 +13,10 @@ void stringToEllipticCurvePoint(mpz_t& x, mpz_t& y, unsigned char string_point[]
 void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru);
 
 ed25519::Point Ru;
+ed25519::Point Pu;
 mpz_t ku;
+mpz_t k_ca;
+mpz_t d_ca;
 
 unsigned char publicKey25519[crypto_sign_ed25519_PUBLICKEYBYTES];  // use 32 bytes
 unsigned char secretKey25519[crypto_sign_ed25519_SECRETKEYBYTES];  // use 32 bytes
