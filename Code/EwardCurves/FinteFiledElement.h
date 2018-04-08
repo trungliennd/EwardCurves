@@ -26,6 +26,7 @@ namespace Cryptography {
     const unsigned int crypto_sign_ed25519_PUBLICKEYBYTES = 32;
     const unsigned int crypto_sign_ed25519_SECRETKEYBYTES = 32;
     const unsigned int crypto_sign_ed25519_SHAREDKEYBYTES = 32;
+    const unsigned int crypto_sign_ed25519_PUBLICKEYBYTES_D = 64;
     const unsigned int crypto_secretbox_NONCEBYTES = 24;
     const unsigned int crypto_aead_aes256gcm_ABYTES = 16;
     const unsigned int crypto_scalarmult_curve25519_BYTES = 32;
@@ -69,9 +70,6 @@ namespace Cryptography {
         mpz_clear(pow_base);
    //     gmp_printf("\nran_dom is: %Zd", rs);
     }
-
-
-
     // find x^2 = q mod n
 // return
 // -1 q is quadratic non-residue mod n
@@ -502,6 +500,13 @@ namespace Cryptography {
                     x_.assignFiniteFieldElement(x);
                     y_.assignFiniteFieldElement(y);
                     mpz_set(this->P, P);
+                    ec = &e;
+                }
+
+                void assignPoint(mpz_t x, mpz_t y, EdwardsCurve &e) {
+                    mpz_set(this->P, e.P);
+                    x_.assignFiniteFieldElement(x, this->P);
+                    y_.assignFiniteFieldElement(y, this->P);
                     ec = &e;
                 }
 
@@ -1106,7 +1111,7 @@ namespace Cryptography {
             Ed_curves25519->takeX(rs, pb);
             ed25519::Point q(rs.i_, pubkey, *Ed_curves25519);
             q.scalarMultiply(skey, q);
-            q.printPoint();
+       //    q.printPoint();
             crypto_encode_ed225519_ClampC(sharedKey, q.y_.i_, 32);
             return 0;
       }
@@ -1175,7 +1180,7 @@ namespace Cryptography {
         mpz_set_ui(t2, 1);
         unsigned char temp[bytes];
         str_copy(temp, decode, bytes);
-        printKey(temp,32);
+     //   printKey(temp,32);
         for(int i = 0; i < bytes;i++) {
             mpz_t t1;
             mpz_init(t1);

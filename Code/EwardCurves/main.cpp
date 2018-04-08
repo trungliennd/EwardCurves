@@ -20,6 +20,6 @@ int main() {
   printf("\n");
   stringToEllipticCurvePoint(temp1, temp2, point, 64);
   gmp_printf("\ny  is: %Zd\n",temp2);*/
- // createPairKey_ku_vs_Ru((char*)"key",(char*)"key.pub");
-  //test();
+    createPairKey_ku_vs_Ru((char*)"key",(char*)"key.pub");
+    loadKey_new((char*)"key",(char*)"key.pub");  //test();
 }
