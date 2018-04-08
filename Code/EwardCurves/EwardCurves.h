@@ -163,8 +163,8 @@ void loadKey(char secretKey[], char publicKey[]) {
     }
  //    publicKey25519[crypto_scalarmult_curve25519_BYTES] = '\0';
      fclose(readFile1);
-     printf("\n LOAD KEYS DONE!!!\n");
-     printf("\npublic is: ");
+ //    printf("\n LOAD KEYS DONE!!!\n");
+ //    printf("\npublic is: ");
   //   printKey(publicKey25519, 32);
      initCurveTwistEwards25519();
      if(crypto_scalarmult(sharesKey25519, secretKey25519, publicKey25519) != 0){
