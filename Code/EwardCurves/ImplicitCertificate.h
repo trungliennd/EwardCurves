@@ -20,6 +20,11 @@ unsigned char secretKey25519[crypto_sign_ed25519_SECRETKEYBYTES];  // use 32 byt
 unsigned char sharesKey25519[crypto_sign_ed25519_SHAREDKEYBYTES]; // use 32 bytes
 unsigned char nonce[crypto_secretbox_NONCEBYTES];  // use 24 bytes
 
+void copyKey(unsigned char *a,const char* b,int len) {
+    for(int i =0 ;i < len;i++) {
+        a[i] = b[i];
+    }
+}
 
 void str_inv_copy(unsigned char des[], unsigned char src[], int len) {
         for(int i = 0;i < len;i++) {
@@ -63,6 +68,7 @@ void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru) {
     }
     mpz_init(ku);
     randNumberSecretKey(ku);
+    gmp_printf("\nk_create is: %Zd",ku);
     unsigned char key_ku[32];
     crypto_encode_ed225519_ClampC(key_ku, ku, 32);
     ed25519::Point q;
@@ -88,16 +94,58 @@ void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru) {
         printf("\nWrite pubKey Fail");
         exit(1);
     }else {
-        string pubkey = base64_encode(key_Ru,crypto_sign_ed25519_SECRETKEYBYTES);
+        string pubkey = base64_encode(key_Ru,crypto_sign_ed25519_PUBLICKEYBYTES_D);
  //       printf("\nS is: \n");
      //   printKey(secretKeyEd25519,32);
         int len = pubkey.length();
-        fprintf(out2,"---------------- PUBLIC KEY ----------------\n");
+        fprintf(out2,"-------------------------------------- PUBLIC KEY --------------------------------------\n");
         fwrite(pubkey.c_str(),1,len,out2);
-        fprintf(out2,"\n--------------------------------------------");
+        fprintf(out2,"\n----------------------------------------------------------------------------------------");
     }
 }
 
+
+void loadKey_new(char*file_ku, char*file_Ru) {
+    // secret key
+    FILE* readFile = fopen(file_ku, "r");
+    if(readFile == NULL) {
+        printf("\nCan't read secretKey");
+        exit(EXIT_FAILURE);
+    }else {
+        unsigned char key_ku[BASE64_LEN];
+        fread(key_ku,1,BASE64_LEN,readFile);
+        fscanf(readFile,"%c",&key_ku[BASE64_LEN - 1]);
+        fread(key_ku,1,BASE64_LEN,readFile);
+        key_ku[BASE64_LEN] = '\0';
+        string s((char*)key_ku);
+        mpz_init(ku);
+        crypto_decode_ed225519_ClampC((unsigned char*)base64_decode(s).c_str(), ku, 32);
+    }
+    fclose(readFile);
+    FILE* readFile1 = fopen(file_Ru, "r");
+    if(readFile1 == NULL) {
+        printf("\nCan't read publicKey");
+        exit(EXIT_FAILURE);
+    }else {
+        unsigned char pub[BASE64_LEN_D];
+        fread(pub,1,BASE64_LEN_D,readFile1);
+        fscanf(readFile1,"%c",&pub[BASE64_LEN_D - 1]);
+        fread(pub,1,BASE64_LEN_D,readFile1);
+        pub[BASE64_LEN] = '\0';
+        string s((char*)pub);
+        mpz_t x, y;
+        mpz_init(x);
+        mpz_init(y);
+        stringToEllipticCurvePoint(x, y, (unsigned char*)base64_decode(s).c_str(), crypto_sign_ed25519_PUBLICKEYBYTES_D);
+        if(Ed_curves25519 == NULL) {
+            initCurveTwistEwards25519();
+        }
+        Ru.assignPoint(x, y, *Ed_curves25519);
+    }
+    fclose(readFile1);
+    Ru.printPoint();
+
+}
 
 void cert_Request(char identity[]) {
 
