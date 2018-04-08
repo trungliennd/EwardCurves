@@ -1,37 +1,25 @@
-#include "EwardCurves.h"
-
-using namespace Cryptography;
+#include "ImplicitCertificate.h"
 
 int main() {
-  /*  printf("Hello World!!");
-    mpz_t i,p,j;
-    mpz_init(i);
-    mpz_init(j);
-    mpz_init(p);
-    mpz_set_str(i, "4872",10);
-    mpz_set(p, i);
-
-    test();
-   // mpz_t i,rs,p;
-   // mpz_init(i);
-   // randNumberSecretKey(i);
-   // gmp_printf("\nN is: %Zd",i);*/
- //  test();
-    char* file = (char*)"Alice";
-    char* file1 = (char*)"Alice.pub";
-    char* file2 = (char*)"Bob";
-    char* file3 = (char*)"Bob.pub";
-  //  createPublicKeyAndSecretKey(file, file1);
-   // createPublicKeyAndSecretKey(file2, file3);
-  //  initCurveTwistEwards25519();
-  //  printf("\n\nLoad1");
-  //  loadKey(file,file3); //pub: 47541145414185450203032252793825292412973981143890313845229093811630295353916
-  //  crypto_scalarmult(sharesKey25519, secretKey25519, publicKey25519);
- //   printKey(sharesKey25519, 32);
-  //  printf("\n\nload2");
-   // loadKey(file2, file1);
-   // crypto_scalarmult(sharesKey25519, secretKey25519, publicKey25519);
-  //  printKey(sharesKey25519, 32);
-
-
+ /* mpz_t t,t1,rs,temp1,temp2;
+  mpz_init(t);
+  mpz_init(temp1);
+  mpz_init(temp2);
+  mpz_init(t1);
+  mpz_init(rs);
+  mpz_set_str(t1, "27742317777372353535851937790883648493", 10);
+  mpz_ui_pow_ui(t, 2, 252);
+  mpz_add(rs, t, t1);
+  gmp_printf("\nrs is: %Zd\n",rs);
+  unsigned char point[64];
+  ellipticCurvePointToString(t1, rs, point,64);
+  printf("\nrs is: ");
+  for(int i = 0;i < 64;i++) {
+    printf("%x",point[i]);
+  }
+  printf("\n");
+  stringToEllipticCurvePoint(temp1, temp2, point, 64);
+  gmp_printf("\ny  is: %Zd\n",temp2);*/
+  createPairKey_ku_vs_Ru((char*)"key",(char*)"key.pub");
+  //test();
 }
