@@ -1,6 +1,7 @@
 #include <math.h>
 #include "FinteFiledElement.h"
 #include "base64.h"
+#include <time.h>
 #include <string.h>
 using namespace Cryptography;
 
@@ -25,11 +26,75 @@ unsigned char secretKey25519[crypto_sign_ed25519_SECRETKEYBYTES];  // use 32 byt
 unsigned char sharesKey25519[crypto_sign_ed25519_SHAREDKEYBYTES]; // use 32 bytes
 unsigned char nonce[crypto_secretbox_NONCEBYTES];  // use 24 bytes
 
+struct cert {
+    char identify[];
+    unsigned char key[];
+    char time_created[];
+    char time_expired[];
+};
+
+
 void copyKey(unsigned char *a,const char* b,int len) {
     for(int i =0 ;i < len;i++) {
         a[i] = b[i];
     }
 }
+
+unsigned char* str_cat(unsigned char* src, unsigned char* dest) {
+    int size = 0;
+    int i,j;
+    for(i = 0;;i++) {
+        if(src[i] != '\0') size++;
+        else break;
+    }
+    for(j = 0;;j++) {
+        if(dest[i] != '\0') size++;
+        else break;
+    }
+    unsigned char *temp = new unsigned char[size];
+    for(int i1 = 0;i1 < i;i1++) {
+        temp[i1] = src[i];
+    }
+    for(int i2 = 0;i2 < j;i2++) {
+        temp[i + i2] = dest[i2];
+    }
+    return temp;
+}
+
+void getTime(char *time_created, char *time_expired) {
+    time_t rawtime;
+    struct tm *timeinfo;
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    time_created = asctime(timeinfo);
+    printf ( "Current local time and date: %s", asctime (timeinfo) );
+    struct tm *then_tm = timeinfo;
+    then_tm->tm_mday += 1;
+    time_expired = asctime(timeinfo);
+    // printf ( "Current local time and date: %s", asctime (then_tm) );
+    return;
+}
+
+time_t getStructTime(char* time) {
+    int day = 0, year = 0, month = 0, hour = 0, minute = 0, seconds = 0;
+    char day_str[10], month_str[10];
+    sscanf(time, "%s %s  %d %d:%d:%d %d", day_str,
+                    month_str, &day, &hour, &minute, &seconds, &year);
+    struct tm breakdown = {0};
+    breakdown.tm_year = year - 1900; /* years since 1900 */
+    breakdown.tm_mon = month - 1;
+    breakdown.tm_mday = day;
+    breakdown.tm_hour = hour;
+    breakdown.tm_sec = seconds;
+    breakdown.tm_min = minute;
+    time_t result = 0;
+    if ((result = mktime(&breakdown)) == (time_t)-1) {
+        fprintf(stderr, "Time invalidate \n");
+        return EXIT_FAILURE;
+    }
+    return result;
+}
+
 
 void str_inv_copy(unsigned char des[], unsigned char src[], int len) {
         for(int i = 0;i < len;i++) {
@@ -46,7 +111,8 @@ void sha256(char *string, unsigned char hash_code[32]) {
 }
 
 // modul n = 2^252 + 27742317777372353535851937790883648493
-void hashModul(char *string_hash, mpz_t &rs, unsigned int hash_bits, unsigned int modul_bits, void(*function)(char *string,unsigned char *out)) {
+void hashModul(char *string_hash, mpz_t &rs, unsigned int hash_bits, unsigned int modul_bits,
+                                            void(*function)(char *string,unsigned char *out)) {
     unsigned char output[32];
     function(string_hash, output);
     unsigned char andBits[5] = {0xff, 0x7f, 0x3f, 0x1f, 0x0f};
@@ -150,19 +216,21 @@ void loadKey_new(char*file_ku, char*file_Ru) {
 
 void cert_Request(char identity[], unsigned char key_Ru[], char *file_out) {
     FILE* out = fopen(file_out, "w");
-    fprintf(out, "Identity: ");
+    fprintf(out, "{\n");
+    fprintf(out, "\"Identity\": ");
     int i = 0;
     while(identity != '\0') {
         fprintf(out,"%c",identity[i]);
         i++;
     }
     fprintf(out, "\n");
-    fprintf(out, "Key: ");
+    fprintf(out, "\"Key\": ");
     i = 0;
     while(key_Ru[i] != '\0') {
         fprintf(out,"%c",key_Ru[i]);
         i++;
     }
+    fprintf(out, "\n}\n");
     fclose(out);
 }
 
@@ -179,8 +247,14 @@ void createPu(ed25519::Point &Ru) {
     Pu.add(Ru.x_, Ru.y_, q.x_, q.y_);
 }
 
-void enCodeCert(ed25519::Point Pu, char identify[], long time) {
-
+char* enCodeCert(ed25519::Point Pu, char identify[], char time[]) {
+    unsigned char* temp1,*temp;
+    ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp1, 64);
+    temp = (unsigned char*)strcat(identify, time);
+    temp = str_cat(temp, temp1);
+    int size = 0;
+    for(int i = 0;;i++) if(temp[i] != '\0') size++; else break;
+    return (char*)base64_encode(temp,size).c_str();
 }
 
 void calculate_r_or_du(mpz_t e, mpz_t k, mpz_t r_or_d_ca) {
