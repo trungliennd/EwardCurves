@@ -1,5 +1,4 @@
 #include "ImplicitCertificate.h"
-
 int main() {
  /* mpz_t t,t1,rs,temp1,temp2;
   mpz_init(t);
@@ -21,9 +20,12 @@ int main() {
   stringToEllipticCurvePoint(temp1, temp2, point, 64);
   gmp_printf("\ny  is: %Zd\n",temp2);*/
    // createPairKey_ku_vs_Ru((char*)"key",(char*)"key.pub");
-   // loadKey_new((char*)"key",(char*)"key.pub");  //test();
+  /* loadKey_new((char*)"key",(char*)"key.pub");  //test();
+   unsigned char key_Ru[88];
+
+   ellipticCurvePointToString(Ru.x_.i_, Ru.y_.i_, key_Ru, 64);
    char* u;
    char* v;
-   getTime((char*)u, (char*)v);
-   getStructTime((char*)"Sun Apr  8 22:07:29 2018");
+   cert_Request((char*)"Alice",(unsigned char*)base64_encode(key_Ru, 64).c_str(), (char*)"request.cert");*/
+   create_certificate((char*)"request.cert",NULL);
 }

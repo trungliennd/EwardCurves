@@ -1086,7 +1086,7 @@ namespace Cryptography {
         Ed_curves25519->setGenerator(fgx, fgy, p, *Ed_curves25519);
         Ed_curves25519->setParamester(fa,fd);
         bool check = Ed_curves25519->checkPoint(fgx,fgy);
-        if(check) printf("\nCurves is createds");
+      //  if(check) printf("\nCurves is createds");
   //          Ed_curves25519->printEd25519();
       }
 

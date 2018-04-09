@@ -3,12 +3,13 @@
 #include "base64.h"
 #include <time.h>
 #include <string.h>
+#include "utility.h"
 using namespace Cryptography;
 
 void sha256(char *string, unsigned char hash_code[32]);
 void HashModul(char *string, mpz_t rs, unsigned int hash_bits, unsigned int modul_bits, void(*function)(char *string, char *out));
 void stringToInteger(unsigned char decode[], mpz_t &num_decode, unsigned int bytes);
-void cert_Request(char identity[]);
+void cert_Request(char identity[], unsigned char key_Ru[], char *file_out);
 void ellipticCurvePointToString(mpz_t& x, mpz_t& y, unsigned char string_point[], int bytes);
 void stringToEllipticCurvePoint(mpz_t& x, mpz_t& y, unsigned char string_point[], int bytes);
 void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru);
@@ -27,10 +28,12 @@ unsigned char sharesKey25519[crypto_sign_ed25519_SHAREDKEYBYTES]; // use 32 byte
 unsigned char nonce[crypto_secretbox_NONCEBYTES];  // use 24 bytes
 
 struct cert {
-    char identify[];
-    unsigned char key[];
-    char time_created[];
-    char time_expired[];
+    char identify[10];
+    unsigned char key[256];
+    char hashCode[256];
+    char r[256];
+    char time_created[30];
+    char time_expired[30];
 };
 
 
@@ -201,7 +204,6 @@ void loadKey_new(char*file_ku, char*file_Ru) {
         fread(pub,1,BASE64_LEN_D,readFile1);
         pub[BASE64_LEN_D] = '\0';
         string s((char*)pub);
-        printf("\npub1 is: %s",(char*)s.c_str());
         mpz_t x, y;
         mpz_init(x);
         mpz_init(y);
@@ -217,20 +219,20 @@ void loadKey_new(char*file_ku, char*file_Ru) {
 void cert_Request(char identity[], unsigned char key_Ru[], char *file_out) {
     FILE* out = fopen(file_out, "w");
     fprintf(out, "{\n");
-    fprintf(out, "\"Identity\": ");
+    fprintf(out, "\"Identity\": \"");
     int i = 0;
-    while(identity != '\0') {
+    while(identity[i] != '\0') {
         fprintf(out,"%c",identity[i]);
         i++;
     }
-    fprintf(out, "\n");
-    fprintf(out, "\"Key\": ");
+    fprintf(out, "\"\n");
+    fprintf(out, "\"Key\": \"");
     i = 0;
     while(key_Ru[i] != '\0') {
         fprintf(out,"%c",key_Ru[i]);
         i++;
     }
-    fprintf(out, "\n}\n");
+    fprintf(out, "\"\n}\n");
     fclose(out);
 }
 
@@ -247,14 +249,48 @@ void createPu(ed25519::Point &Ru) {
     Pu.add(Ru.x_, Ru.y_, q.x_, q.y_);
 }
 
-char* enCodeCert(ed25519::Point Pu, char identify[], char time[]) {
+unsigned char* enCodeCert(ed25519::Point Pu, char identify[], char time[]) {
     unsigned char* temp1,*temp;
     ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp1, 64);
     temp = (unsigned char*)strcat(identify, time);
     temp = str_cat(temp, temp1);
     int size = 0;
-    for(int i = 0;;i++) if(temp[i] != '\0') size++; else break;
-    return (char*)base64_encode(temp,size).c_str();
+    unsigned char *rs = new unsigned char[32];
+    sha256((char*)temp, rs);
+    return rs;
+}
+void convert(char *line) {
+    int i = 0;
+    if(line == NULL) return;
+    while(line[i] != '\0') {
+        if(line[i] == '"' || line[i] == ':') {
+            line[i] = ' ';
+        }
+        i++;
+    }
+}
+void create_certificate(char* file_in, char*file_out) {
+    struct cert temp;
+    FILE* in = fopen(file_in, "r");
+    char *line = NULL;
+    unsigned char key_Ru[88];
+    while(!feof(in)) {
+        line = readLine(in);
+        if(line == NULL){
+            break;
+        }
+        if((strcmp(line,(char*)"{\n") == 0) || (strcmp(line, (char*)"}\n") == 0)) continue;
+        char s1[10],s2[256];
+        convert(line);
+        sscanf(line," %s   %s ",s1, s2);
+        if(strcmp(s1, (char*)"Identity") == 0) {
+
+        }else if(strcmp(s1, (char*)"Key") == 0) {
+            str_copy(key_Ru, (unsigned char*)s2, 88);
+        }
+    }
+    if(line != NULL) free(line);
+    fclose(in);
 }
 
 void calculate_r_or_du(mpz_t e, mpz_t k, mpz_t r_or_d_ca) {
