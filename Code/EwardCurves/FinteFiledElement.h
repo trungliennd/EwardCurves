@@ -39,6 +39,22 @@ namespace Cryptography {
         des[len] = '\0';
     }
 
+    void str_copy(char des[], char src[]) {
+        int i = 0;
+        while(src[i] != '\0') {
+            des[i] = src[i];
+            i++;
+        }
+    }
+
+    void str_copy(unsigned char des[],unsigned char src[]) {
+        int i = 0;
+        while(src[i] != '\0') {
+            des[i] = src[i];
+            i++;
+        }
+    }
+
     void randomNumber(mpz_t rs,unsigned int bytes) {
         unsigned char rd[bytes];
         // read 32 bytes into file /dev/urandom
@@ -1086,7 +1102,7 @@ namespace Cryptography {
         Ed_curves25519->setGenerator(fgx, fgy, p, *Ed_curves25519);
         Ed_curves25519->setParamester(fa,fd);
         bool check = Ed_curves25519->checkPoint(fgx,fgy);
-        if(check) printf("\nCurves is createds");
+      //  if(check) printf("\nCurves is createds");
   //          Ed_curves25519->printEd25519();
       }
 
