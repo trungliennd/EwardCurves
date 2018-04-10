@@ -320,6 +320,30 @@ void convert(char *line) {
         i++;
     }
 }
+
+void printCertificate(struct cert certificate, char *file_out) {
+    FILE *out = fopen(file_out, "w");
+    fprintf(out, "{\n");
+    fprintf(out, "\"Identify\": \"");
+    fprintf(out, "%s\"\n", certificate.identify);
+    fprintf(out, "\"Key\": \"");
+    fprintf(out, "%s\"\n", base64_encode(certificate.key, 64).c_str());
+    fprintf(out, "\"Public_key_ca\": \"");
+    fprintf(out, "%s\"\n", base64_encode(certificate.key_ca, 64).c_ctr());
+    fprintf(out, "\"Time_created\": \"");
+    fprintf(out, "%s\"\n", certificate.time_created);
+    fprintf(out, "\"Time_expired\": \"");
+    fprintf(out, "%s\"\n", certificate.time_expired);
+    fprintf(out, "\"Hash_code\": \"");
+    for(int i= 0;i < 32;i++)
+        fprintf(out, "%x",certificate.hashCode[i]);
+    fprintf(out, "\"\n");
+    fprintf(out, "\"R\": \"");
+    fprintf(out, "%s\"", base64_encode(certificate.r, 32));
+    fprintf(out,"\n}\n");
+    fclose(out);
+}
+
 void create_certificate(char* file_in, char*file_out) {
     struct cert temp;
     FILE* in = fopen(file_in, "r");
@@ -362,6 +386,8 @@ void create_certificate(char* file_in, char*file_out) {
     ellipticCurvePointToString(Qca.x_.i_, Qca.y_.i_, temp.key_ca, 64); // 3
     crypto_encode_ed225519_ClampC(temp.r, r, 32);
 }
+
+
 
 void calculate_r_or_du(mpz_t &rs_out, mpz_t e, mpz_t k, mpz_t r_or_d_ca) {
     if(Ed_curves25519 == NULL) {
