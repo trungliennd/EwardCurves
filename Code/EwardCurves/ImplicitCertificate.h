@@ -13,25 +13,28 @@ void cert_Request(char identity[], unsigned char key_Ru[], char *file_out);
 void ellipticCurvePointToString(mpz_t& x, mpz_t& y, unsigned char string_point[], int bytes);
 void stringToEllipticCurvePoint(mpz_t& x, mpz_t& y, unsigned char string_point[], int bytes);
 void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru);
+void calculate_r_or_du(mpz_t &rs_out, mpz_t e, mpz_t k, mpz_t r_or_d_ca);
 
 ed25519::Point Ru;
 ed25519::Point Pu;
 ed25519::Point Qu;
+ed25519::Point Qca;
 mpz_t ku;
 mpz_t k_ca;
 mpz_t d_ca;
 mpz_t r;
-
+/*
 unsigned char publicKey25519[crypto_sign_ed25519_PUBLICKEYBYTES];  // use 32 bytes
 unsigned char secretKey25519[crypto_sign_ed25519_SECRETKEYBYTES];  // use 32 bytes
 unsigned char sharesKey25519[crypto_sign_ed25519_SHAREDKEYBYTES]; // use 32 bytes
 unsigned char nonce[crypto_secretbox_NONCEBYTES];  // use 24 bytes
-
+*/
 struct cert {
-    char identify[10];
-    unsigned char key[256];
-    char hashCode[256];
-    char r[256];
+    char identify[30];
+    unsigned char key[64]; // Pu
+    unsigned char key_ca[64]; // Q_ca
+    unsigned char hashCode[32];
+    unsigned char r[32];
     char time_created[30];
     char time_expired[30];
 };
@@ -124,6 +127,14 @@ void hashModul(char *string_hash, mpz_t &rs, unsigned int hash_bits, unsigned in
     stringToInteger(output, rs, 32);
 }
 
+void hashModul(unsigned char string[32], mpz_t&rs, unsigned int hash_bits, unsigned int modul_bits) {
+    unsigned char output[32];
+    str_copy(output, string, 32);
+    unsigned char andBits[5] = {0xff, 0x7f, 0x3f, 0x1f, 0x0f};
+    int num_bits = hash_bits - modul_bits;
+    output[0] = ( output[0] & andBits[num_bits]);
+    stringToInteger(output, rs, 32);
+}
 
 
 void stringToInteger(unsigned char hash[], mpz_t &num_decode, unsigned int bytes) {
@@ -216,6 +227,46 @@ void loadKey_new(char*file_ku, char*file_Ru) {
     fclose(readFile1);
 }
 
+void loadKey_ca(char*file_k_ca, char*file_Q_ca) {
+    // secret key
+    FILE* readFile = fopen(file_k_ca, "r");
+    if(readFile == NULL) {
+        printf("\nCan't read secretKey");
+        exit(EXIT_FAILURE);
+    }else {
+        unsigned char key_kca[BASE64_LEN];
+        fread(key_kca,1,BASE64_LEN,readFile);
+        fscanf(readFile,"%c",&key_kca[BASE64_LEN - 1]);
+        fread(key_kca,1,BASE64_LEN,readFile);
+        key_kca[BASE64_LEN] = '\0';
+        string s((char*)key_kca);
+        mpz_init(k_ca);
+        crypto_decode_ed225519_ClampC((unsigned char*)base64_decode(s).c_str(), k_ca, 32);
+    }
+    fclose(readFile);
+    FILE* readFile1 = fopen(file_Q_ca, "r");
+    if(readFile1 == NULL) {
+        printf("\nCan't read publicKey");
+        exit(EXIT_FAILURE);
+    }else {
+        unsigned char pub[BASE64_LEN_D];
+        fread(pub,1,BASE64_LEN_D,readFile1);
+        fscanf(readFile1,"%c",&pub[BASE64_LEN_D - 1]);
+        fread(pub,1,BASE64_LEN_D,readFile1);
+        pub[BASE64_LEN_D] = '\0';
+        string s((char*)pub);
+        mpz_t x, y;
+        mpz_init(x);
+        mpz_init(y);
+        stringToEllipticCurvePoint(x, y, (unsigned char*)base64_decode(s).c_str(), crypto_sign_ed25519_PUBLICKEYBYTES_D);
+        if(Ed_curves25519 == NULL) {
+            initCurveTwistEwards25519();
+        }
+        Qca.assignPoint(x, y, *Ed_curves25519);
+    }
+    fclose(readFile1);
+}
+
 void cert_Request(char identity[], unsigned char key_Ru[], char *file_out) {
     FILE* out = fopen(file_out, "w");
     fprintf(out, "{\n");
@@ -280,28 +331,47 @@ void create_certificate(char* file_in, char*file_out) {
             break;
         }
         if((strcmp(line,(char*)"{\n") == 0) || (strcmp(line, (char*)"}\n") == 0)) continue;
-        char s1[10],s2[256];
+        char s1[30],s2[256];
         convert(line);
         sscanf(line," %s   %s ",s1, s2);
         if(strcmp(s1, (char*)"Identity") == 0) {
-
+            str_copy(temp.identify, s2);  // 1
         }else if(strcmp(s1, (char*)"Key") == 0) {
             str_copy(key_Ru, (unsigned char*)s2, 88);
         }
     }
     if(line != NULL) free(line);
     fclose(in);
-}
-
-void calculate_r_or_du(mpz_t e, mpz_t k, mpz_t r_or_d_ca) {
     if(Ed_curves25519 == NULL) {
         initCurveTwistEwards25519();
     }
-    mpz_init(r);
+    mpz_t x,y,e;
+    mpz_init(x);
+    mpz_init(y);
+    mpz_init(e);
+    stringToEllipticCurvePoint(x, y, key_Ru, 64);
+    Ru.assignPoint(x, y, *Ed_curves25519);
+    createPu(Ru);
+    getTime(temp.time_created, temp.time_expired); // 5, 6
+    unsigned char *string_hash = enCodeCert(Pu, temp.identify, temp.time_created);
+    str_copy(temp.hashCode, string_hash); // 4
+    hashModul(string_hash, e, 256, 255);
+    loadKey_ca((char*)"ca",(char*)"ca.pub");
+    calculate_r_or_du(r, e, k_ca, d_ca);
+    ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp.key, 64);  // 2
+    ellipticCurvePointToString(Qca.x_.i_, Qca.y_.i_, temp.key_ca, 64); // 3
+    crypto_encode_ed225519_ClampC(temp.r, r, 32);
+}
+
+void calculate_r_or_du(mpz_t &rs_out, mpz_t e, mpz_t k, mpz_t r_or_d_ca) {
+    if(Ed_curves25519 == NULL) {
+        initCurveTwistEwards25519();
+    }
+    mpz_init(rs_out);
     ffe_t f_e(e, Ed_curves25519->P), f_k(k, Ed_curves25519->P), f_r_or_dca(r_or_d_ca, Ed_curves25519->P),rs;
     rs.mulFiniteFieldElement(f_e, f_k);
     rs.addFiniteFieldElement(rs, f_r_or_dca);
-    mpz_set(r, rs.i_);
+    mpz_set(rs_out, rs.i_);
 }
 
 
@@ -326,6 +396,7 @@ void ellipticCurvePointToString(mpz_t& x, mpz_t& y,unsigned char string_point[],
        string_point[i] = point_x[i];
        string_point[index + i] = point_y[i];
     }
+    string_point[bytes] = '\0';
 }
 
 void stringToEllipticCurvePoint(mpz_t& x, mpz_t& y, unsigned char string_point[], int bytes) {

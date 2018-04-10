@@ -33,7 +33,9 @@
 		<Unit filename="FinteFiledElement.h" />
 		<Unit filename="ImplicitCertificate.h" />
 		<Unit filename="Makefile" />
+		<Unit filename="base64.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="utility.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

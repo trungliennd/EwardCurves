@@ -39,6 +39,22 @@ namespace Cryptography {
         des[len] = '\0';
     }
 
+    void str_copy(char des[], char src[]) {
+        int i = 0;
+        while(src[i] != '\0') {
+            des[i] = src[i];
+            i++;
+        }
+    }
+
+    void str_copy(unsigned char des[],unsigned char src[]) {
+        int i = 0;
+        while(src[i] != '\0') {
+            des[i] = src[i];
+            i++;
+        }
+    }
+
     void randomNumber(mpz_t rs,unsigned int bytes) {
         unsigned char rd[bytes];
         // read 32 bytes into file /dev/urandom
