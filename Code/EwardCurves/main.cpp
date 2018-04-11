@@ -19,13 +19,16 @@ int main() {
   printf("\n");
   stringToEllipticCurvePoint(temp1, temp2, point, 64);
   gmp_printf("\ny  is: %Zd\n",temp2);*/
-   // createPairKey_ku_vs_Ru((char*)"key",(char*)"key.pub");
+    //createPairKey_ku_vs_Ru((char*)"ca",(char*)"ca.pub");
   /* loadKey_new((char*)"key",(char*)"key.pub");  //test();
    unsigned char key_Ru[88];
 
    ellipticCurvePointToString(Ru.x_.i_, Ru.y_.i_, key_Ru, 64);
    char* u;
    char* v;
-   cert_Request((char*)"Alice",(unsigned char*)base64_encode(key_Ru, 64).c_str(), (char*)"request.cert");*/
-   create_certificate((char*)"request.cert",NULL);
+  // cert_Request((char*)"Alice",(unsigned char*)base64_encode(key_Ru, 64).c_str(), (char*)"request.cert");*/
+  // create_certificate((char*)"request.cert",(char*)"ca.crt");
+  struct cert certificate;
+  loadCertificate(certificate, (char*)"ca.crt");
+  printCertificate(certificate, (char*)"ca1.crt");
 }

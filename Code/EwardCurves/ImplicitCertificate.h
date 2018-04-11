@@ -54,12 +54,12 @@ unsigned char* str_cat(unsigned char* src, unsigned char* dest) {
         else break;
     }
     for(j = 0;;j++) {
-        if(dest[i] != '\0') size++;
+        if(dest[j] != '\0') size++;
         else break;
     }
     unsigned char *temp = new unsigned char[size];
     for(int i1 = 0;i1 < i;i1++) {
-        temp[i1] = src[i];
+        temp[i1] = src[i1];
     }
     for(int i2 = 0;i2 < j;i2++) {
         temp[i + i2] = dest[i2];
@@ -67,16 +67,22 @@ unsigned char* str_cat(unsigned char* src, unsigned char* dest) {
     return temp;
 }
 
-void getTime(char *time_created, char *time_expired) {
+void getTime(char time_created[], char time_expired[], int days) {
     time_t rawtime;
     struct tm *timeinfo;
     time(&rawtime);
     timeinfo = localtime(&rawtime);
-    time_created = asctime(timeinfo);
-    printf ( "Current local time and date: %s", asctime (timeinfo) );
+    char *created = asctime(timeinfo);
+    str_copy(time_created, created);
+    time_created[24] = '\0';
+    //printf ( "Current local time and date: %s", time_created);
     struct tm *then_tm = timeinfo;
-    then_tm->tm_mday += 1;
-    time_expired = asctime(timeinfo);
+    then_tm->tm_mday += days;
+    time_t thentime = mktime(then_tm);
+    then_tm = localtime(&thentime);
+    char *expired = asctime(then_tm);
+    str_copy(time_expired, expired);
+    time_expired[24] = '\0';
     // printf ( "Current local time and date: %s", asctime (then_tm) );
     return;
 }
@@ -300,16 +306,17 @@ void createPu(ed25519::Point &Ru) {
     Pu.add(Ru.x_, Ru.y_, q.x_, q.y_);
 }
 
-unsigned char* enCodeCert(ed25519::Point Pu, char identify[], char time[]) {
-    unsigned char* temp1,*temp;
+unsigned char* enCodeCert(ed25519::Point &Pu, char identify[], char time[]) {
+    unsigned char temp1[64],*temp;
     ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp1, 64);
-    temp = (unsigned char*)strcat(identify, time);
+    temp = (unsigned char*)str_cat((unsigned char*)identify, (unsigned char*)time);
     temp = str_cat(temp, temp1);
     int size = 0;
     unsigned char *rs = new unsigned char[32];
     sha256((char*)temp, rs);
     return rs;
 }
+
 void convert(char *line) {
     int i = 0;
     if(line == NULL) return;
@@ -324,24 +331,65 @@ void convert(char *line) {
 void printCertificate(struct cert certificate, char *file_out) {
     FILE *out = fopen(file_out, "w");
     fprintf(out, "{\n");
-    fprintf(out, "\"Identify\": \"");
+    fprintf(out, "\"Identity\": \"");
     fprintf(out, "%s\"\n", certificate.identify);
     fprintf(out, "\"Key\": \"");
     fprintf(out, "%s\"\n", base64_encode(certificate.key, 64).c_str());
     fprintf(out, "\"Public_key_ca\": \"");
-    fprintf(out, "%s\"\n", base64_encode(certificate.key_ca, 64).c_ctr());
+    fprintf(out, "%s\"\n", base64_encode(certificate.key_ca, 64).c_str());
     fprintf(out, "\"Time_created\": \"");
     fprintf(out, "%s\"\n", certificate.time_created);
     fprintf(out, "\"Time_expired\": \"");
     fprintf(out, "%s\"\n", certificate.time_expired);
     fprintf(out, "\"Hash_code\": \"");
     for(int i= 0;i < 32;i++)
-        fprintf(out, "%x",certificate.hashCode[i]);
+        fprintf(out, "%02hhx",certificate.hashCode[i]);
     fprintf(out, "\"\n");
     fprintf(out, "\"R\": \"");
-    fprintf(out, "%s\"", base64_encode(certificate.r, 32));
+    fprintf(out, "%s\"", base64_encode(certificate.r, 32).c_str());
     fprintf(out,"\n}\n");
     fclose(out);
+}
+
+void loadCertificate(struct cert &certificate, char* file_in) {
+    FILE* in = fopen(file_in, "r");
+    char *line = readLine(in);
+    while(!feof(in) && line != NULL) {
+        if((strcmp(line,(char*)"{\n") == 0) || (strcmp(line, (char*)"}\n") == 0)) {
+            line = readLine(in);
+            continue;
+        }
+        convert(line);
+        char s1[30],s2[256];
+        sscanf(line, " %s   %s",s1, s2);
+        if(strcmp(s1, (char*)"Identity") == 0) {
+            str_copy(certificate.identify, s2);
+        }else if(strcmp(s1, (char*)"Key") == 0) {
+            string s((char*)s2);
+            str_copy(certificate.key, (unsigned char*)base64_decode(s).c_str());
+        }else if(strcmp(s1, (char*)"Public_key_ca") == 0) {
+            string s((char*)s2);
+            str_copy(certificate.key_ca, (unsigned char*)base64_decode(s).c_str());
+        }else if(strcmp(s1, (char*)"Time_created") == 0) {
+            printf("\ns2 is: %s", s2);
+            str_copy(certificate.time_created, s2);
+        }else if(strcmp(s1, (char*)"Time_expired") == 0){
+            str_copy(certificate.time_expired, s2);
+        }else if(strcmp(s1, (char*)"Hash_code") == 0) {
+            unsigned char hashCode[32];
+            char *it = s2;
+            for(int i = 0;i < 32;i++) {
+                sscanf(it + (i*2), "%02hhx",&hashCode[i]);
+            }
+            str_copy(certificate.hashCode, hashCode);
+        }else if(strcmp(s1, (char*)"R") == 0) {
+            string s((char*)s2);
+            str_copy(certificate.r, (unsigned char*)base64_decode(s).c_str());
+        }
+        line = readLine(in);
+    }
+    fclose(in);
+    return;
 }
 
 void create_certificate(char* file_in, char*file_out) {
@@ -376,7 +424,7 @@ void create_certificate(char* file_in, char*file_out) {
     stringToEllipticCurvePoint(x, y, key_Ru, 64);
     Ru.assignPoint(x, y, *Ed_curves25519);
     createPu(Ru);
-    getTime(temp.time_created, temp.time_expired); // 5, 6
+    getTime(temp.time_created, temp.time_expired, 30);// 5, 6
     unsigned char *string_hash = enCodeCert(Pu, temp.identify, temp.time_created);
     str_copy(temp.hashCode, string_hash); // 4
     hashModul(string_hash, e, 256, 255);
@@ -385,6 +433,7 @@ void create_certificate(char* file_in, char*file_out) {
     ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp.key, 64);  // 2
     ellipticCurvePointToString(Qca.x_.i_, Qca.y_.i_, temp.key_ca, 64); // 3
     crypto_encode_ed225519_ClampC(temp.r, r, 32);
+    printCertificate(temp, file_out);
 }
 
 
