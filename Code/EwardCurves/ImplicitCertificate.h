@@ -31,12 +31,12 @@ unsigned char nonce[crypto_secretbox_NONCEBYTES];  // use 24 bytes
 */
 struct cert {
     char identify[30];
+    char time_created[30];
+    char time_expired[30];
     unsigned char key[64]; // Pu
     unsigned char key_ca[64]; // Q_ca
     unsigned char hashCode[32];
-    unsigned char r[32];
-    char time_created[30];
-    char time_expired[30];
+    unsigned char r_key[32];
 };
 
 
@@ -65,6 +65,15 @@ unsigned char* str_cat(unsigned char* src, unsigned char* dest) {
         temp[i + i2] = dest[i2];
     }
     return temp;
+}
+void convertTime(char* time) {
+    int i = 0;
+    while(time[i] != '\0') {
+        if(time[i] == ' ') {
+            time[i] = '-';
+        }
+        i++;
+    }
 }
 
 void getTime(char time_created[], char time_expired[], int days) {
@@ -320,15 +329,20 @@ unsigned char* enCodeCert(ed25519::Point &Pu, char identify[], char time[]) {
 void convert(char *line) {
     int i = 0;
     if(line == NULL) return;
+    bool check = true;
     while(line[i] != '\0') {
-        if(line[i] == '"' || line[i] == ':') {
+        if(line[i] == '"') {
+            line[i] = ' ';
+        }
+        if(line[i] == ':' && check) {
+            check = false;
             line[i] = ' ';
         }
         i++;
     }
 }
 
-void printCertificate(struct cert certificate, char *file_out) {
+void printCertificate(struct cert &certificate, char *file_out) {
     FILE *out = fopen(file_out, "w");
     fprintf(out, "{\n");
     fprintf(out, "\"Identity\": \"");
@@ -346,7 +360,7 @@ void printCertificate(struct cert certificate, char *file_out) {
         fprintf(out, "%02hhx",certificate.hashCode[i]);
     fprintf(out, "\"\n");
     fprintf(out, "\"R\": \"");
-    fprintf(out, "%s\"", base64_encode(certificate.r, 32).c_str());
+    fprintf(out, "%s\"", base64_encode(certificate.r_key, 32).c_str());
     fprintf(out,"\n}\n");
     fclose(out);
 }
@@ -360,31 +374,47 @@ void loadCertificate(struct cert &certificate, char* file_in) {
             continue;
         }
         convert(line);
-        char s1[30],s2[256];
-        sscanf(line, " %s   %s",s1, s2);
+        char s1[30];
+        sscanf(line, "%s",s1);
         if(strcmp(s1, (char*)"Identity") == 0) {
+            char s2[30];
+            sscanf(line, "%s %s",s1,s2);
             str_copy(certificate.identify, s2);
-        }else if(strcmp(s1, (char*)"Key") == 0) {
+        }
+        if(strcmp(s1, (char*)"Time_created") == 0) {
+            char s2[30];
+            sscanf(line, "%s %s",s1,s2);
+            str_copy(certificate.time_created, s2);
+        }
+        if(strcmp(s1, (char*)"Time_expired") == 0){
+            char s2[30];
+            sscanf(line, "%s %s",s1,s2);
+            str_copy(certificate.time_expired, s2);
+        }
+        if(strcmp(s1, (char*)"Key") == 0) {
+            char s2[88];
+            sscanf(line, "%s %s",s1,s2);
             string s((char*)s2);
             str_copy(certificate.key, (unsigned char*)base64_decode(s).c_str());
-        }else if(strcmp(s1, (char*)"Public_key_ca") == 0) {
+        }
+        if(strcmp(s1, (char*)"Public_key_ca") == 0) {
+            char s2[88];
+            sscanf(line, "%s %s",s1,s2);
             string s((char*)s2);
             str_copy(certificate.key_ca, (unsigned char*)base64_decode(s).c_str());
-        }else if(strcmp(s1, (char*)"Time_created") == 0) {
-            printf("\ns2 is: %s", s2);
-            str_copy(certificate.time_created, s2);
-        }else if(strcmp(s1, (char*)"Time_expired") == 0){
-            str_copy(certificate.time_expired, s2);
-        }else if(strcmp(s1, (char*)"Hash_code") == 0) {
-            unsigned char hashCode[32];
-            char *it = s2;
+        }
+        if(strcmp(s1, (char*)"Hash_code") == 0) {
+            char s2[64];
+            sscanf(line, "%s %s",s1,s2);
             for(int i = 0;i < 32;i++) {
-                sscanf(it + (i*2), "%02hhx",&hashCode[i]);
+                sscanf(s2 + (i*2), "%02hhx",&certificate.hashCode[i]);
             }
-            str_copy(certificate.hashCode, hashCode);
-        }else if(strcmp(s1, (char*)"R") == 0) {
+        }
+        if(strcmp(s1, (char*)"R") == 0) {
+            char s2[44];
+            sscanf(line, "%s %s",s1,s2);
             string s((char*)s2);
-            str_copy(certificate.r, (unsigned char*)base64_decode(s).c_str());
+            str_copy(certificate.r_key, (unsigned char*)base64_decode(s).c_str());
         }
         line = readLine(in);
     }
@@ -432,7 +462,7 @@ void create_certificate(char* file_in, char*file_out) {
     calculate_r_or_du(r, e, k_ca, d_ca);
     ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp.key, 64);  // 2
     ellipticCurvePointToString(Qca.x_.i_, Qca.y_.i_, temp.key_ca, 64); // 3
-    crypto_encode_ed225519_ClampC(temp.r, r, 32);
+    crypto_encode_ed225519_ClampC(temp.r_key, r, 32);
     printCertificate(temp, file_out);
 }
 

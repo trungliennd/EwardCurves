@@ -49,6 +49,7 @@ namespace Cryptography {
     }
 
     void str_copy(unsigned char des[],unsigned char src[]) {
+
         int i = 0;
         while(src[i] != '\0') {
             des[i] = src[i];

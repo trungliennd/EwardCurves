@@ -30,5 +30,13 @@ int main() {
   // create_certificate((char*)"request.cert",(char*)"ca.crt");
   struct cert certificate;
   loadCertificate(certificate, (char*)"ca.crt");
+ // printf("time %s", certificate.time_expired);
   printCertificate(certificate, (char*)"ca1.crt");
+ /* char test[88] = {"000c912130d0f576c1caa067c2faa223771d61739c0aa8471a7333004b4c4d4e"};
+  unsigned char hashCode[32];
+  char *it = test;
+  for(int i = 0;i < 32;i++) {
+        sscanf(test +(i*2), "%02hhx",&hashCode[i]);
+  }
+  printKey(hashCode, 32);*/
 }
