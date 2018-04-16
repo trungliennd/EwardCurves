@@ -614,13 +614,3 @@ void recoverQ_u_vs_du(struct cert& certificate, char *file_ku,char *file_du, cha
     calculate_Qu(e, Pu, Qca);
     savePairKey(du, Qu, file_du, file_Qu);
 }
-
-
-
-
-
-
-
-
-
-
