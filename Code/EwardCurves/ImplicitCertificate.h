@@ -370,8 +370,9 @@ void createPu(ed25519::Point &Ru) {
     mpz_init(k_ca);
     randNumberSecretKey(k_ca);
     ed25519::Point q;
-    q.scalarMultiply(ku, Ed_curves25519->returnGx());
-    Pu.add(Ru.x_, Ru.y_, q.x_, q.y_);
+    q.scalarMultiply(k_ca, Ed_curves25519->returnGx());
+    q.add(Ru.x_, Ru.y_, q.x_, q.y_);
+    Pu.assignPoint(q);
 }
 
 unsigned char* enCodeCert(ed25519::Point &Pu, char identify[], char time[]) {
@@ -411,8 +412,10 @@ void printCertificate(struct cert &certificate, char *file_out) {
     fprintf(out, "\"Public_key_ca\": \"");
     fprintf(out, "%s\"\n", base64_encode(certificate.key_ca, 64).c_str());
     fprintf(out, "\"Time_created\": \"");
+    convertTime(certificate.time_created);
     fprintf(out, "%s\"\n", certificate.time_created);
     fprintf(out, "\"Time_expired\": \"");
+    convertTime(certificate.time_expired);
     fprintf(out, "%s\"\n", certificate.time_expired);
     fprintf(out, "\"Hash_code\": \"");
     for(int i= 0;i < 32;i++)
@@ -443,11 +446,13 @@ void loadCertificate(struct cert &certificate, char* file_in) {
         if(strcmp(s1, (char*)"Time_created") == 0) {
             char s2[30];
             sscanf(line, "%s %s",s1,s2);
+            recoverTime(s2);
             str_copy(certificate.time_created, s2);
         }
         if(strcmp(s1, (char*)"Time_expired") == 0){
             char s2[30];
             sscanf(line, "%s %s",s1,s2);
+            recoverTime(s2);
             str_copy(certificate.time_expired, s2);
         }
         if(strcmp(s1, (char*)"Key") == 0) {
@@ -512,6 +517,7 @@ void create_certificate(char* file_in, char*file_out) {
     mpz_init(e);
     stringToEllipticCurvePoint(x, y, key_Ru, 64);
     Ru.assignPoint(x, y, *Ed_curves25519);
+  //  Ru.printPoint();
     createPu(Ru);
     getTime(temp.time_created, temp.time_expired, 30);// 5, 6
     unsigned char *string_hash = enCodeCert(Pu, temp.identify, temp.time_created);
@@ -589,6 +595,9 @@ bool checkCertificate(struct cert& certificate) {
     if(Ed_curves25519 == NULL) initCurveTwistEwards25519();
     Pu.assignPoint(x, y, *Ed_curves25519);
     unsigned char *string_hash = enCodeCert(Pu, certificate.identify, certificate.time_created);
+    for(int i = 0; i < 32;i++) {
+        printf("%02hhx", string_hash[i]);
+    }
     if(strcmp((const char*)string_hash, (const char*)certificate.hashCode) != 0) return false;
     return true;
 }
@@ -598,7 +607,7 @@ void recoverQ_u_vs_du(struct cert& certificate, char *file_ku,char *file_du, cha
     if(!check) {
         printf("\nCertificate Invalid???\n");
     }
-    mpz_t e;
+  /*  mpz_t e;
     mpz_init(e);
     hashModul(certificate.hashCode,e, 255, 256);
     mpz_init(du);
@@ -612,5 +621,5 @@ void recoverQ_u_vs_du(struct cert& certificate, char *file_ku,char *file_du, cha
     if(Ed_curves25519 == NULL) initCurveTwistEwards25519();
     Qca.assignPoint(x, y, *Ed_curves25519);
     calculate_Qu(e, Pu, Qca);
-    savePairKey(du, Qu, file_du, file_Qu);
+    savePairKey(du, Qu, file_du, file_Qu);*/
 }
