@@ -9,7 +9,7 @@
 #include <openssl/hmac.h>
 #include <openssl/buffer.h>
 #include <openssl/sha.h>
-
+#include "utility.h"
 #define PATH_DEV_URANDOM "/dev/urandom"
 
 using namespace std;
@@ -32,31 +32,6 @@ namespace Cryptography {
     const unsigned int crypto_scalarmult_curve25519_BYTES = 32;
   //  const unsigned int AES_BLOCK_SIZE = 32;
 
-    void str_copy(unsigned char des[], unsigned char src[], int len) {
-        for(int i = 0;i < len;i++) {
-            des[i] = src[i];
-        }
-        des[len] = '\0';
-    }
-
-    void str_copy(char des[], char src[]) {
-        int i = 0;
-        while(src[i] != '\0') {
-            des[i] = src[i];
-            i++;
-        }
-        des[i] = '\0';
-    }
-
-    void str_copy(unsigned char des[],unsigned char src[]) {
-
-        int i = 0;
-        while(src[i] != '\0') {
-            des[i] = src[i];
-            i++;
-        }
-        des[i] = '\0';
-    }
 
     void randomNumber(mpz_t rs,unsigned int bytes) {
         unsigned char rd[bytes];
@@ -500,8 +475,8 @@ namespace Cryptography {
                 }
 
                 Point(Point& e) {
-                    x_.assignFiniteFieldElement(e.x());
-                    y_.assignFiniteFieldElement(e.y());
+                    x_.assignFiniteFieldElement(e.x_);
+                    y_.assignFiniteFieldElement(e.y_);
                     mpz_set(this->P, e.P);
                     ec = e.ec;
               //      ec.printEd25519();
@@ -907,6 +882,19 @@ namespace Cryptography {
                     mpz_clear(J);
                     mpz_clear(temp);
                     mpz_clear(TWO);
+                }
+
+                bool comparePoint(const Point &temp) {
+                    if(mpz_cmp(this->P, temp.P) != 0) {
+                        return false;
+                    }
+                    if(!this->x_.compareEqual(temp.x_)) {
+                        return false;
+                    }
+                    if(!this->y_.compareEqual(temp.y_)) {
+                        return false;
+                    }
+                    return true;
                 }
 
                 void printPoint() {
