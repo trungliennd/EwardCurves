@@ -71,6 +71,7 @@ unsigned char* str_cat(unsigned char* src, unsigned char* dest) {
     for(int i2 = 0;i2 < j;i2++) {
         temp[i + i2] = dest[i2];
     }
+    temp[size] = '\0';
     return temp;
 }
 void convertTime(char* time) {
@@ -217,7 +218,8 @@ void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru) {
         initCurveTwistEwards25519();
     }
     mpz_init(ku);
-    randNumberSecretKey(ku);
+    mpz_set_str(ku, "425638306587506704699731512122928355317925", 10);
+   // randNumberSecretKey(ku);
    // gmp_printf("\nk_create is: %Zd",ku);
     unsigned char key_ku[32];
     crypto_encode_ed225519_ClampC(key_ku, ku, 32);
@@ -366,8 +368,9 @@ void createPu(ed25519::Point &Ru) {
     if(Ed_curves25519 == NULL) {
         initCurveTwistEwards25519();
     }
- //   mpz_init(k_ca);
-    randNumberSecretKey(k_ca);
+    mpz_init(k_ca);
+    mpz_set_str(k_ca, "9045783334", 10);
+   // randNumberSecretKey(k_ca);
   //  gmp_printf("\nK1 is: %Zd",k_ca);
     ed25519::Point q;
     q.scalarMultiply(k_ca, Ed_curves25519->returnGx());
@@ -518,28 +521,25 @@ void create_certificate(char* file_in, char*file_out) {
     mpz_init(x);
     mpz_init(y);
     mpz_init(e);
-    stringToEllipticCurvePoint(x, y, key_Ru, 64);
+    string s((char*)key_Ru);
+    stringToEllipticCurvePoint(x, y, (unsigned char*)base64_decode(s).c_str(), 64);
     Ru.assignPoint(x, y, *Ed_curves25519);
-  //  Ru.printPoint();
     createPu(Ru);
-   // gmp_printf("\nk_ca is: %Zd\n",k_ca);
- //   Ru.printPoint();
-//    Pu.printPoint();
-
-   // Pu.printPoint();
-    getTime(temp.time_created, temp.time_expired, 30);// 5, 6
+    gmp_printf("\nk_ca is: %Zd\n",k_ca);
+    printf("\nRu is: \n");
+    Ru.printPoint();
+    printf("\nPu is: \n");
     Pu.printPoint();
+    getTime(temp.time_created, temp.time_expired, 30);// 5, 6
     unsigned char *string_hash = enCodeCert(Pu, temp.identify, temp.time_created);
-    printf("\nhashcode\n");
-    printKey(string_hash, 32);
-    str_copy(temp.hashCode, string_hash); // 4
+    str_copy(temp.hashCode, string_hash, 32); // 4
     hashModul(string_hash, e, 256, 255);
- //   gmp_printf("\ne is: %Zd\n",e);
+    gmp_printf("\ne is: %Zd\n",e);
     loadKey_ca((char*)"ca",(char*)"ca.pub");
     calculate_r_or_du(r, e, k_ca, d_ca);
-//    gmp_printf("\nr is: %Zd\n",r);
-//    gmp_printf("\nd_ca is: %Zd\n",d_ca);
-   // gmp_printf("\n r is: %Zd",r);
+    gmp_printf("\nr is: %Zd\n",r);
+    gmp_printf("\nd_ca is: %Zd\n",d_ca);
+    gmp_printf("\n r is: %Zd",r);
     ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp.key, 64);  // 2
     ellipticCurvePointToString(Qca.x_.i_, Qca.y_.i_, temp.key_ca, 64); // 3
     crypto_encode_ed225519_ClampC(temp.r_key, r, 32);
@@ -554,7 +554,6 @@ void calculate_r_or_du(mpz_t &rs_out, mpz_t e, mpz_t k, mpz_t r_or_d_ca) {
     if(Ed_curves25519 == NULL) {
         initCurveTwistEwards25519();
     }
-    //gmp_printf("\nk2 is: %Zd", k);
     mpz_init(rs_out);
     ffe_t f_e(e, Ed_curves25519->P), f_k(k, Ed_curves25519->P), f_r_or_dca(r_or_d_ca, Ed_curves25519->P),rs;
     rs.mulFiniteFieldElement(f_e, f_k);
@@ -578,13 +577,11 @@ void ellipticCurvePointToString(mpz_t& x, mpz_t& y,unsigned char string_point[],
     crypto_encode_ed225519_ClampC(point_x, x, 32);
     unsigned char point_y[32];
     crypto_encode_ed225519_ClampC(point_y, y, 32);
-    //printKey(point_y, 32);
     int index = bytes/2;
     for(int i=0;i < index;i++) {
        string_point[i] = point_x[i];
        string_point[index + i] = point_y[i];
     }
-   // printf("\ns = %s\n",base64_encode(string_point,64).c_str());
     string_point[bytes] = '\0';
 }
 
@@ -607,19 +604,13 @@ bool checkCertificate(struct cert& certificate) {
     time(&time2);
     double diff = difftime(time1, time2);
     if(diff < 0) return false;
-   // printKey(certificate.key ,32);
     mpz_t x,y;
     mpz_init(x);
     mpz_init(y);
     stringToEllipticCurvePoint(x, y, certificate.key, 64);
-    //gmp_printf("\n%Zd",y);
     if(Ed_curves25519 == NULL) initCurveTwistEwards25519();
     Pu.assignPoint(x, y, *Ed_curves25519);
-    //Pu.printPoint();
     unsigned char *string_hash = enCodeCert(Pu, certificate.identify, certificate.time_created);
- //   Pu.printPoint();
-    printKey(string_hash, 32);
-    printKey(certificate.hashCode, 32);
     if(compare(string_hash, certificate.hashCode , 32) != 0) return false;
     return true;
 }
@@ -641,31 +632,42 @@ void recoverQ_u_vs_du(struct cert& certificate, char *file_ku,char *file_du, cha
     bool check = checkCertificate(certificate);
     if(!check) {
         printf("\nCertificate Invalid???\n");
+        exit(1);
     }
     mpz_t e;
     mpz_init(e);
     hashModul(certificate.hashCode,e, 256, 255);
-  //  gmp_printf("\ne is: %Zd\n",e);
+    gmp_printf("\ne is: %Zd\n",e);
     mpz_init(du);
     loadKey_new(file_ku, NULL);
- //   gmp_printf("\nku is: %Zd\n",ku);
+    gmp_printf("\nku is: %Zd\n",ku);
     mpz_init(r);
     crypto_decode_ed225519_ClampC(certificate.r_key, r, 32);
-//    gmp_printf("\n r is: %Zd\n",r);
+    gmp_printf("\nr is: %Zd\n",r);
     calculate_r_or_du(du, e, ku, r);
- //   gmp_printf("\ndu is: %Zd\n",du);
+    gmp_printf("\ndu is: %Zd\n",du);
     mpz_t x,y;
     mpz_init(x);
     mpz_init(y);
     stringToEllipticCurvePoint(x, y, certificate.key_ca, 64);
     if(Ed_curves25519 == NULL) initCurveTwistEwards25519();
     Qca.assignPoint(x, y, *Ed_curves25519);
- //   Qca.printPoint();
-  //  Pu.printPoint();
+    printf("\nQca: ");
+    Qca.printPoint();
+    printf("\nPu: ");
+    Pu.printPoint();
+    if(Ed_curves25519->checkPoint(Pu.x_, Pu.y_)) {
+        printf("\ncase11\n");
+    }
     calculate_Qu(e, Pu, Qca);
- //   Qu.printPoint();
+    printf("\nQu: ");
+    Qu.printPoint();
+    if(Ed_curves25519->checkPoint(Qu.x_, Qu.y_)) {
+        printf("\ncase12\n");
+    }
     if(!checkKeyExtract(du, Qu)) {
         printf("\nCertificate Invalid???\n");
+        exit(1);
     }
     savePairKey(du, Qu, file_du, file_Qu);
 }

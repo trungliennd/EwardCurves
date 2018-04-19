@@ -507,6 +507,10 @@ void str_copy(unsigned char des[],unsigned char src[]) {
               //      ec.printEd25519();
                 }
 
+                Point(EdwardsCurve &ec) {
+                    this->ec = &ec;
+                }
+
 
                 void assignPoint(const Point &rp) {
                     x_.assignFiniteFieldElement(rp.x_);
@@ -1148,6 +1152,22 @@ void str_copy(unsigned char des[],unsigned char src[]) {
             return 0;
       }
 
+
+      void randNumberSecretKey(mpz_t n) {
+        mpz_t key, const_paramters;
+        mpz_init(key);             //"57896044618658097711785492504343953926634992332820282019728792003956564819960"
+        mpz_init(const_paramters); //"28948022309329048855892746252171976963317496166410141009864396001978282409976"
+        mpz_set_str(const_paramters, "28948022309329048855892746252171976963317496166410141009864396001978282409984", 10);
+        randomNumber(key, 32); //  ---->
+        mpz_fdiv_q_ui(key, key, 32); // randon number in { 0, ,1, 2, ..., 2^251 - 1}
+        mpz_sub_ui(key, key , 1);// --->
+        mpz_mul_ui(key, key, 8); // 8*{ 0, ,1, 2, ..., 2^251 - 1}
+        mpz_add(key, key, const_paramters); // 2^254 _+ 8*{ 0, ,1, 2, ..., 2^251 - 1}
+        // return number n in 2^254 + 8*{0, 1, 2, ... , 2^251 - 1};
+        mpz_set(n, key);
+        mpz_clear(key);
+        mpz_clear(const_paramters);
+      }
 
       void randNumberSecretKey(mpz_t n) {
         mpz_t key, const_paramters;
