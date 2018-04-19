@@ -31,6 +31,31 @@ namespace Cryptography {
     const unsigned int crypto_aead_aes256gcm_ABYTES = 16;
     const unsigned int crypto_scalarmult_curve25519_BYTES = 32;
   //  const unsigned int AES_BLOCK_SIZE = 32;
+    void str_copy(unsigned char des[], unsigned char src[], int len) {
+        for(int i = 0;i < len;i++) {
+            des[i] = src[i];
+        }
+        des[len] = '\0';
+    }
+
+void str_copy(char des[], char src[]) {
+        int i = 0;
+        while(src[i] != '\0') {
+            des[i] = src[i];
+            i++;
+        }
+        des[i] = '\0';
+    }
+
+void str_copy(unsigned char des[],unsigned char src[]) {
+        //printKey(src, 64);
+        int i = 0;
+        while(src[i] != '\0') {
+            des[i] = src[i];
+            i++;
+        }
+        des[i] = '\0';
+}
 
 
     void randomNumber(mpz_t rs,unsigned int bytes) {

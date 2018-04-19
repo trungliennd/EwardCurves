@@ -376,10 +376,8 @@ void createPu(ed25519::Point &Ru) {
 }
 
 unsigned char* enCodeCert(ed25519::Point &Pu, char identify[], char time[]) {
-    Pu.printPoint();
     unsigned char temp1[64],*temp;
     ellipticCurvePointToString(Pu.x_.i_, Pu.y_.i_, temp1, 64);
-    printf("\n%s\n",base64_encode(temp1,64).c_str());
     temp = (unsigned char*)str_cat((unsigned char*)identify, (unsigned char*)time);
     temp = str_cat(temp, temp1);
     int size = 0;
@@ -461,14 +459,16 @@ void loadCertificate(struct cert &certificate, char* file_in) {
             char s2[88];
             sscanf(line, "%s %s",s1,s2);
             string s((char*)s2);
-            str_copy(certificate.key, (unsigned char*)base64_decode(s).c_str());
-         //   printKey(certificate.key ,32);
+        //    printf("\nbase64 is: %s\n", s2);
+       //     printKey((unsigned char*)base64_decode(s).c_str(), 64);
+            str_copy(certificate.key, (unsigned char*)base64_decode(s).c_str(),64);
+        //    printf("\nbase64 is: %s\n", base64_encode(certificate.key, 64).c_str());
         }
         if(strcmp(s1, (char*)"Public_key_ca") == 0) {
             char s2[88];
             sscanf(line, "%s %s",s1,s2);
             string s((char*)s2);
-            str_copy(certificate.key_ca, (unsigned char*)base64_decode(s).c_str());
+            str_copy(certificate.key_ca, (unsigned char*)base64_decode(s).c_str(),64);
         }
         if(strcmp(s1, (char*)"Hash_code") == 0) {
             char s2[64];
@@ -481,7 +481,7 @@ void loadCertificate(struct cert &certificate, char* file_in) {
             char s2[44];
             sscanf(line, "%s %s",s1,s2);
             string s((char*)s2);
-            str_copy(certificate.r_key, (unsigned char*)base64_decode(s).c_str());
+            str_copy(certificate.r_key, (unsigned char*)base64_decode(s).c_str(),32);
         }
         line = readLine(in);
     }
@@ -522,13 +522,16 @@ void create_certificate(char* file_in, char*file_out) {
     Ru.assignPoint(x, y, *Ed_curves25519);
   //  Ru.printPoint();
     createPu(Ru);
-    gmp_printf("\nk_ca is: %Zd\n",k_ca);
+   // gmp_printf("\nk_ca is: %Zd\n",k_ca);
  //   Ru.printPoint();
 //    Pu.printPoint();
 
    // Pu.printPoint();
     getTime(temp.time_created, temp.time_expired, 30);// 5, 6
+    Pu.printPoint();
     unsigned char *string_hash = enCodeCert(Pu, temp.identify, temp.time_created);
+    printf("\nhashcode\n");
+    printKey(string_hash, 32);
     str_copy(temp.hashCode, string_hash); // 4
     hashModul(string_hash, e, 256, 255);
  //   gmp_printf("\ne is: %Zd\n",e);
@@ -575,13 +578,13 @@ void ellipticCurvePointToString(mpz_t& x, mpz_t& y,unsigned char string_point[],
     crypto_encode_ed225519_ClampC(point_x, x, 32);
     unsigned char point_y[32];
     crypto_encode_ed225519_ClampC(point_y, y, 32);
-    printKey(point_y, 32);
+    //printKey(point_y, 32);
     int index = bytes/2;
     for(int i=0;i < index;i++) {
        string_point[i] = point_x[i];
        string_point[index + i] = point_y[i];
     }
-    printf("\ns = %s\n",base64_encode(string_point,64).c_str());
+   // printf("\ns = %s\n",base64_encode(string_point,64).c_str());
     string_point[bytes] = '\0';
 }
 
@@ -612,11 +615,11 @@ bool checkCertificate(struct cert& certificate) {
     //gmp_printf("\n%Zd",y);
     if(Ed_curves25519 == NULL) initCurveTwistEwards25519();
     Pu.assignPoint(x, y, *Ed_curves25519);
-    Pu.printPoint();
+    //Pu.printPoint();
     unsigned char *string_hash = enCodeCert(Pu, certificate.identify, certificate.time_created);
  //   Pu.printPoint();
-   // printKey(string_hash, 32);
-  //  printKey(certificate.hashCode, 32);
+    printKey(string_hash, 32);
+    printKey(certificate.hashCode, 32);
     if(compare(string_hash, certificate.hashCode , 32) != 0) return false;
     return true;
 }
