@@ -459,6 +459,7 @@ void str_copy(unsigned char des[],unsigned char src[]) {
 
         public:
             mpz_t P;
+            mpz_t orderG;
             typedef FiniteFieldElement ffe_t;
 
         class Point {
@@ -1039,6 +1040,10 @@ void str_copy(unsigned char des[],unsigned char src[]) {
             this->d_.assignFiniteFieldElement(d);
         }
 
+        void setOrder(mpz_t& order) {
+            mpz_init(orderG);
+            mpz_set(orderG, order);
+        }
         //constructors
         EdwardsCurve(mpz_t p) {
             mpz_init(this->P);
@@ -1103,12 +1108,14 @@ void str_copy(unsigned char des[],unsigned char src[]) {
     * init curves 25519 Twist Edwards
     */
       void initCurveTwistEwards25519() {
-        mpz_t p,gx,gy,a,d;
+        mpz_t p,gx,gy,a,d,order;
         mpz_init(p);
         mpz_init(gx);
         mpz_init(gy);
         mpz_init(a);
         mpz_init(d);
+        mpz_init(order);
+        mpz_set_str(order, "7237005577332262213973186563042994240857116359379907606001950938285454250989", 10);
         mpz_set_str(p, "57896044618658097711785492504343953926634992332820282019728792003956564819949", 10);
         mpz_set_str(gx, "547c4350219f5e19dd26a3d6668b74346a8eb726eb2396e1228cfa397ffe6bd4", 16);
         mpz_set_str(gy, "6666666666666666666666666666666666666666666666666666666666666658", 16);
@@ -1121,6 +1128,7 @@ void str_copy(unsigned char des[],unsigned char src[]) {
         Ed_curves25519 = new ed25519(p);
         Ed_curves25519->setGenerator(fgx, fgy, p, *Ed_curves25519);
         Ed_curves25519->setParamester(fa,fd);
+        Ed_curves25519->setOrder(order);
         bool check = Ed_curves25519->checkPoint(fgx,fgy);
       //  if(check) printf("\nCurves is createds");
   //          Ed_curves25519->printEd25519();
@@ -1169,15 +1177,15 @@ void str_copy(unsigned char des[],unsigned char src[]) {
         mpz_clear(const_paramters);
       }
 
-      void randNumberSecretKey(mpz_t n) {
+      void randNumberSecretKeyNew(mpz_t n) {
         mpz_t key, const_paramters;
         mpz_init(key);             //"57896044618658097711785492504343953926634992332820282019728792003956564819960"
         mpz_init(const_paramters); //"28948022309329048855892746252171976963317496166410141009864396001978282409976"
-        mpz_set_str(const_paramters, "28948022309329048855892746252171976963317496166410141009864396001978282409984", 10);
+        mpz_set_str(const_paramters, "27742317777372353535851937790883648493", 10);
         randomNumber(key, 32); //  ---->
         mpz_fdiv_q_ui(key, key, 32); // randon number in { 0, ,1, 2, ..., 2^251 - 1}
         mpz_sub_ui(key, key , 1);// --->
-        mpz_mul_ui(key, key, 8); // 8*{ 0, ,1, 2, ..., 2^251 - 1}
+        mpz_mul_ui(key, key, 2); // 2*{ 0, ,1, 2, ..., 2^251 - 1}
         mpz_add(key, key, const_paramters); // 2^254 _+ 8*{ 0, ,1, 2, ..., 2^251 - 1}
         // return number n in 2^254 + 8*{0, 1, 2, ... , 2^251 - 1};
         mpz_set(n, key);

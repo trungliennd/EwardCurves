@@ -29,7 +29,7 @@ int main() {
     P.printPoint();
     Ru.scalarMultiply(e, Ru);
     mpz_mul(temp, e, k_ca);
-    mpz_fdiv_r(temp, temp, Ed_curves25519->P);
+    mpz_fdiv_r(temp, temp, Ed_curves25519->orderG);
     test1.scalarMultiply(temp, Ed_curves25519->returnGx());
     Ru.add(Ru.x_, Ru.y_, test1.x_, test1.y_);
     Ru.printPoint();
