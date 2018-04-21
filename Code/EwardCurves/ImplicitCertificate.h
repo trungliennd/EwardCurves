@@ -13,6 +13,8 @@ void ellipticCurvePointToString(mpz_t& x, mpz_t& y, unsigned char string_point[]
 void stringToEllipticCurvePoint(mpz_t& x, mpz_t& y, unsigned char string_point[], int bytes);
 void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru);
 void calculate_r_or_du(mpz_t &rs_out, mpz_t e, mpz_t k, mpz_t r_or_d_ca);
+void decrypto_messages(char file_ciphertext[], char file_message[]);
+void encrypto_messages(char file_message[],char file_ciphertext[]) ;
 
 ed25519::Point Ru;
 ed25519::Point Pu;
@@ -635,3 +637,75 @@ void recoverQ_u_vs_du(struct cert& certificate, char *file_ku,char *file_du, cha
     }
     savePairKey(du, Qu, file_du, file_Qu);
 }
+
+void encrypto_messages(char file_message[],char file_ciphertext[]) {
+    randNonce(iv, 24);
+    FILE* readFile = fopen(file_message, "rb");
+    FILE* writeFile = fopen(file_ciphertext, "wb");
+
+    if(readFile == NULL) {
+        printf("\n Read file is null");
+        exit(1);
+    }
+    if(writeFile == NULL) {
+        printf("\n Write file is null");
+        exit(1);
+    }
+
+    fwrite(iv, 1, 16, writeFile); // IV bytes 1-8
+    fwrite("\0\0\0\0\0\0\0\0", 1, 8, writeFile); // fill the last 4 with null bytes 25 - 32
+
+    if(AES_set_encrypt_key(sharesKey25519, 256, &key) < 0) {
+        printf("\n Could not set encryption key");
+        exit(1);
+    }
+    init_ctr(&state, iv);
+
+    int bytes_read, bytes_wrriten;
+    unsigned char indata[MESSAGE_LEN];
+    unsigned char outdata[MESSAGE_LEN];
+
+    while(true) {
+        bytes_read = fread(indata, 1, MESSAGE_LEN, readFile);
+        AES_ctr128_encrypt(indata, outdata, bytes_read, &key, state.ivec, state.ecount, &state.num);
+
+        bytes_wrriten = fwrite(outdata, 1, bytes_read, writeFile);
+        if(bytes_read < MESSAGE_LEN) {
+            break;
+        }
+    }
+
+    fclose(readFile);
+    fclose(writeFile);
+}
+
+void decrypto_messages(char file_ciphertext[], char file_message[]) {
+    FILE* readFile = fopen(file_ciphertext, "rb");
+    FILE* writeFile = fopen(file_message, "w");
+    if(readFile == NULL || writeFile == NULL) {
+        printf("\nCan't decrypto ciphertext");
+        exit(EXIT_FAILURE);
+    }
+
+    fread(iv, 1, 24, readFile);
+    if(AES_set_encrypt_key(sharesKey25519,256,&key) < 0) {
+        printf("\n Could not set decryption key");
+        exit(1);
+    }
+
+    init_ctr(&state, iv);
+    int bytes_read, byte_writen;
+    unsigned char indata[MESSAGE_LEN];
+    unsigned char outdata[MESSAGE_LEN];
+    while(true) {
+        bytes_read = fread(indata, 1, MESSAGE_LEN, readFile);
+        AES_ctr128_encrypt(indata, outdata, bytes_read, &key,
+                                state.ivec, state.ecount, &state.num);
+        byte_writen = fwrite(outdata, 1, bytes_read, writeFile);
+        if(bytes_read < MESSAGE_LEN) {
+            break;
+        }
+    }
+
+}
+
