@@ -30,11 +30,14 @@
 		</Compiler>
 		<Unit filename="EwardCurves.cpp" />
 		<Unit filename="EwardCurves.h" />
+		<Unit filename="EwardCurvesImplicitCertificate.cpp" />
 		<Unit filename="FinteFiledElement.h" />
 		<Unit filename="ImplicitCertificate.h" />
 		<Unit filename="Makefile" />
 		<Unit filename="base64.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="test.cpp" />
+		<Unit filename="test2.cpp" />
 		<Unit filename="utility.h" />
 		<Extensions>
 			<code_completion />
