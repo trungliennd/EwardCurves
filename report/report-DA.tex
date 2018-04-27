@@ -150,11 +150,9 @@ Ngành Mật mã (cryptology) thường được quan niệm như sự kết h�
 \item[2. ] Phá giải mã (cryptanalysis): nghiên cứu các kỹ thuật toán học phục vụ phân tích phá mật mã và/hoặc tạo ra các đoạn mã giản nhằm đánh lừa bên nhận tin
 \end{itemize}
 
-Hai lĩnh vực con này tồn tại như hai mặt đối lập, “đấu tranh để cùng phát triển”
-của một thể thống nhất là ngành khoa học mật mã (cryptology).
+Hai lĩnh vực con này tồn tại như hai mặt đối lập, "đấu tranh để cùng phát triển" của một thể thống nhất là ngành khoa học mật mã (cryptology).
 
-Mặc dù mật mã có thể coi là một ngành toán học phát triển cao, đòi hỏi tư duy
-cao để nắm được các thành tựu hiện đại của nó, nhưng cơ sở xuất phát ban đầu của nó lại là một mô hình thực tiễn khá đơn giản như sau:\\
+Mặc dù mật mã có thể coi là một ngành toán học phát triển cao, đòi hỏi tư duy cao để nắm được các thành tựu hiện đại của nó, nhưng cơ sở xuất phát ban đầu của nó lại là một mô hình thực tiễn khá đơn giản như sau:\\
 \textbf{hình vẽ}
 
 Như vậy trong một hệ thống mật mã khái quát sẽ có các thành phần sau:
@@ -172,15 +170,48 @@ Trong mật mã học, các thuật toán khóa đối xứng (symmetric-key alg
 
 Khóa dùng để mã hóa có liên hệ một cách rõ ràng với khóa dùng để giải mã có nghĩa chúng có thể hoàn toàn giống nhau, hoặc chỉ khác nhau nhờ một biến đổi đơn giản giữa hai khóa. Trên thực tế, các khóa này đại diện cho một bí mật được phân hưởng bởi hai bên hoặc nhiều hơn và được sử dụng để giữ gìn sự bí mật trong kênh truyền thông tin.
 
+Thuật toán đối xứng có thể được chia ra làm hai thể loại, mật mã dòng (stream ciphers) và mật mã khối (block ciphers). Mật mã dòng mã hóa từng bit của thông điệp trong khi mật mã khối gộp một số bit lại và mật mã hóa chúng như một đơn vị. Cỡ khối được dùng thường là các khối 64 bit(128 bit). Ngày nay được ưa chuộng sử dụng hơn là mật mã khối (block cipher) -- trong đó từng khối nhiều ký tự được mã hóa cùng một lúc. Trong mật mã khối, các tham số quan trọng là kích thước (độ dài khối) và kích thước khóa. Các khái niệm này được minh họa qua ví dụ sau đây.
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+\hline
+key & 000 & 001 & 010 & 011 & 100 & 101 & 110 & 111 \\
+\hline
+0 & 001 & 111 & 110 & 000 & 100 & 010 & 101 & 011 \\
+\hline
+1 & 001 & 110 & 111 & 100 & 011 & 010 & 000 & 101 \\
+\hline
+2 & 001 & 000 & 100 & 101 & 110 & 111 & 010 & 011 \\
+\hline
+3 & 100 & 101 & 110 & 111 & 000 & 001 & 010 & 011 \\
+\hline
+4 & 101 & 110 & 100 & 010 & 011 & 001 & 011 & 111 \\
+\hline
+\end{tabular}
+\end{center}
 
+Qua ví dụ đơn giản này (chỉ có tính chất minh họa), ta thấy rằng nếu các
+tham số kích thước khối và khóa qua nhỏ thì mật mã rất dễ bị phá bằng các tấn công thông qua phân tích thống kê. Chẳng hạn trong ví dụ trên, nếu kẻ thù nhận được một khối mã ciphertext 001 thì nó có thể dễ dàng suy ra plaintext tương ứng chỉ có thể là 000 hoặc 101 (nhờ thống kê trên bảng biến đổi mã).
+
+Vì vây, các điều kiện cần cho mật mã khối an toàn là:
+\begin{itemize}
+\item Kích thước khối phải đủ lớn để chống lại các loại tấn công phá hoại bằng phương pháp thống kê. Tuy nhiên cần lưu ý rằng kích thước khối lớn sẽ làm thời gian trễ lớn.
+\item Không gian khóa phải đủ lớn (tức là chiều dài khóa phải đủ lớn) để chống lại tìm kiếm vét cạn.Tuy nhiên mặt khác, khóa cần phải đủ ngắn để việc làm khóa, phân phối và lưu trữ được hiệu quả.	
+\end{itemize}
+
+Về các nguyên lý thiết kế mật mã khối, người ta đã ghi nhận 2 nguyên tắc cơ sở sau để có bảo mật cao, đó là việc tạo ra confusion (tính hỗn loạn, rắc rối) và diffusion (tính khuếch tán).
+
+\textit{Confusion}. (Hỗn loạn, rắc rối) Sự phụ thuộc của bản mã đối với bản rõ phải thực phức tạp để gây rắc rối, cảm giác hỗn loạn đối với kẻ thù có ý định phân tích tìm qui luật để phá mã. Quan hệ hàm số của mã-tin là phi tuyến (non-linear).
+
+\textit{Diffusion}. (Khuếch tán) Làm khuếch tán những mẫu văn bản mang đặc tính thống kê (gây ra do dư thừa của ngôn ngữ) lẫn vào toàn bộ văn bản. Nhờ đó tạo ra khó khăn cho kẻ thù trong việc dò phá mã trên cơ sở thống kê các mẫu lặp lại cao. Sự thay đổi của một bit trong một khối bản rõ phải dẫn tới sự thay đối hoàn toàn trong khối mã tạo ra.
+
+Một cách đơn giản nhất, confusion có thể được thực hiện bằng phép thay thế (substitution) trong khi diffusion được tạo ra bằng các phép chuyển đổi chỗ (transposition/permutation) hay hoán vị. Toàn bộ sơ đồ biến đổi mật mã sẽ là một lưới các biến đổi thay thế-hoán vị (substitution-permutation network).
 \section{Mật mã khóa công khai}
 \subsection*{Giới thiệu}
 Mật mã hóa khóa công khai là một dạng mật mã hóa cho phép người sử dụng trao đổi các thông tin mật mà không cần phải trao đổi các khóa chung bí mật trước đó. Điều này được thực hiện bằng cách sử dụng một cặp khóa có quan hệ toán học với nhau là khóa công khai và khóa cá nhân (hay khóa bí mật). 
 
 Trong hệ mã khóa công khai, mỗi người sử dụng có hai khoá, một được gọi là khoá bí mật (secret key hay private key) và một được gọi là khoá công khai (public key). Khoá thứ
 nhất chỉ mình user biết và giữ bí mật, còn khoá thứ hai thì anh ta có thể tự do phổ biến
-công khai. Khoá thứ nhất thường đi liền với thuật toán giải mã, còn khoá thứ hai thường đi liền với thuật toán sinh mã, tuy nhiên điều đó không phải là bắt buộc. Ta hãy
-ký hiệu chúng là z (khóa riêng) và Z (khóa công khai)
+công khai. Khoá thứ nhất thường đi liền với thuật toán giải mã, còn khoá thứ hai thường đi liền với thuật toán sinh mã, tuy nhiên điều đó không phải là bắt buộc. Ta hãy ký hiệu chúng là z (khóa riêng) và Z (khóa công khai)
 
 Hoạt động của chúng là đối xứng
 \begin{align}
@@ -202,7 +233,7 @@ Hệ thống mật mã hóa khóa công khai có thể sử dụng với các m�
 \end{itemize}
 
 Thông thường, các kỹ thuật mật mã hóa khóa công khai đòi hỏi khối lượng tính toán nhiều hơn các kỹ thuật mã hóa khóa đối xứng nhưng những lợi điểm mà chúng mang lại khiến cho chúng được áp dụng trong nhiều ứng dụng.
-\subsection*{Hệ thống khóa công khai RSA}
+\subsection*{Hệ thống khóa công khai}
 RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế,
 phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
 
@@ -283,9 +314,222 @@ Mã là $Y = (a,b)$ và có độ dài gấp đôi bản rõ.
 \begin{displaymath}
 X = \frac{b}{a^u} (mod \ p)
 \end{displaymath}
-\section{Hàm băm}
-\section{Chữ ký điện tử}
-\section{Chứng thư số}
+\section{Chữ ký điện tử và Hàm băm}
+\subsection*{Chữ ký điện tử}
+Khái niệm chữ ký điện tử được hai nhà bác học Diffie và Hellman đề xuất trong
+cùng bài báo nổi tiếng của các ông khai sáng nguyên lý của hệ thống mật mã công khai (1976). Ý tưởng về mô phỏng chữ ký tay trên văn bản trong đời thường đã có từ lâu, nhưng thực sự chỉ có thể thực hiện được cùng với sự ra đời của hệ mật mã KCK (khóa công khai). Như đã biết, hệ thống mật mã đối xứng đã được sử dụng phổ biến trước đó không có tính chất đại diện duy nhất cho một cá nhân. Trong khi đó, một hệ mã hóa khóa công khai (hay còn gọi là phi đối xứng) có thể được xem là được tạo lập để giúp bảo mật truyền tin trong liên lạc giữa 1 cá nhân và phần còn lại của xã hội. Nhờ có mật mã KCK, khái niệm chữ ký điện tử mới được hiện thực hóa và giúp cho giao dịch kinh tế thương mại trong đời sống có thể đi vào số hóa hoàn toàn, qua đó thúc đẩy hoạt động dịch vụ trực tuyến trên Internet phát triển như ngày này. 
+
+Chữ ký điện tử hay chữ ký và chữ ký tay thực ra không phải hoàn toàn tương tự. Chữ ký tay là dấu vết của con người tác động lên cùng bản giấy đã mang chứa văn bản (in/viết sẵn). Phần chữ ký tay và phần văn bản có sẵn là độc lập, không có quan hệ ràng buộc nào. Do các qui luật của thế giới vật lý, người ta không thể đánh tráo chữ ký theo kiểu đơn giản là xé bỏ phần tờ giấy chứa chữ ký và ghép nối vào một phần giấy mang chữ ký tạo mới khác. Tuy nhiên trong thế giới số hóa, các qui luật vật lý này không có mặt, và bất cứ lập trình viên nào cũng có thể tha hồ cắt ghép văn bản số hóa mà không bị phát hiện. 
+\subsubsection{Sơ đồ chữ ký cơ bản}
+Do đó, nguyên lý tạo chữ ký điện tử là khác hẳn và phức tạp hơn. Khi có một văn bản ở dạng nhị phân $X$, người ta phải tạo ra một chữ ký ở dạng nhị phân $S$ sao cho $S$ phụ thuộc hàm vào $X$, tức là $S = f(X)$, hơn nữa quan hệ hàm này là bí mật (có tham số khóa bí mật) đối với người ngoài. Do đó nếu có kẻ nào thử đánh tráo (tức giả mạo) chữ ký, quan hệ hàm $S = f(X)$ sẽ không còn đúng và bị phát hiện.
+
+Tuy nhiên việc phát hiện xem một văn bản có chữ ký có là chuẩn hay bị giả mạo lại phải là một thao tác mà ai cũng làm được dễ dàng, không cần đến khóa bí mật kia (do người chủ chữ ký nắm giữ). Vì vậy hệ thống chữ ký điện tử được xây dựng trên nguyên tắc sử dụng hai thuật toán riêng rẽ cho việc tạo chữ ký và kiểm định chữ ký, thông qua việc sử dụng cặp 2 hàm toán học đối lập nhau, một cần khóa bí mật còn một thì không. Chính do điều này, mật mã khóa công khai đã được khai thác để giúp hiện thực điểm chốt của cơ chế đặc biệt này.
+
+Giả sử Alice đã thiết lập một hệ mật mã KCK với thành phần khóa bí mật $z_A$ và công khai $Z_A$, tức là có hàm sinh mã $E_{Z_A}()$ và hàm giải mã $D_{z_A}()$, khi đó Alice có thể tạo chữ ký điện tử bằng hàm $D_{z_A}()$ và bất kỳ người nào khác sẽ kiểm tra bằng hàm $E_{Z_A}()$. Cụ thể là, với văn bản nhị phân $X$, Alice sẽ tạo được chữ ký $S= D_{z_A}(X)$, văn bản có chữ ký sẽ là $Y=X||S$. Khi văn bản này đến tay Bob, Bob sẽ kiểm tra tính hợp lệ bằng việc tính $X'= E_{Z_A}(S)$ và đối chiếu $X = X'?$ Lưu ký, Bob sẽ cần kiếm được khóa công khai của Alice, $Z_A$, bằng một cách nào đó.
+
+Như vậy nếu Bob đã nhận được văn bản có chữ ký $X||S$ và dùng khóa công khai của Alice để kiểm định thành công, văn bản đó trở thành bằng chứng, ngay cả khi Alice có muốn chối cãi đã tạo ra và ký nó cũng không được. Bởi vì chỉ duy nhất Alice mới sở hữu khóa $d_A$ bí mật để tạo ra được chữ ký hợp lệ mà thôi. Ta gọi tính chất này của chữ ký điện tử là tính không thể chối cãi được (non-repudiation). Ngay cả khi Alice có khiếu nại bị oan với lý do chữ ký tạo ra bởi một kẻ đã ăn cắp được khóa bí mật của cô ta, thì điều này cũng không thể chứng minh được.
+
+\textbf{Công chứng}: Để có thể đảm bảo phòng tránh được tình trạng chữ ký giả mạo do kẻ gian ăn cắp được khóa bí mật của người bị hại, người ta đã giới thiệu thêm hệ thống công chứng – public notary. Ý tưởng thực hiện: có thêm một bên thứ ba tham gia, vô tư và có thẩm quyền hợp pháp, được gọi là công chứng viên (public notary), sẽ được thuê để ký xác nhận thêm vào sau chữ ký của Alice đối với những văn bản quan trọng mà Alice ký. Văn bản đầy đủ chữ ký sẽ có dạng $Y=X||S_A||S_N$ trong đó chữ ký của công chứng viên $S_N$ là ký trên văn bản $X||S_A$.
+
+\textbf{Bằng chứng biên nhận}: Trong truyền tin liên lạc, chữ ký điện tử có thể sử dụng để đảm bảo tính chính xác của tài liệu (bằng chữ ký của bên gửi A), và bên nhận B có thể gửi lại chữ ký của mình vào tài liệu đã nhận như là bằng chứng để A biết là B đã thực sự nhận được tài liệu đó. Nếu thủ tục này được thực hiện, sau này A có thể chứng minh được là mình đã gửi tài liệu cho B, ngay cả khi lúc đó B muốn chối cũng không được.
+
+$A \rightarrow B: Y = E_{Z_B}(X\||D_{z_A}(X))$
+
+$B:$ tính $E_{z_B}(Y)$ thu được $X$ và $S = D_{z_A}(X)$, kiểm tra xem $X =? E_{z_A}(S)$
+
+$B \rightarrow A: Y' = E_{Z_A}(D_{z_B}(X))$
+
+$A:$ tính $S_B(X) = D_{z_A}(Y')$, đó chính là chữ ký của $B$ trên $X$, bằng chứng xác nhận $B$ đã nhận được tài liệu X chính xác.
+\subsubsection{Nhược điểm của hệ chữ ký cơ sở}
+Hệ chữ ký điện tử theo tiếp cận ban đầu nói trên, tức là sử dụng $D_z$ để ký và $E_Z$ để kiểm định, là khá đơn giản và phạm phải nhược điểm lớn:
+\begin{itemize}
+\item Chữ ký quá dài, dài đúng bằng tài liệu: Với văn bản dài, ta cần dùng việc chia khối rồi ký lên nhiều khối; cụ thể là $X = X_1|| X_2|| X_3|| \ldots ||X_t \rightarrow S= S_A(X_1) ||$ $S_A(X_2) || S_A(X_3) || \ldots || S_A(X_t))$. Rõ ràng số lượng khối trên văn bản đã ký nhiều gấp đôi ban đầu.
+\item Không những dài, việc thực hiện nhiều lần thuật toán KCK (ký lên từng khối) sẽ làm thủ tục ký có thể diễn ra rất lâu, thời gian tỷ lệ với độ dài văn bản. Điều này là không chấp nhận được với các giao dịch trực tuyến.
+\item Kẻ tấn công có thể dễ dàng phá hệ thống chữ ký này bằng kiểu tấn công lắp ghép khối (thay đổi thứ tự, thêm hay bớt khối \ldots).
+\end{itemize}
+
+Vì vậy hệ thống chữ ký điện tử đơn giản kiểu này đã không được sử dụng. Giải pháp đầy đủ là có thêm sự hộ trợ của hàm băm, tức là "Băm" tài liệu trước khi ký, sẽ được trình bày tiếp theo đây.
+\subsection*{Hàm băm và ứng dụng chữ ký điện tử}
+Một hàm băm H sẽ lấy ở đầu vào là một thông tin X có kích thước bất kỳ và sinh kết quả ra là một chuỗi $h_X=h(X)$ có độ dài cố định, thường là nhỏ hơn nhiều so với kích thước của $X$. Chuỗi này thường được gọi là cốt yếu, hay cốt (digest) của thông tin X.
+
+Ví dụ: Thông tin X có thể là một tệp độ dài hàng trăm Kb trong khi cốt của nó chỉ là một khối có độ dài 128bit. Tất nhiên, điều đó dẫn đến khả năng có thể có 2 thông tin $X \neq X'$ mà cho cùng một cốt giống nhau với một hàm băm, tức là $H(X) = H(X')$. Trường hợp này gọi là đụng độ (collision).
+
+Tuy nhiên với hàm băm thiết kế tốt, đụng độ là gần như không thể xảy ra được trên thực tế. Nói cách khác nếu cố đi tìm, khối lượng tính toán phải thực hiện là rất lớn, không khả thi với công cụ tính toán hiện thời.
+
+Hàm băm có ứng dụng chủ chốt trong các hệ chữ ký điện tử được sử dụng hiên nay. Thay vì ký (tức là thực hiện thuật toán $D_{z_A}$) lên văn bản $X$, Alice cần thực hiện việc ký lên $h_X$, như vậy văn bản đã ký sẽ có dạng $X || D_{z_A}(H(X))$.
+
+Để đảm bảm an toàn cao, chống được tấn công giả mạo chữ ký, chúng ta cần sử dụng các hàm băm mật mã (cryptographic hash function) với các thuộc tính như sau:
+\begin{itemize}
+\item[1. ] Lấy đầu vào là một xâu với độ dài bất kỳ và sinh ra một xâu với độ dài cố định.
+\item[2. ] Có tính một chiều: biết $X$, có thể dễ dàng tính được giá trị băm $h_X$, nhưng không thể tính ngược được $X$ khi chỉ biết $h_X$, với công cụ tính toán hiện nay (bất khả thi về tính toán).
+\item[3. ] Có tính phi đụng độ cao (collision free), tức là thực tế không thể tim được hai thông tin $X \neq X'$ sao cho $H(X) = H(X')$. Tất nhiên, đây là bất khả thi về mặt tính toán.
+\end{itemize}
+
+\textbf{hình}
+
+\subsubsection{Đụng độ}
+Rõ ràng là với không gian giá trị băm nhỏ hơn không gian tin về mặt kích thước thì chắc chắn sẽ tồn tại đụng độ (collision), nghĩa là có hai bản rõ $X \neq X’$ mà giá trị băm của chúng giống nhau nghĩa là $h_X=h_{X’}$. Điều này có thể thấy rõ ràng qua nguyên lý Diricle - Nếu có n+1 con thỏ được thả vào n cái chuồng thì phải tồn tại ít nhất một cái chuồng mà trong đó có ít ra là hai con thỏ ở chung.
+
+Trong thực tế người ta thường chọn không gian băm cỡ khoảng 64bit, 128 bit \ldots .Trong khi đó các văn bản thực tế lớn hơn nhiều, cỡ Kb trở lên, cho nên việc tồn tại đụng độ là chắc chắn. Tuy nhiên nếu sử dụng hàm băm mật mã có không gian băm lớn được chế tạo tốt (an toàn) thì việc tìm ra đụng độ đòi hỏi khối lượng tính toán lớn đến mức phi thực tế (infesible computation).
+
+Việc chế tạo các hàm băm phi đụng độ là rất khó. Nhiều hàm băm được phát minh bởi các nhóm có tên tuổi trên thế giới sau một thời gian xuất hiện đã bị những người khác chỉ ra những đụng độ tồn tại và không được công nhận là an toàn nữa.
+\subsection*{Các kỹ thuật làm hàm băm}
+Các kỹ thuật để chế tạo được hàm băm có thể chia ra làm ba loại:
+\begin{itemize}
+\item Dựa trên việc áp dụng các hệ mã khối theo mật mã khoá bí mật đối xứng (SKC).
+\item Dựa trên các phép toán số học đồng dư.
+\item Các hàm thiết kế băm đặc biệt.
+\end{itemize}
+\subsubsection{Các hàm băm chế từ hệ SKC}
+\textbf{\textit{Sơ đồ Rabin-Matyas-Davies-Price (RMDP)}}
+\begin{center}
+\begin{tabular}{l}
+$X = X_1 X_2 \ldots$ \\
+$H_0 = 0$ (hay một số ngẫu nhiên nào đó) \\
+$H_i = E_{x_i}(H_{i - 1})$ \\
+\end{tabular}
+\end{center}
+
+Ở đây, tất nhiên các TIN phải được chặt thành các khối có kích cỡ bằng khoá của hệ mã E. Giá trị băm là $H(X) = (H_0,H_t)$.
+
+Người ta chứng minh được rằng với không gian băm chỉ là 64bit thì $H(X)$ không phải là một chiều, tức là cho $Y=H(X)$, việc tìm ngược được X là khả thi.
+
+\textbf{\textit{Sơ đồ Davies-Meyer (DM hash)}}
+\begin{center}
+\begin{tabular}{l}
+$X = X_1 X_2 \ldots$ \\
+$H_0 = $ vector khởi tạo là một số ngẫu nhiên nào đó \\
+$H_i = E_{x_i}(H_{i-1}) \oplus H_{i-1}$	 \\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item Việc xây dựng các hàm băm từ các mã khối đòi hỏi phải có phân tích tính an toàn một cách cẩn thận.
+\item DM được coi như là an toàn nếu sử dụng với các mã khối kích thước 128bit.
+\item Không có hệ nào khác đã được đề xuất mà được chứng minh là an toàn.
+\end{itemize}
+\subsection*{Các hàm băm dựa trên các phép toán số học đồng dư}
+\textbf{\textit{QCMDC (Quadratic Congruential Manipulation Detection Code)}}
+
+Được đề xuất bởi Jueneman (1983).
+
+Bản rõ được chia thành các khối m bit. $H_0$ là giá trị khởi đầu được chọn ngẫu nhiên và giữ bí mật (vì thế vẫn được gọi là hàm băm có khóa - keyed hash function).
+
+Các bước xây dựng hàm băm như sau:
+\begin{center}
+\begin{tabular}{l}
+M là một số nguyên tố sao cho $M \geq 2^{m-1}$, \\ 
+$H_i = (H_i - 1 + X_i)^2$ (mod M) \\
+M là luỹ thừa của 2.
+\end{tabular}
+\end{center}
+
+Hệ này đã bị phá (Coppersmith).
+
+\textbf{\textit{Davies-Price (1985)}}
+
+Chia văn bản thành các khối có m-d bit:
+\begin{center}
+\begin{tabular}{l}
+$X = X_1 X_2 X_3 \ldots X_n$ \\
+$H_i = (H_{i-1} \oplus X_i)^2$ (mod M), $H_0 = 0$
+\end{tabular}
+\end{center}
+
+Hệ này bị chứng minh là không đảm bảo tính một chiều (Girault)
+
+\subsection*{Các hàm băm được chế tạo đặc biệt}
+Ngoài các kỹ thuật thông thường nói trên người ta đã tìm nhiều cách rất riêng biệt khác nhau để chế tạo ra những hàm băm có độ tin cậy cao. Thông thường những sơ đồ này rất phức tạp và có những cấu trúc đặc biệt, nên không trình bày đầy đủ ở đây. Sau đây là một số các hàm băm nổi tiếng.
+\subsubsection{MD5 (Rivest 1992)}
+Đây là một trong các hàm băm có tiếng nhất và được sử dụng thông dụng:
+\begin{itemize}
+\item[+] Nó lấy vào các khối đầu vào 512 bit và sinh ra các giá trị băm 128 bit.
+\item[+] Được tin là phi đụng độ và một chiều (one - way)
+\item[+] Thuật toán MD5 được thiết kế cho phép chạy tốt nhất trên các máy tính 32 bit. Nó sử dụng các phép toán đơn giản như phép cộng modulo 32, do đó thích hợp với việc mã hoá cho các bộ xử lý 32 bit.
+\end{itemize}
+\subsubsection{SHA (Secure Hash Function)}
+Đây là một thuật toán được đề xuất và bảo trợ bởi cơ quan NIST để sử dụng đối với hệ chữ ký DSA (cũng là một dự chuẩn cho chữ ký điện tử). Nó cho giá trị băm là 160 bit và được thiết kế với cùng một tiếp cận như MD5.
+\subsubsection{HAVAL}
+Một hệ băm của Australia cho phép thay đổi kích thước giá trị băm. Cấu trúc rất giống như MD5.
+\subsubsection{Snefru Mekle (1989)}
+\begin{itemize}
+\item[+] Là hàm băm có khóa (keyed hash function)
+\item[+] Cho phép 1 trong 2 lựa chọn kích thước giá trị băm là 128 bit và 256 bit.
+\item[+] Eli Biham đã chỉ ra một đụng độ cho trường hợp 128 bit.
+\end{itemize}
+\section{Hệ thống chứng thực và Chứng thư số}
+\subsection*{Hệ thống chứng thực}
+Hệ thống chứng thực là một hạ tầng an ninh mạng được xây dựng trên một hạ tầng cơ sở khóa công khai (PKI) cung cấp các giải pháp đảm bảo an toàn cho các hoạt động (gọi chung là giao dịch) thông qua mạng.
+\subsubsection{Tại sao lại phải sử dụng hệ thống chứng thực?}
+\begin{itemize}
+\item Hệ thống chứng thực cung cấp các dịch vụ đảm bảo an toàn cho các giao dịch thông qua mạng. Các dịch vụ cơ bản mà một hệ thống chứng thực cung cấp bao gồm:
+\item Dịch vụ xác thực: nhằm xác định xem ai đang giao dịch với mình.
+\item Dịch vụ bảo mật: đảm bảo tính bí mật của thông tin, người không có thẩm quyền không thể đọc được nội dung của thông tin.
+\item Dịch vụ toàn vẹn: khẳng định thông tin có bị thay đổi hay không.
+\item Dịch vụ chống chối bỏ: cung cấp các bằng chứng chống lại việc chối bỏ một hành động đã thực hiện hay đã diễn ra
+\item Như vậy sử dụng hệ thống chứng thực sẽ đảm bảo, bí mật, toàn vẹn cho thông tin được truyền qua mạng, xác thực được người dùng và chống chối bỏ các hành động hay sự kiện đã xảy ra.
+\end{itemize}
+\subsubsection{Hệ thống chứng thực gồm những thành phần nào?}
+\begin{itemize}
+\item Hệ thống chứng thực gồm 2 thành phần:
+\begin{itemize}
+\item Thành phần thực hiện các nhiệm vụ về quản lý chứng thư số như: đăng ký và phát hành, thu hồi \ldots chứng thư số.
+\item Thành phần thực hiện chức năng xác định xem một chứng thư số có hợp lệ hay không
+\end{itemize}
+\end{itemize}
+\subsubsection{Cơ quan chứng thực (CA) là gì?}
+Cơ quan chứng thực (Certification Authority - CA) có thẩm quyền cấp phát, thu hồi, quản lý chứng thư số cho các thực thể thực hiện các giao dịch an toàn. Cơ quan chứng thực là một thành phần chính của hệ thống chứng thực.
+\subsubsection{Cơ quan đăng ký (RA) là gì?}
+Cơ quan đăng ký (Registration Authority) là một thành phần trong hệ thống chứng thực có nhiệm vụ tiếp nhận và xác minh các yêu cầu về chứng thư số của người sử dụng đồng thời gửi các yêu cầu đã xác minh cho cơ quan chứng thực (CA) thực hiện yêu cầu đó.
+\subsubsection{Hệ thống chứng thực có những ứng dụng gì?}
+\begin{itemize}
+\item Một số ứng dụng của hệ thống chứng thực:
+\item Nhóm các dịch vụ chính phủ điện tử e-Government:
+\begin{itemize}
+\item Hóa đơn điện tử (E-Invoice)
+\item Thuế điện tử (E-Tax Filing)
+\item Hải quan điện tử (E-Customs)
+\item Bầu cử điện tử (E-Voting)
+\item E-Passport
+\item PKI-based National ID Card
+\item Các dịch vụ của chính phủ cho doanh nghiệp G2B (các ứng dụng đăng ký kê khai, thăm dò qua mạng đối với các doanh nghiệp)
+\item  Các dịch vụ của chính phủ cho công dân G2C (dịch vụ y tế \ldots).
+\end{itemize}
+\item Nhóm các dịch vụ ngân hàng trực tuyến (Online Banking)
+\begin{itemize}
+\item Thanh toán trực tuyến (E-Payment)
+\item Tiền điện tử (E-Billing)
+\end{itemize}
+\begin{itemize}
+\item Kinh doanh chứng khoán trực tuyến (Online security trading)
+\item Đấu thầu trực tuyến (E-Procurement)
+\item Bảo hiểm trực tuyến (E-Insurance)
+\item Quản lý tài liệu
+\item Bảo mật email
+\end{itemize}
+\end{itemize}
+\subsection*{Chứng thư số}
+Để thực hiện được các giao dịch an toàn qua mạng, các bên tham gia cần phải có "chứng thư số". Chứng thư số là một cấu trúc dữ liệu chứa các thông tin cần thiết để thực hiện các giao dịch an toàn qua mạng. Chứng thư số được lưu giữ trên máy tính dưới dạng một tập tin (file).
+
+Nội dung chứng thư số bao gồm:
+\begin{itemize}
+\item Tên chủ thể chứng thư số.
+\item Khoá công khai.
+\item Một số thông tin khác như, tên của CA cấp chứng chỉ số đó, hạn dùng, thuật toán ký \ldots.
+\item Chữ ký số của CA cấp chứng thư số đó.
+\end{itemize}
+
+Mục đích của chứng thư số dùng để nhận diện một đối tượng khi tham gia giao dịch trên mạng.
+
+\subsubsection{Ứng dụng chứng thư số để làm gì?}
+\begin{itemize}
+\item Với chứng thư số người dùng có thể:
+\begin{itemize}
+\item Xác định danh tính người dùng khi đăng nhập vào một hệ thống (xác thực).
+\item Ký số các tài liệu Word, PDF hay một tệp liệu.
+\item Mã hóa thông tin để đảm bảo bí mật khi gửi và nhận trên mạng.
+\item Thực hiện các kênh liên lạc trao đổi thông tin bí mật với các thực thể trên mạng như thực hiện kênh liên lạc mật giữa người dùng với webserver.
+\end{itemize}
+\end{itemize}
 \chapter{Mật mã dựa trên đường cong Elliptic}
 \section{Đường cong Elliptic}
 \section{Mật mã dựa trên đường cong Elliptic}
@@ -293,7 +537,7 @@ X = \frac{b}{a^u} (mod \ p)
 \chapter{Cài đặt cho thiết bị IoT}
 \chapter*{Kết luận và hướng phát triển}
 \begin{thebibliography}{9}
-\bibitem{csplib30} \url{http://www.csplib.org/Problems/prob030/}
+\bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
 \bibitem{slidethayquang} Slide Trí tuệ nhân tạo thầy Nguyễn Nhật Quang. Chương 5 : Thỏa mãn ràng buộc
 \bibitem{AIAMAB} Stuart Russell and Peter Norvig 
 \textit{Artificial Intelligence: A Modern Approach} 2\textsuperscript{nd } edition, Prentice Hall, page 137,  2003.
