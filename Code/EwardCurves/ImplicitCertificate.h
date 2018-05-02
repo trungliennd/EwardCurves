@@ -3,7 +3,14 @@
 #include "base64.h"
 #include <time.h>
 #include <string.h>
+#define MESSAGE_LEN 1024
+#define BASE64_LEN 44
 using namespace Cryptography;
+using namespace std;
+
+unsigned char sharesKey25519[crypto_sign_ed25519_SHAREDKEYBYTES]; // use 32 bytes
+unsigned char nonce[crypto_secretbox_NONCEBYTES];  // use 24 bytes
+
 
 void sha256(char *string, unsigned char hash_code[32]);
 void HashModul(char *string, mpz_t rs, unsigned int hash_bits, unsigned int modul_bits, void(*function)(char *string, char *out));
@@ -15,6 +22,8 @@ void createPairKey_ku_vs_Ru(char* file_ku, char* file_Ru);
 void calculate_r_or_du(mpz_t &rs_out, mpz_t e, mpz_t k, mpz_t r_or_d_ca);
 void decrypto_messages(char file_ciphertext[], char file_message[]);
 void encrypto_messages(char file_message[],char file_ciphertext[]) ;
+int crypto_scalarmult(unsigned char sharesKey25519[], mpz_t &du, ed25519::Point &Qu);
+
 
 ed25519::Point Ru;
 ed25519::Point Pu;
@@ -342,6 +351,72 @@ void loadKey_ca(char*file_k_ca, char*file_Q_ca) {
     }
 }
 
+
+void loadKey(char secretKey[], char publicKey[]) {
+   // secret key
+    if(secretKey != NULL) {
+        FILE* readFile = fopen(secretKey, "r");
+        if(readFile == NULL) {
+            printf("\nCan't read secretKey");
+            exit(EXIT_FAILURE);
+        }else {
+            unsigned char key_du[BASE64_LEN];
+            fread(key_du,1,BASE64_LEN,readFile);
+            fscanf(readFile,"%c",&key_du[BASE64_LEN - 1]);
+            fread(key_du,1,BASE64_LEN,readFile);
+            key_du[BASE64_LEN] = '\0';
+            string s((char*)key_du);
+            mpz_init(du);
+            crypto_decode_ed225519_ClampC((unsigned char*)base64_decode(s).c_str(), du, 32);
+        }
+        fclose(readFile);
+    }
+    if(publicKey != NULL) {
+        FILE* readFile1 = fopen(publicKey, "r");
+        if(readFile1 == NULL) {
+            printf("\nCan't read publicKey");
+            exit(EXIT_FAILURE);
+        }else {
+            unsigned char pub[BASE64_LEN_D];
+            fread(pub,1,BASE64_LEN_D,readFile1);
+            fscanf(readFile1,"%c",&pub[BASE64_LEN_D - 1]);
+            fread(pub,1,BASE64_LEN_D,readFile1);
+            pub[BASE64_LEN_D] = '\0';
+            string s((char*)pub);
+            mpz_t x, y;
+            mpz_init(x);
+            mpz_init(y);
+            stringToEllipticCurvePoint(x, y, (unsigned char*)base64_decode(s).c_str(), crypto_sign_ed25519_PUBLICKEYBYTES_D);
+            if(Ed_curves25519 == NULL) {
+                initCurveTwistEwards25519();
+            }
+            Qu.assignPoint(x, y, *Ed_curves25519);
+        }
+        fclose(readFile1);
+    }
+
+    if(crypto_scalarmult(sharesKey25519, du, Qu) != 0){
+        printf("\nCan't calculation shareKey");
+        exit(1);
+    }
+
+}
+
+int crypto_scalarmult(unsigned char sharesKey25519[], mpz_t &du, ed25519::Point &Qu) {
+    if(mpz_cmp_ui(du, 0) == 0) {
+        return -1;
+    }
+
+    if(mpz_cmp_ui(Qu.x_.i_, 0) == 0 && mpz_cmp_ui(Qu.y_.i_, 0) == 0) {
+        return -1;
+    }
+
+    ed25519::Point share;
+    share.scalarMultiply(du, Qu);
+    crypto_encode_ed225519_ClampC(sharesKey25519, share.x_.i_, 32);
+    return 0;
+}
+
 void cert_Request(char identity[], unsigned char key_Ru[], char *file_out) {
     FILE* out = fopen(file_out, "w");
     fprintf(out, "{\n");
@@ -637,6 +712,28 @@ void recoverQ_u_vs_du(struct cert& certificate, char *file_ku,char *file_du, cha
     }
     savePairKey(du, Qu, file_du, file_Qu);
 }
+
+const unsigned int aes_block_SIZE = 32;
+
+struct ctr_state {
+    unsigned char  ivec[aes_block_SIZE];
+    unsigned int   num;
+    unsigned char  ecount[aes_block_SIZE];
+};
+
+struct ctr_state state;
+AES_KEY key;
+unsigned char iv[crypto_secretbox_NONCEBYTES];
+
+int init_ctr(struct ctr_state* state, const unsigned char iv[32]) {
+    state->num = 0;
+    memset(state->ecount, 0, aes_block_SIZE);
+    // initialize counter in ivec to 0
+    memset(state->ivec + 16, 0, 8);
+    // Copy IV into 'ivec'
+    memcpy(state->ivec, iv, 16);
+}
+
 
 void encrypto_messages(char file_message[],char file_ciphertext[]) {
     randNonce(iv, 24);
