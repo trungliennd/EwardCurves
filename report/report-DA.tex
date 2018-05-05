@@ -6,9 +6,9 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{comment}
-%\usepackage{enumitem}
+\usepackage{enumitem}
 \usepackage{enumerate}
-%\usepackage{amssymb}
+\usepackage{amssymb}
 \usepackage{graphicx}
 %\usepackage{cases}
 \usepackage{fancybox}
@@ -19,7 +19,7 @@
 \usepackage{indentfirst}
 \usepackage[english]{babel}
 \usepackage{algpseudocode}
-%\usepackage[refpage]{nomencl}
+\usepackage[refpage]{nomencl}
 %\makenomenclature
 \usepackage{acro}
 \acsetup{
@@ -197,7 +197,6 @@ Vì vây, các điều kiện cần cho mật mã khối an toàn là:
 \item Kích thước khối phải đủ lớn để chống lại các loại tấn công phá hoại bằng phương pháp thống kê. Tuy nhiên cần lưu ý rằng kích thước khối lớn sẽ làm thời gian trễ lớn.
 \item Không gian khóa phải đủ lớn (tức là chiều dài khóa phải đủ lớn) để chống lại tìm kiếm vét cạn.Tuy nhiên mặt khác, khóa cần phải đủ ngắn để việc làm khóa, phân phối và lưu trữ được hiệu quả.	
 \end{itemize}
-
 Về các nguyên lý thiết kế mật mã khối, người ta đã ghi nhận 2 nguyên tắc cơ sở sau để có bảo mật cao, đó là việc tạo ra confusion (tính hỗn loạn, rắc rối) và diffusion (tính khuếch tán).
 
 \textit{Confusion}. (Hỗn loạn, rắc rối) Sự phụ thuộc của bản mã đối với bản rõ phải thực phức tạp để gây rắc rối, cảm giác hỗn loạn đối với kẻ thù có ý định phân tích tìm qui luật để phá mã. Quan hệ hàm số của mã-tin là phi tuyến (non-linear).
@@ -234,8 +233,7 @@ Hệ thống mật mã hóa khóa công khai có thể sử dụng với các m�
 
 Thông thường, các kỹ thuật mật mã hóa khóa công khai đòi hỏi khối lượng tính toán nhiều hơn các kỹ thuật mã hóa khóa đối xứng nhưng những lợi điểm mà chúng mang lại khiến cho chúng được áp dụng trong nhiều ứng dụng.
 \subsection*{Hệ thống khóa công khai}
-RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế,
-phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
+RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế, phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
 
 Cơ sở thuật toán RSA dựa trên tính khó của bài toán phân tích các số lớn ra thừa số nguyên tố: không tồn tại thuật toán thời gian đa thức (theo độ dài của biểu diễn nhị phân của số đó) cho bài toán này. Chẳng hạn, việc phân tích một hợp số là tích của 2 số nguyên tố lớn hàng trăm chữ số sẽ mất hàng ngàn năm tính toán với một máy PC trung bình có CPU khoảng trên 2Ghz.
 \subsubsection{Thuật toán RSA}
@@ -531,42 +529,132 @@ Mục đích của chứng thư số dùng để nhận diện một đối tư�
 \end{itemize}
 \end{itemize}
 \chapter{Mật mã dựa trên đường cong Elliptic}
+ giơi thiệu 
+\section{Lý thuyết số}
+\subsection*{Nhóm}
+Một nhóm $(G, +)$ là tập hợp các phần tử $G$ cùng với phép toán hai ngôi $+$ kết hợp thành phần tử thứ ba thỏa mãn bốn tiên đề của nhóm (với $ a, b , c, e \in G$):
+\begin{itemize}
+\item Tính đóng: $\forall a, b: (a + b) \in G$
+\item Tính kết hợp: $\forall a, b, c: (a + b) + c = a + (b + c)$
+\item Phần tử đơn vị: $\exists e \ \forall a: a + e = e + a = a$
+\item Tính khả nghịch: $\forall a \ \exists b: a + b = b + a = e$
+\end{itemize}
+$e$ được gọi là phần tử đơn vị(ví dụ nhóm số nguyên phần tử đơn vị là 0). Một nhóm được gọi là abelian khi thỏa mãn điều kiện:
+\begin{itemize}
+\item Tính giao hoán: $\forall a,b: a + b = b + a$
+\end{itemize}
+Cho $\cdot$ là phép nhân kết quả của phép cộng lặp đi lặp lại nhiều lần của 1 phần tử. Cho nhóm $(G, \cdot)$ là nhóm và $x^n$ được định nghĩa như sau:
+\begin{center}
+\begin{tabular}{c}
+$x^0 = \infty$ \\
+$x^{n + 1} = x^n\cdot x$ với $n \in N$ 
+\end{tabular}
+\end{center}	
+$\infty$ là phép nhân phân tử đơn vị. Cấp(order) r của một phần tử x được định nghĩa như một số nguyên nhỏ r > 0 sao cho $x^r = \infty$. Nếu một nhóm có phần tử g sao cho \{$g^n | n \in Z$\} là tất cả phần tử trong nhóm, g được gọi là phần tử sinh của nhóm vòng.
+\subsection*{Vành}
+Một vành được gọi là nhóm abelian với phép toàn hai ngôi thỏa mãn luật kết hợp và phân phối trên nhóm abelian:
+\begin{displaymath}
+\forall a, b, c \in G: a\cdot (b + c) = a \cdot b + a \cdot c
+\end{displaymath}
+\subsection*{Trường}
+Một trường là một vành giao hoán khác 0, chứa một nghịch đảo nhân cho mọi phần tử khác không. Như một vành, các phần tử khác không tạo thành một nhóm abelian dưới phép nhân.
 
-\\ giơi thiệu 
+Ví dụ về trường:
+\begin{itemize}
+\item Trường số thực $(R)$
+\item Trường số phức $(C)$
+\item Trường số hữ tỉ $(Q)$
+\end{itemize}
 \section{Đường cong Elliptic}
-Một đường cong elliptic và tập hợp nghiệm của phương trình có công thức
+Một đường cong elliptic curve được xác định bởi phương trình đường cong và một số trường tọa độ cơ bản.
+
+Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong E. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với một số biểu diễn được thành $2^k$. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
+
+$E(GF(p^k))$ là tập hợp các điểm thỏa mãn phươn trình đường cong (và cả điểm $\infty$). Lực lượng $|E(GF(p^k))|$ được định nghĩa là cấp (order) của đường cong. Nếu muốn xác định một số phần tử của 
+$E(GF(p^k))$ như một điểm sinh. Nó tạo ra nhóm con khác theo luật:
+\begin{displaymath}
+h = \frac{|E(GF(p^k))|}{o}
+\end{displaymath}
+h được gọi là cofactor và o được gọi là cấp(order) của điểm sinh.
+
+Số lượng điểm sinh của trường $GF(n)$ là $\phi (n - 1)$ ở đây $\phi$ là một hàm Ơ-le của Euler. Điều này cũng là yếu tố cho phép nhân trong nhóm vòng[*].
+
+Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve, Montgomery Curve, Edwards Curve, Twisted Edwards Curve, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
+\subsection*{Luật cộng}
+Một đường cong elliptic là tập hợp các nghiệm của phương trình:
 \begin{displaymath}
 Y^2 = X^3 + AX + B.
 \end{displaymath}
-Phương trình này được gọi là phương trình Weierstrass sau khi các nhà toán học người nghiên cứu chúng rộng rãi trong thế kỷ XIX. Hai ví dụ về đường cong elliptic
+
+Phương trình này được gọi là phương trình Weierstrass. Ta có hai ví dụ về đường cong elliptic
+
+\begin{center}
+\begin{tabular}{ccc}
+$E_1: Y^2 = X^3 - 3X + 3$ & và & $E_2: Y^2 = X^3 - 6X + 5$ 
+\end{tabular}
+\end{center}
+\textbf{hình minh họa} \\
+
+Một đặc điểm của đường cong elliptic là lấy hai điểm bất kì trên đường cong và cộng chúng lại để tạo ra một điểm thứ ba nằm trên đường cong. Nhưng không giống như luật cộng thông thường chúng ta sẽ mô tả luật cộng thông qua hình học.
+
+Cho $P$ và $Q$ là hai điểm trên đường cong elliptic $E$, như hình [?]. Kẻ đường thẳng $L$ đi qua $P$ và $Q$. Đường thẳng $L$ cắt đường cong $E$ tại ba điểm, trong đố có hai điểm $P$ và $Q$ và một điểm khác là $R$. Chúng ta lấy điểm $R$ và chiếu nó theo chục x để lấy được điểm mới $R'$. Điểm $R'$ được gọi là "tổng của $P$ và $Q$", có thể thấy phép cộng này không giống như các phép cộng thông thường. Chúng ta có thể kí hiệu phép cộng bởi $\oplus$.
+\begin{displaymath}
+P \oplus Q = R'
+\end{displaymath}
+
+Một ví dụ về luật cộng. Cho đường cong $E$ có phương trình:
+\begin{equation}
+Y^2 = X^3 - 15X + 18 \label{2.1}
+\end{equation}
+
+Cho hai điểm $P = (7,16)$ và $Q = (1,2)$ nằm trên đường cong $E$. Đường thẳng $L$ đi qua hai điểm có phương trình:
+\begin{equation}
+L: Y = \frac{7}{3} - \frac{1}{3} \label{2.2}
+\end{equation}
+Để tìm được giao điểm của đường thẳng $L$ và đường cong $E$. Chúng ta sẽ thay phương trình \ref{2.2} vào \ref{2.1} Ta có:
+\begin{align*}
+(\frac{7}{3}X - \frac{1}{3})^2 = X^3 - 15X + 18, \\
+\frac{49}{9}X^2 - \frac{14}{9}X + \frac{1}{9} = X^3 - 15X + 18, \\
+0 = X^3 - \frac{49}{9}X^2 - \frac{121}{9}X + \frac{161}{9}
+\end{align*}
+Chúng ta cần tìm nghiệm của đa thức. Nhìn chung để tìm nghiệm của đa thức là khó. Tuy nhiên như chúng ta đã biết $L \cap E$ Tại hai điểm P và Q nên ta có hai là $X = 7$ và $X = 1$,vì thế chúng ta có thể dễ dàng tìm được nghiệm thứ ba còn lại:
+\begin{displaymath}
+X^3 - \frac{49}{9}X^2 - \frac{121}{9}X + \frac{161}{9} = (X - 7)\cdot(X - 1)\cdot(X + \frac{23}{9})
+\end{displaymath}
+vì vậy điểm thứ ba là giao điểm của $L$ và $E$ sẽ có tọa $X = -\frac{23}{9}$. Chúng ta sẽ tìm tọa đô Y theo X bằng cách thay X vào phương trình \ref{2.2} kết quả $R = (-\frac{23}{9}, -\frac{170}{27})$. Cuối cùng chúng ta sẽ chiếu $R$ theo chục tọa đô X đạt được 
+\begin{displaymath}
+P \oplus Q = (-\frac{23}{9}, \frac{170}{27}).
+\end{displaymath} 
+
+Có một vấn đề ta có thể nhìn thấy trong hình [?] nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình [??]. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
+\subsection*{Hệ tọa độ}
+Trong phương trình đường cong tổng quát xem xét hai tọa độ x và y. Ví dụ: xem xét đường cong Montgomery trên trường F được xác định bởi:
+\begin{center}
+$By^2 = x^3 + Ax^2 + x$ \ \ \ \  $A, B \in F$ và $B(A^2 - 4) \neq 0$
+\end{center}
+A, B là các hằng số xác định đường cong. Phần tử trên đường cong là cặp tọa độ (x, y). Tuy nhiên có thể biểu diễn mở rộng theo bảng sau:
+\begin{center}
+\begin{tabular}{rll}
+$(x ,y)$ & affine	 \\
+$(X, Y, Z, ZZ)$ & standard & với $x = X/Z$ và $y = Y/Z$ và $ZZ = Z^2$ \\
+$(X, Y, Z)$ & projective & với $x = X/Z$ và $y = Y/Z$ \\
+$(X, Y, Z)$ & Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
+$(X, Y, Z)$ & Jacobian & với $x = X/Z^2$ và	$y = Y/Z^3$ \\
+$(X, Y, Z, Z^2, XZ )$ & Extended Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
+$(X, Y, Z, Z^2)$ &  Extended Jacobian & với $x = X/Z^2$ và $y = Y/Z^3$ \\
+$(X, Y, Z, T)$ & Extended Twisted Edwards & với $x = X/Z and Y = Y/Z$ với $T = X \cdot Y$ 
+\end{tabular}
+\end{center}
+\subsection*{Weierstrass curve}
+\subsection*{Montgomery curve}
+\subsection*{Edwards curve}
+\subsection*{Twisted Edwards curve}
 \section{Mật mã dựa trên đường cong Elliptic}
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
 \chapter{Cài đặt cho thiết bị IoT}
 \chapter*{Kết luận và hướng phát triển}
 \begin{thebibliography}{9}
 \bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
-\bibitem{slidethayquang} Slide Trí tuệ nhân tạo thầy Nguyễn Nhật Quang. Chương 5 : Thỏa mãn ràng buộc
-\bibitem{AIAMAB} Stuart Russell and Peter Norvig 
-\textit{Artificial Intelligence: A Modern Approach} 2\textsuperscript{nd } edition, Prentice Hall, page 137,  2003.
-\bibitem{main} Ha Quang Minh and Deville Yves and Pham Quang Dung and Ha Minh Hoang, \textit{On the min cost traveling salesman problem with drone}, arXiv preprint arXiv:1509.08764, 2015
-\bibitem{bahiwww} S. Banker, Amazon and drones – here is why it will work (dec 2013).
-URL \url{http://www.forbes.com/sites/stevebanker/2013/12/19/amazon-drones-here-is-why-it-will-work/}
-\bibitem{TRR} Nguyễn Đức Nghĩa, Nguyễn Tô Thành 
-\textit{Toán rời rạc} 3\textsuperscript{rd} edition, Nhà xuất bản đại học quốc gia Hà Nội, page 107-108,  2006.
-\bibitem{TUHTT} Slide Tối ưu hóa tổ hợp thầy Nguyễn Đức Nghĩa. Chương mở đầu, Bài toán vận tải.
-\bibitem{CBLS} Slide Tìm kiếm cục bộ dựa trên ràng buộc thầy Phạm Quang Dũng. Chương 5: Contraint-base local search applications.
-\bibitem{DAA} Slide Phân tích và thiết kế thuật toán thầy Nguyễn Đức Nghĩa. Chương 5: Quy hoạch động, Chương 3: Greedy Algorithms.
-\bibitem{HCP} Francesca Rossi, Peter van Beek, Toby Walsh 
-\textit{Handbook of Constraint Programming} 1\textsuperscript{st} edition, Elsevier Science, page 107-108,  2006.
-\bibitem{GA} Bài giảng môn tính toán tiến hóa cô Huỳnh Thị Thanh Bình. Thuật giải di truyền.
-\bibitem{AODTBT}Rupert Howell,Jonathon Wong
-\textit{Apache OFBiz Development: The Beginner's Tutorial}, Paperback , page 53,  2008.
-truyền.
-\bibitem{AOC} Ruth Hoffman
-\textit{Apache OFBiz Cookbook}, Paperback , page 28, 2010.
-\bibitem{AOW} Apache Ofbiz (wikipedia)
-\url{https://en.wikipedia.org/wiki/Apache_OFBiz}
 \end{thebibliography}
-
 
 \end{document}
