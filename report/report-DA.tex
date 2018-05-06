@@ -6,9 +6,9 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{comment}
-\usepackage{enumitem}
-\usepackage{enumerate}
-\usepackage{amssymb}
+%\usepackage{enumitem}
+%\usepackage{enumerate}
+%\usepackage{amssymb}
 \usepackage{graphicx}
 %\usepackage{cases}
 \usepackage{fancybox}
@@ -626,7 +626,143 @@ vì vậy điểm thứ ba là giao điểm của $L$ và $E$ sẽ có tọa $X 
 P \oplus Q = (-\frac{23}{9}, \frac{170}{27}).
 \end{displaymath} 
 
-Có một vấn đề ta có thể nhìn thấy trong hình [?] nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình [??]. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
+Có một số vấn đề, đầu tiên ta có thể nhìn thấy trong hình [?] nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình [??]. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
+
+Ví dụ tiếp tục với đường cong E với phườn trình \ref{2.1} và điểm P ở ví dụ trên, chúng ta sẽ tính $P \oplus P$ hệ số góc tiếp tuyến của $E$ ở $P$ được tính bởi đạo hàm phương trình \ref{2.1}. Do đó ta có:
+\begin{displaymath}
+2Y\frac{dY}{dX} = 3X^2 - 15 \Rightarrow \frac{dY}{dX} = \frac{3X^2 - 15}{2Y}
+\end{displaymath}
+Thay tọa độ điểm $P = (7,16)$ vào ta được hệ số góc $\lambda = \frac{33}{8}$ và đường thẳng tiếp tuyến với $E$ tại $P$ có phương trình
+\begin{equation}
+L: Y = \frac{33}{8}X - \frac{103}{8} \label{2.3}
+\end{equation}
+Từ \ref{2.3} và \ref{2.1} ta có:
+\begin{align*}
+(\frac{33}{8}X - \frac{103}{8})^2 = X^3 - 15X + 18, \\
+X^3 - \frac{1089}{64}X^2 + \frac{2919}{32}X - \frac{9457}{64} = 0, \\
+(X - 7)^2\cdot(X - \frac{193}{64}) = 0.
+\end{align*}
+Tọa độ $X$ của điểm P là nghiệm kép của phương trình ta dễ dàng tìm được nghiệm còn lại $X = \frac{193}{64}$, thay $X$ vào \ref{2.3} tìm được $Y = -\frac{223}{512}$.Từ đó ta thu được kết quả của phép cộng
+\begin{displaymath}
+P \oplus P = (\frac{193}{64}, \frac{223}{512}).
+\end{displaymath}
+
+Vấn đề thứ hai với luật cộng phát sinh là nếu như chúng ta cộng điểm $P = (a, b)$ với điẻm đối của nó  $P' = (a, -b)$ đường thẳng đi qua $P$ và $P'$ là x = a và nó chỉ cắt đường cong tại 2 điểm $P$ và $P'$(hình [???]) không có điểm thứ ba xuất hiện chúng ta sẽ thêm một điểm $O$ nằm ở vô cùng và điểm này không tồn tại trong mặt phẳng XY, chúng ta giả định nó luôn nằm trên đường thẳng dọc và chúng ta sẽ xét phép cộng như sau
+\begin{displaymath}
+P \oplus P' = O.
+\end{displaymath}
+Nếu công điểm $O$ với điểm $P$ nằm trên E sẽ như nào? Đường thẳng $L$ đi qua $O$ và $P$ là đường theo chiều dọc đi qua $P$ khi đó $O$ nằm trên đường dọc này và đường thẳng sẽ cắt $E$ tại điểm $P$, $O$ và điểm $P' = (a , -b)$. Nên phép công $P$ với $O$, chúng ta lấy hình chiếu của $P'$ qua trục X sẽ thu được điểm $P$ ban đầu. Nói một các khác $P \oplus O = P$, vì vậy $O$ giống như số không trong phép cộng của đường cong elliptic
+
+Qua đây có một số định nghĩa về đường cong elliptic
+\begin{definition}
+Một đường cong $E$ là tập các nghiệm của phương trình Weierstrass
+\begin{displaymath}
+E: Y^2 = X^3 + AX + B,
+\end{displaymath}
+cùng với điểm $O$, với hằng số A, B thỏa mãn điều kiện
+\begin{displaymath}
+4A^3 + 27B^2 \neq 0,
+\end{displaymath}
+\end{definition}
+
+Luật cộng trên $E$ được định nghĩa như sau. Cho $P$ và $Q$ là hai điểm trên $E$. Cho $L$ là đường thẳng qua $P$ và $Q$, hoặc là tiếp tuyến của $E$ tại $P$ nếu như $P = Q$. Giao điểm của $E$ và $L$ có chứa ba điểm $P, Q, R$ phép cộng sẽ được tính thích hợp với điểm $O$ nằm trên đường dọc vô cùng. Điểm $R = (a, b)$, tổng của $P$ và $Q$ được định nghĩa là $R' = (a, -b)$ hình chiếu của $R$ qua trục X. Tổng này được định nghĩa là $P \oplus Q$ hay đơn gian hơn là $P + Q$.
+
+Hơn nữa, nếu $P = (a, b)$ chúng ta định nghĩa điểm đối $-P = (a, -b)$, chúng ta định nghĩa $P - Q$ trở thành $P + (-Q)$. Tương tự phép cộng lặp nhiều lần được biểu diễn như phép nhân một điểm với một số nguyên,
+\begin{displaymath}
+nP = \underbrace{P + P + P + \ldots + P}_{n}.
+\end{displaymath}
+\begin{theorem} \label{dl2.1}
+Cho đường cong $E$. Luật cộng trên đường cong $E$ thỏa mãn tính chất:
+\begin{itemize}
+\item[(a)] $P + O = O + P = P \ \forall P \in E$ (phần tử đơn vị)
+\item[(b)] $P + (-P) = O \ \forall P \in E$ (phần tử nghịch)
+\item[(c)] $(P + Q) + R = P + (Q + R) \ \forall P, Q, R \in E$ (kết hợp)
+\item[(d)] $P + Q = Q + P \ \forall P, Q \in E$ (giao hoán) 
+\end{itemize}
+Hay nói cách khách tập các điểm thuôc $E$ với luật cộng tạo thành nhóm abelian
+\end{theorem}
+\begin{theorem} \label{dl2.2}
+Thuật toán Cộng trên đường cong elliptic với phương trình đường cong Weierstrass. Cho
+\begin{displaymath}
+E: Y^2 = X^3 + AX + B
+\end{displaymath}
+là một đường cong elliptic và hai điểm $P_1$ và $P_2$ nằm trên đường cong $E$.
+\begin{itemize}
+\item[(a)] Nếu $P_1 = O$ thì $P_1 + P_2 = P_2$.
+\item[(b)] trái lại $P_2 = 0$ thì $P_1 + P_2 = P_1$.
+\item[(c)] trái lại $P_1 = (x_1, y_1)$ và $P_2 = (x_2, y_2)$
+\item[(d)] nếu $x_1 = x_2$ và $y_1 = -y_2$ thì $P_1 + P_2 = O$.
+\item[(e)] trái lại, định nghĩa $\lambda$ bằng
+\begin{displaymath}
+\lambda = \left\{ \begin{array}{ll}
+\frac{y_2 - y_1}{x_2 - x_1} & if \ P_1 \neq P_2  \\
+\\
+\frac{3x_1^2 + A}{2y_1} & if \ P_1 = P_2,
+\end{array} \right.
+\end{displaymath}
+và
+\begin{displaymath}
+x_3 = \lambda^2 - x_1 - x_2 \ \ \& \ \ y_3 = \lambda(x_1 - x_3) - y_1
+\end{displaymath}
+Phép cộng $P_1 + P_2 = (x_3,y_3)$
+\end{itemize}
+\end{theorem}
+\subsection*{Đường cong Elliptic trên trường hữu hạn}
+Trong phần trước chúng ta đã xem xét lí thuyết về đường cong bằng hình học. Ví dụ tổng của hai điểm phân biệt $P$ và $Q$ trên đường cong $E$ được định nghĩa bởi đường thẳng $L$ đi qua hai điểm $P$ và $Q$ sau đó tìm điểm thứ ba là giao điểm của $L$ và $E$ như minh họa hình[?]. Tuy nhiên để áp dụng lí thuyết elliptic vào mật mã, chúng ta cần nhìn đường cong và các điểm của nó có tọa độ nằm trong trường hữu hạn $F_p$ điều này dễ làm.
+\begin{definition}
+Cho $p$ $\geq$ 3 là một số nguyên tố. Một đường cong elliptic trên trường $F_p$ có công thức
+\begin{center}
+$E: Y^2 = X^3 + AX + B$ với $A, B \in F_p$ thỏa mãn $4A^3 + 27B^2 \neq  0$.
+\end{center} 
+Với tập các điểm trên E với tọa độ nằm trong trường $F_p$
+\begin{center}
+$E(F_p) = \{ (x, y): x, y \in F_p$ thỏa mãn $y^2 = x^3 + Ax + B \} \cup \{ O \}$
+\end{center}
+\end{definition}
+Xem xét ví dụ với đường cong elliptic
+\begin{center}
+$E: Y^2 = X^3 + 3X + 8$ trên trường $F_{13}$
+\end{center}
+Chúng ta có thể tìm thấy các điểm của $E(F_{13})$ bằng các thay lần lượt các giá trị của $X = 0, 1, 2, \ldots, 12$ và kiểm tra với giá trị $X$ kết quả của phương trình $X^3 + 3X + 8$ có phải là một bình phương với modulo 13 không. Ví dụ thay $X = 0$ cho kết quả là 8 và 8 không phải là bình phương với modulo 13. Tiếp theo $X = 1$ cho kết quả 12 và 12 là căn bậc hai của modul 13.
+\begin{center}
+$5^2 \equiv 12 (mod 13)$ và $8^2 \equiv 12 (mod 13)$ trên trường $F_13$
+\end{center}
+Điều này sẽ cho hai điểm $(1, 5)$ và $(1, 8)$ trong trường $F_{13}$. Tiếp tục tính với các giá trị $X$ ta thu được danh sách các điểm.
+\begin{displaymath}
+E(F_{13}) = \{ O, (1, 5), (1, 8), (2, 3), (2, 10), (9, 6), (9, 7), (12, 2), (12, 11)\}
+\end{displaymath}
+Giả sử chúng ta có hai điểm $P = (x_1, y_1)$ và $Q = (x_2, y_2)$ là hai điểm nằm trên $e(F_p)$. Chúng ta sẽ định nghĩa phép cộng $P + Q$ là điểm có tọa độ $(x_3, y_3)$ thực hiện phép toán cộng(định lý \ref{dl2.2}). Chú ý rằng thuật toán này chỉ sử dụng các phép toán cộng, trừ , nhân ,chia liên quan đến các hệ số của đường cong $E$ và các điểm $P$ và $Q$. Khi các hệ số và tọa đô nằm trong trường $F_p$, chúng ta sẽ có điểm $(x_3, y_3)$ với tọa độ trong trường $F_p$.
+\begin{theorem}
+Cho $E$ là một đường cong trên trường $F_p$ và hai điểm $P$ và $Q$ nằm trong $E(F_p)$.
+\begin{itemize}
+\item[(a)] Thuật toán cộng đường cong elliptic (định lý \ref{dl2.2}) áp dụng với $P$ và $Q$ tạo điểm trong $E(F_p)$. Chúng ta định nghĩa $P + Q$.
+\item[(b)] Luật cộng trên $E(F_p)$ thỏa mãn tất cả các tính chất của định lí \ref{dl2.1}. Hay nói cách khác luật cộng $E(F_p)$ nằm trong một nhóm hữu hạn phần tử. 
+\end{itemize}
+\end{theorem}
+Xét ví dụ thuật toán cộng (định lí \ref{dl2.2}) với hai điểm $P = (9, 7)$ và $Q = (1, 8)$ trong $E(F_{13})$. Bước thứ e của thuật toán sẽ được tính đầu tiên
+\begin{displaymath}
+\lambda = \frac{y_2 - y_1}{x_2 - x_1} = \frac{8 - 7}{1 - 9} = \frac{1}{-8} = \frac{1}{5}	= 8,
+\end{displaymath}
+Ở đây các phép tính được thực hiện trên trường $F_{13}$ vì vậy -8 = 5 và $\frac{1}{5} = 5^{-1} = 8$. Tiếp theo tính 
+\begin{displaymath}
+v = y_1 - \lambda x_1 = 7 - 8\cdot 9 = -65 = 0
+\end{displaymath}
+Cuối cùng phép cộng sẽ có kết quả
+\begin{center}
+\begin{tabular}{ll}
+$x_3$ & = $\lambda^2 - x_1 - x_2 = 64 - 9 - 1 = 54 = 2$, \\
+$y_3$ & = $-(\lambda x_3 + v) = -8\cdot2 = -16 = 10$
+\end{tabular}
+\end{center}
+Hay $P + Q = (1, 8) + (9, 7) = (2, 10)$ in  $E(F_{13})$. Tương tự ta có thể tính thuật toán cộng $P = (9, 7)$ với chính nó. Tính
+\begin{center}
+$\lambda = \frac{3x_1^2 + A}{2y_1} = \frac{3\cdot9^2 + 3}{2\cdot7} = \frac{246}{14} = 12$ và $v = y_1 - \lambda x_1 = 7 - 12\cdot9 = 3$
+\end{center}
+Ta có kết quả là 
+\begin{center}
+$x_3 = \lambda^2 - x_1 - x_2 = (12)^2 - 9 - 9 = 9$ và $y_3 = -(\lambda x_3 + v) = -(12\cdot9 + 3) = 6$,
+\end{center}
+vì vậy $P + P = (9, 7) + (9, 7) = (9,6)$ trong trường $E(F_{13})$
 \subsection*{Hệ tọa độ}
 Trong phương trình đường cong tổng quát xem xét hai tọa độ x và y. Ví dụ: xem xét đường cong Montgomery trên trường F được xác định bởi:
 \begin{center}
