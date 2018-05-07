@@ -875,7 +875,53 @@ Phương trình của một đường cong Edwards trên một trường K mà k
 x^{2}+y^{2}=1+dx^{2}y^{2}
 \end{displaymath}
 cho một số vô hướng  $d \in K \setminus \{0,1\}$. Ngoài ra dạng sau với các tham số c và d được gọi là đường cong Edwards:
+\begin{displaymath}
+x^2 + y^2 = c^2(1 + dx^2y^2)
+\end{displaymath}
+trong đó $c, d \in K$ với $cd(1 - c^4\cdot d) \neq 0$ \\
+Mỗi đường cong Edwards tương đương với đường cong elip ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu K là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $K$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có c = 1, không mất tính tổng quát. Trong các phần sau, giả sử rằng c = 1.
+\subsubsection{Luật cộng}
+Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phần tử đơn vị. Đối với đường cong Edwards, lấy phần tử trung tính là điểm (0, 1), tổng các điểm $(x_1,  y_1)$ và $(x_2 ,y_2)$ được đưa ra bởi công thức:
+\begin{displaymath}
+(x_1, y_1) + (x_2, y_2) = \left( \frac{x_1y_2 + x_2y_1}{1 + dx_1x_2y_1y_2}, \frac{y_1y_2 - x_1x_2}{1 - dx_1x_2y_1y_2} \right).
+\end{displaymath}
+Nghịch đảo của bất kì điểm nào $(x_1, y_1)$ là $(-x_1, y_1)$. Người ta kiểm tra rằng điểm $(0, -1)$ có cấp là 2, và điểm $(\pm 1, 0)$ có cấp là 4, Trong thưc tế, một đường cong Edward luôn luôn có một điểm có cấp là 4 với tọa độ trong trường $K$.
+Nếu d không phải là một bình phương trong $K$ và $\displaystyle (x_{1}, y_{1}), (x_{2}, y_{2}) \in \{(x, y)|x^{2} + y^{2} = 1 + dx^{2}y^{2} \}$, không có điểm đặc biệt có mẫu số $1 +  dx_1x_2y_1y_2 và 1 -  dx_1 x_2y_1y_2$ bằng 0. Do đó, luật cộng Edwards là hoàn tất khi d không phải là một bình phương trong trường $K$. Điều này có nghĩa là các công thức sẽ làm việc tốt và không có lỗi với các phép toán doubling, phần tử đơn vị, phần tử âm. Nói cách khác, nó được định nghĩa cho tất cả các cặp điểm đầu vào trên đường cong Edwards trên $K$ và kết quả cho tổng của các điểm đầu vào.
+Nếu $d$ là một bình phương $K$ , thì phép toán tương tự có thể có các điểm đặc biệt, tức là có thể có cặp $(x_1, y_1)$ và $(x_2, y_2)$ trong đó 1$ +  dx_1x_2y_1y_2 = 0$ hoặc $1 -  dx_1x_2y_1y_2 = 0$.
+Một trong những tính năng hấp dẫn của luật cộng của Edwards là nó được thống nhất mạnh mẽ, tức là nó cũng có thể được sử dụng để gấp đôi một điểm, đơn giản hóa việc bảo vệ chống lại tấn công bên kênh. Công thức cộng ở trên nhanh hơn các công thức thống nhất khác và có tính chất hoàn chỉnh mạnh.
+\subsubsection*{Doubling}
+Doubling có thể được thực hiện với chính xác công thức tương tự như cộng. Doubling đề cập đến trường hợp trong đó các đầu vào $(x_1, y_1)$ và $(x_2, y_2)$ được biết là bằng nhau. Vì $(x_1, y_1)$ nằm trên đường cong Edwards, ta có thể thay thế hệ số bằng $(x_1^2 + y_1^2  - 1)/x_1^2y_1^2$ như sau:
+\begin{displaymath}
+{\begin{aligned}2(x_{1},y_{1})&=(x_{1},y_{1})+(x_{1},y_{1})\\[6pt]2(x_{1},y_{1})&=\left({\frac  {2x_{1}y_{1}}{1+dx_{1}^{2}y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{1-dx_{1}^{2}y_{1}^{2}}}\right)\\[6pt]&=\left({\frac  {2x_{1}y_{1}}{x_{1}^{2}+y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{2-x_{1}^{2}-y_{1}^{2}}}\right)\end{aligned}}
+\end{displaymath}
+Điều này làm giảm mức độ mẫu số từ 4 đến 2, được phản ánh trong doubling. Luật cộng chung trong các tọa độ Edwards mất $10M + 1S + 1C + 1D + 7a$ và chi phí phép doubling là $3M + 4S + 3C + 6a$. Trong đó M là phép nhân trường, S là các phép bình phương trong trường , D là chi phí nhân với một tham số đường cong có thể lựa chọn và một trường bổ sung.
 \subsection*{Twisted Edwards curve}
+Trong hình học đại số , các đường cong Twisted Edwards là mô hình mặt phẳng của các đường cong elip , một sự tổng quát của các đường cong Edwards được giới thiệu bởi Bernstein , Birkner, Joye, Lange và Peters trong năm 2008. Bộ đường cong được đặt tên theo nhà toán học Harold M. Edwards . Đường cong Elliptic rất quan trọng trong mật mã khóa công khai và các đường cong Twist Edwards nằm ở trung tâm của một lược đồ chữ ký điện tử gọi là EdDSA mang lại hiệu năng cao trong khi tránh các vấn đề bảo mật xuất hiện trong các chương trình chữ ký số khác.
+
+Như tên cho thấy, mỗi đường cong Twist Edwards là một xoắn của một đường cong Edwards. Đường cong Twist Edwards $E_{a, d}$ trên một trường $\displaystyle \mathbb{K}$ trong đó có $\displaystyle \mathrm{char}(\mathbb{K}) \neq 2$ là một đường cong mặt phẳng affine được xác định bởi phương trình:
+\begin{displaymath}
+E_{E_{a,d}}: ax^2 + y^2 = 1 + dx^2y^2
+\end{displaymath}
+Ở đâu $a, d$ là các phần tử khác 0 của $\displaystyle \mathbb{K}$. Đường cong Edwards là đường cong Twist Edwards với a = 1.
+Mỗi đường cong Twist Edwards đều tương đương với đường cong elip ở dạng Montgomery và ngược lại.
+\subsubsection*{Luật cộng}
+Cho $\displaystyle \mathbb{K}$ là một trường có đặc điểm là khác 2. Để $\displaystyle (x_{1}, y_{1})$ và $\displaystyle (x_{2}, y_{2})$ là điểm trên đường cong Twist Edwards. Phương trình của đường cong Twist Edwards được viết như:
+\begin{displaymath}
+E_{E,a,d}: ax^2 + y^2 = 1 + dx^2y^2.
+\end{displaymath}
+Tổng của $(x_1, y_1)$ và $(x_2, y_2)$ trên $E_{E,a,d}$ là:
+\begin{displaymath}
+(x_{1}, y_{1}) + (x_{2}, y_{2}) = \left({\frac {x_{1}y_{2} + y_{1}x_{2}} { 1 + dx_{1}x_{2}y_{1}y_{2}}}, {\frac{y_{1}y_{2} - ax_{1}x_{2}} {1 - dx_{1}x_{2}y_{1}y_{2}}} \right)
+\end{displaymath}
+Phần tử đơn vị là $(0,1)$ và âm của điểm $(x_1, y_1)$ là $(-x_1, y_1)$. Công thức này cũng làm việc với doubling. Nếu a là một bình phương trong $\mathbb{K}$ và d không phải bình phương trong $\mathbb{K}$, công thức trên là hoàn tất. Điều này có nghĩa là chúng ta có thể công thức cho tất cả các cặp điểm mà không xảy ra ngoai lệ.
+\subsubsection*{Doubling}
+Doubling có thể được thực hiện với chính xác công thức tương tự như phép cộng. Doubling một điểm $(x_1 , y_1)$ trên đường cong $E_{E,a,d}$ là: $[2](x_1, y_1) = (x_3, y_3)$ ở đây
+\begin{displaymath}
+\begin{aligned}
+x_{3} &= {\frac{x_{1}y_{1}+y_{1}x_{1}}{1+dx_{1}x_{1}y_{1}y_{1}}}={\frac {2x_{1}y_{1}}{ax_{1}^{2}+y_{1}^{2}}} \\[6pt]
+y_{3} &= {\frac {y_{1}y_{1} - ax_{1}x_{1}}{1 - dx_{1}x_{1}y_{1}y_{1}}}={\frac{y_{1}^{2} - ax_{1}^{2}}{2 - ax_{1}^{2} - y_{1}^{2}}}.
+\end{aligned}
+\end{displaymath}
 \section{Mật mã dựa trên đường cong Elliptic}
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
 \chapter{Cài đặt cho thiết bị IoT}
