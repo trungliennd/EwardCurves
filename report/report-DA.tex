@@ -6,9 +6,9 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{comment}
-\usepackage{enumitem}
-\usepackage{enumerate}
-\usepackage{amssymb}
+%\usepackage{enumitem}
+%\usepackage{enumerate}
+%\usepackage{amssymb}
 \usepackage{graphicx}
 %\usepackage{cases}
 \usepackage{fancybox}
@@ -580,7 +580,7 @@ h được gọi là cofactor và o được gọi là cấp(order) của điể
 Số lượng điểm sinh của trường $GF(n)$ là $\phi (n - 1)$ ở đây $\phi$ là một hàm Ơ-le của Euler. Điều này cũng là yếu tố cho phép nhân trong nhóm vòng[*].
 
 Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve, Montgomery Curve, Edwards Curve, Twisted Edwards Curve, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
-\subsection*{Luật cộng}
+ \subsection*{Luật cộng}
 Một đường cong elliptic là tập hợp các nghiệm của phương trình:
 \begin{displaymath}
 Y^2 = X^3 + AX + B.
@@ -626,29 +626,255 @@ vì vậy điểm thứ ba là giao điểm của $L$ và $E$ sẽ có tọa $X 
 P \oplus Q = (-\frac{23}{9}, \frac{170}{27}).
 \end{displaymath} 
 
-Có một vấn đề ta có thể nhìn thấy trong hình [?] nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình [??]. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
+Có một số vấn đề, đầu tiên ta có thể nhìn thấy trong hình [?] nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình [??]. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
 
-\subsection*{Hệ tọa độ}
-Trong phương trình đường cong tổng quát xem xét hai tọa độ x và y. Ví dụ: xem xét đường cong Montgomery trên trường F được xác định bởi:
+Ví dụ tiếp tục với đường cong E với phườn trình \ref{2.1} và điểm P ở ví dụ trên, chúng ta sẽ tính $P \oplus P$ hệ số góc tiếp tuyến của $E$ ở $P$ được tính bởi đạo hàm phương trình \ref{2.1}. Do đó ta có:
+\begin{displaymath}
+2Y\frac{dY}{dX} = 3X^2 - 15 \Rightarrow \frac{dY}{dX} = \frac{3X^2 - 15}{2Y}
+\end{displaymath}
+Thay tọa độ điểm $P = (7,16)$ vào ta được hệ số góc $\lambda = \frac{33}{8}$ và đường thẳng tiếp tuyến với $E$ tại $P$ có phương trình
+\begin{equation}
+L: Y = \frac{33}{8}X - \frac{103}{8} \label{2.3}
+\end{equation}
+Từ \ref{2.3} và \ref{2.1} ta có:
+\begin{align*}
+(\frac{33}{8}X - \frac{103}{8})^2 = X^3 - 15X + 18, \\
+X^3 - \frac{1089}{64}X^2 + \frac{2919}{32}X - \frac{9457}{64} = 0, \\
+(X - 7)^2\cdot(X - \frac{193}{64}) = 0.
+\end{align*}
+Tọa độ $X$ của điểm P là nghiệm kép của phương trình ta dễ dàng tìm được nghiệm còn lại $X = \frac{193}{64}$, thay $X$ vào \ref{2.3} tìm được $Y = -\frac{223}{512}$.Từ đó ta thu được kết quả của phép cộng
+\begin{displaymath}
+P \oplus P = (\frac{193}{64}, \frac{223}{512}).
+\end{displaymath}
+
+Vấn đề thứ hai với luật cộng phát sinh là nếu như chúng ta cộng điểm $P = (a, b)$ với điẻm đối của nó  $P' = (a, -b)$ đường thẳng đi qua $P$ và $P'$ là x = a và nó chỉ cắt đường cong tại 2 điểm $P$ và $P'$(hình [???]) không có điểm thứ ba xuất hiện chúng ta sẽ thêm một điểm $O$ nằm ở vô cùng và điểm này không tồn tại trong mặt phẳng XY, chúng ta giả định nó luôn nằm trên đường thẳng dọc và chúng ta sẽ xét phép cộng như sau
+\begin{displaymath}
+P \oplus P' = O.
+\end{displaymath}
+Nếu công điểm $O$ với điểm $P$ nằm trên E sẽ như nào? Đường thẳng $L$ đi qua $O$ và $P$ là đường theo chiều dọc đi qua $P$ khi đó $O$ nằm trên đường dọc này và đường thẳng sẽ cắt $E$ tại điểm $P$, $O$ và điểm $P' = (a , -b)$. Nên phép công $P$ với $O$, chúng ta lấy hình chiếu của $P'$ qua trục X sẽ thu được điểm $P$ ban đầu. Nói một các khác $P \oplus O = P$, vì vậy $O$ giống như số không trong phép cộng của đường cong elliptic
+
+Qua đây có một số định nghĩa về đường cong elliptic
+\begin{definition}
+Một đường cong $E$ là tập các nghiệm của phương trình Weierstrass
+\begin{displaymath}
+E: Y^2 = X^3 + AX + B,
+\end{displaymath}
+cùng với điểm $O$, với hằng số A, B thỏa mãn điều kiện
+\begin{displaymath}
+4A^3 + 27B^2 \neq 0,
+\end{displaymath}
+\end{definition}
+
+Luật cộng trên $E$ được định nghĩa như sau. Cho $P$ và $Q$ là hai điểm trên $E$. Cho $L$ là đường thẳng qua $P$ và $Q$, hoặc là tiếp tuyến của $E$ tại $P$ nếu như $P = Q$. Giao điểm của $E$ và $L$ có chứa ba điểm $P, Q, R$ phép cộng sẽ được tính thích hợp với điểm $O$ nằm trên đường dọc vô cùng. Điểm $R = (a, b)$, tổng của $P$ và $Q$ được định nghĩa là $R' = (a, -b)$ hình chiếu của $R$ qua trục X. Tổng này được định nghĩa là $P \oplus Q$ hay đơn gian hơn là $P + Q$.
+
+Hơn nữa, nếu $P = (a, b)$ chúng ta định nghĩa điểm đối $-P = (a, -b)$, chúng ta định nghĩa $P - Q$ trở thành $P + (-Q)$. Tương tự phép cộng lặp nhiều lần được biểu diễn như phép nhân một điểm với một số nguyên,
+\begin{displaymath}
+nP = \underbrace{P + P + P + \ldots + P}_{n}.
+\end{displaymath}
+\begin{theorem} \label{dl2.1}
+Cho đường cong $E$. Luật cộng trên đường cong $E$ thỏa mãn tính chất:
+\begin{itemize}
+\item[(a)] $P + O = O + P = P \ \forall P \in E$ (phần tử đơn vị)
+\item[(b)] $P + (-P) = O \ \forall P \in E$ (phần tử nghịch)
+\item[(c)] $(P + Q) + R = P + (Q + R) \ \forall P, Q, R \in E$ (kết hợp)
+\item[(d)] $P + Q = Q + P \ \forall P, Q \in E$ (giao hoán) 
+\end{itemize}
+Hay nói cách khách tập các điểm thuôc $E$ với luật cộng tạo thành nhóm abelian
+\end{theorem}
+\begin{theorem} \label{dl2.2}
+Thuật toán Cộng trên đường cong elliptic với phương trình đường cong Weierstrass. Cho
+\begin{displaymath}
+E: Y^2 = X^3 + AX + B
+\end{displaymath}
+là một đường cong elliptic và hai điểm $P_1$ và $P_2$ nằm trên đường cong $E$.
+\begin{itemize}
+\item[(a)] Nếu $P_1 = O$ thì $P_1 + P_2 = P_2$.
+\item[(b)] trái lại $P_2 = 0$ thì $P_1 + P_2 = P_1$.
+\item[(c)] trái lại $P_1 = (x_1, y_1)$ và $P_2 = (x_2, y_2)$
+\item[(d)] nếu $x_1 = x_2$ và $y_1 = -y_2$ thì $P_1 + P_2 = O$.
+\item[(e)] trái lại, định nghĩa $\lambda$ bằng
+\begin{displaymath}
+\lambda = \left\{ \begin{array}{ll}
+\frac{y_2 - y_1}{x_2 - x_1} & if \ P_1 \neq P_2  \\
+\\
+\frac{3x_1^2 + A}{2y_1} & if \ P_1 = P_2,
+\end{array} \right.
+\end{displaymath}
+và
+\begin{displaymath}
+x_3 = \lambda^2 - x_1 - x_2 \ \ \& \ \ y_3 = \lambda(x_1 - x_3) - y_1
+\end{displaymath}
+Phép cộng $P_1 + P_2 = (x_3,y_3)$
+\end{itemize}
+\end{theorem}
+\subsection*{Đường cong Elliptic trên trường hữu hạn}
+Trong phần trước chúng ta đã xem xét lí thuyết về đường cong bằng hình học. Ví dụ tổng của hai điểm phân biệt $P$ và $Q$ trên đường cong $E$ được định nghĩa bởi đường thẳng $L$ đi qua hai điểm $P$ và $Q$ sau đó tìm điểm thứ ba là giao điểm của $L$ và $E$ như minh họa hình[?]. Tuy nhiên để áp dụng lí thuyết elliptic vào mật mã, chúng ta cần nhìn đường cong và các điểm của nó có tọa độ nằm trong trường hữu hạn $F_p$ điều này dễ làm.
+\begin{definition}
+Cho $p$ $\geq$ 3 là một số nguyên tố. Một đường cong elliptic trên trường $F_p$ có công thức
 \begin{center}
-$By^2 = x^3 + Ax^2 + x$ \ \ \ \  $A, B \in F$ và $B(A^2 - 4) \neq 0$
+$E: Y^2 = X^3 + AX + B$ với $A, B \in F_p$ thỏa mãn $4A^3 + 27B^2 \neq  0$.
+\end{center} 
+Với tập các điểm trên E với tọa độ nằm trong trường $F_p$
+\begin{center}
+$E(F_p) = \{ (x, y): x, y \in F_p$ thỏa mãn $y^2 = x^3 + Ax + B \} \cup \{ O \}$
 \end{center}
-A, B là các hằng số xác định đường cong. Phần tử trên đường cong là cặp tọa độ (x, y). Tuy nhiên có thể biểu diễn mở rộng theo bảng sau:
+\end{definition}
+Xem xét ví dụ với đường cong elliptic
 \begin{center}
-\begin{tabular}{rll}
-$(x ,y)$ & affine	 \\
-$(X, Y, Z, ZZ)$ & standard & với $x = X/Z$ và $y = Y/Z$ và $ZZ = Z^2$ \\
-$(X, Y, Z)$ & projective & với $x = X/Z$ và $y = Y/Z$ \\
-$(X, Y, Z)$ & Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
-$(X, Y, Z)$ & Jacobian & với $x = X/Z^2$ và	$y = Y/Z^3$ \\
-$(X, Y, Z, Z^2, XZ )$ & Extended Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
-$(X, Y, Z, Z^2)$ &  Extended Jacobian & với $x = X/Z^2$ và $y = Y/Z^3$ \\
-$(X, Y, Z, T)$ & Extended Twisted Edwards & với $x = X/Z and Y = Y/Z$ với $T = X \cdot Y$ 
+$E: Y^2 = X^3 + 3X + 8$ trên trường $F_{13}$
+\end{center}
+Chúng ta có thể tìm thấy các điểm của $E(F_{13})$ bằng các thay lần lượt các giá trị của $X = 0, 1, 2, \ldots, 12$ và kiểm tra với giá trị $X$ kết quả của phương trình $X^3 + 3X + 8$ có phải là một bình phương với modulo 13 không. Ví dụ thay $X = 0$ cho kết quả là 8 và 8 không phải là bình phương với modulo 13. Tiếp theo $X = 1$ cho kết quả 12 và 12 là căn bậc hai của modul 13.
+\begin{center}
+$5^2 \equiv 12 (mod 13)$ và $8^2 \equiv 12 (mod 13)$ trên trường $F_13$
+\end{center}
+Điều này sẽ cho hai điểm $(1, 5)$ và $(1, 8)$ trong trường $F_{13}$. Tiếp tục tính với các giá trị $X$ ta thu được danh sách các điểm.
+\begin{displaymath}
+E(F_{13}) = \{ O, (1, 5), (1, 8), (2, 3), (2, 10), (9, 6), (9, 7), (12, 2), (12, 11)\}
+\end{displaymath}
+Giả sử chúng ta có hai điểm $P = (x_1, y_1)$ và $Q = (x_2, y_2)$ là hai điểm nằm trên $e(F_p)$. Chúng ta sẽ định nghĩa phép cộng $P + Q$ là điểm có tọa độ $(x_3, y_3)$ thực hiện phép toán cộng(định lý \ref{dl2.2}). Chú ý rằng thuật toán này chỉ sử dụng các phép toán cộng, trừ , nhân ,chia liên quan đến các hệ số của đường cong $E$ và các điểm $P$ và $Q$. Khi các hệ số và tọa đô nằm trong trường $F_p$, chúng ta sẽ có điểm $(x_3, y_3)$ với tọa độ trong trường $F_p$.
+\begin{theorem}
+Cho $E$ là một đường cong trên trường $F_p$ và hai điểm $P$ và $Q$ nằm trong $E(F_p)$.
+\begin{itemize}
+\item[(a)] Thuật toán cộng đường cong elliptic (định lý \ref{dl2.2}) áp dụng với $P$ và $Q$ tạo điểm trong $E(F_p)$. Chúng ta định nghĩa $P + Q$.
+\item[(b)] Luật cộng trên $E(F_p)$ thỏa mãn tất cả các tính chất của định lí \ref{dl2.1}. Hay nói cách khác luật cộng $E(F_p)$ nằm trong một nhóm hữu hạn phần tử. 
+\end{itemize}
+\end{theorem}
+Xét ví dụ thuật toán cộng (định lí \ref{dl2.2}) với hai điểm $P = (9, 7)$ và $Q = (1, 8)$ trong $E(F_{13})$. Bước thứ e của thuật toán sẽ được tính đầu tiên
+\begin{displaymath}
+\lambda = \frac{y_2 - y_1}{x_2 - x_1} = \frac{8 - 7}{1 - 9} = \frac{1}{-8} = \frac{1}{5}	= 8,
+\end{displaymath}
+Ở đây các phép tính được thực hiện trên trường $F_{13}$ vì vậy -8 = 5 và $\frac{1}{5} = 5^{-1} = 8$. Tiếp theo tính 
+\begin{displaymath}
+v = y_1 - \lambda x_1 = 7 - 8\cdot 9 = -65 = 0
+\end{displaymath}
+Cuối cùng phép cộng sẽ có kết quả
+\begin{center}
+\begin{tabular}{ll}
+$x_3$ & = $\lambda^2 - x_1 - x_2 = 64 - 9 - 1 = 54 = 2$, \\
+$y_3$ & = $-(\lambda x_3 + v) = -8\cdot2 = -16 = 10$
 \end{tabular}
 \end{center}
-\subsection*{Weierstrass curve}
+Hay $P + Q = (1, 8) + (9, 7) = (2, 10)$ in  $E(F_{13})$. Tương tự ta có thể tính thuật toán cộng $P = (9, 7)$ với chính nó. Tính
+\begin{center}
+$\lambda = \frac{3x_1^2 + A}{2y_1} = \frac{3\cdot9^2 + 3}{2\cdot7} = \frac{246}{14} = 12$ và $v = y_1 - \lambda x_1 = 7 - 12\cdot9 = 3$
+\end{center}
+Ta có kết quả là 
+\begin{center}
+$x_3 = \lambda^2 - x_1 - x_2 = (12)^2 - 9 - 9 = 9$ và $y_3 = -(\lambda x_3 + v) = -(12\cdot9 + 3) = 6$,
+\end{center}
+vì vậy $P + P = (9, 7) + (9, 7) = (9,6)$ trong trường $E(F_{13})$
+\subsection*{Thuật toán Double-and-Add}
+Xuất phát từ việc khó phục hồi lại giá trị của n từ điểm $P$ và $Q = n\cdot P$ trong $E(F_{p})$ đây là vấn đề khó của ECDLP. Tuy nhiên để sử dụng
+\begin{displaymath}
+Z \rightarrow E(F_p), \ \ \ n \mapsto nP,
+\end{displaymath}
+cho mật mã, chúng ta cần thực hiện phép tính $nP$ hiệu quả khi biết giá trị của $n$ và $P$. Nếu như $n$ lớn thì chúng ta chẳng muốn tính $nP$ bằng cách $P, 2P, 3P, 4P, \ldots .$
+Các toán tử sử dụng trong tính toán đường cong elliptic được viết như phép cộng vì thế chúng ta sẽ gọi nó là "doubling-and-add". Ý tưởng cơ bản của thuật toán là chúng ta sẽ phân tích số n thành biểu diễn nhị phân
+\begin{center}
+$n = n_0 + n_1\cdot2 + n_2\cdot4 + n_3\cdot8 + \ldots + n_r\cdot2^r$ với $n_0, n_1, \ldots , n_r \in \{0, 1\}$.
+\end{center}
+Nếu chúng ta giả sử $n_r = 1$. Chúng ta có thể tính
+\begin{displaymath}
+Q_0 = P, \ \ Q_1 = 2Q_0, \ \ Q_2 = 2Q_1, \ldots , Q_r = 2Q_{r - 1}.
+\end{displaymath}
+Chú ý rằng $Q_i$, đơn giản chỉ là gấp hai lần $Q_{i-1}$ vì vậy 
+\begin{displaymath}
+Q_i = 2^iP.
+\end{displaymath}
+Các điểm là được biểu diễn như là phép với một số mũ cơ số 2, tính toán các điểm này yêu cầu r phép doubling. Cuối cùng chúng ta tính được $nP$ sử dụng r phép cộng
+\begin{displaymath}
+nP = n_0Q_0 + n_1Q_1 + n_2Q_2 + \ldots + n_rQ_r.
+\end{displaymath}
+Do đó tổng thời gian tính toán $nP$ tối đa là 2r phép toán trong $E(F_p)$. Chú ý rằng $n \geq 2^r$, vì vậy không lớn hơn $2\log_2(n)$ phép toán để tính $nP$. Điều này tạo nên sự linh hoạt khi tính $nP$ thậm trí cả khi giá trị của n là lớn. Thuật toán tổng quát Double-and-Add.
+\begin{algorithm}[H]
+\caption{The double-and-add algorithm for elliptic curves}
+\textbf{Input:} Điểm P nằm trường elliptic và số nguyên n >= 1
+\begin{algorithmic}[1]
+\State $Set \ Q = P \ and \  R = O$.
+\State Loop while $n > 0$
+\State \ \ \ \ If $n \equiv 1$ (mod 2), set $R = R + Q$.
+\State \ \ \ \ $Q = 2Q$ and $n = \lfloor n/2 \rfloor$.
+\State \ \ \ \ If $n > 0$, continue with loop at Step 2.
+\State Return the point $R$, which equals $nP$.
+\end{algorithmic}
+\end{algorithm}
+%\subsection*{Hệ tọa độ}
+%Trong phương trình đường cong tổng quát xem xét hai tọa độ x và y. Ví dụ: xem xét đường cong Montgomery trên trường F được xác định bởi:
+%\begin{center}
+%$By^2 = x^3 + Ax^2 + x$ \ \ \ \  $A, B \in F$ và $B(A^2 - 4) \neq 0$
+%\end{center}
+%A, B là các hằng số xác định đường cong. Phần tử trên đường cong là cặp tọa độ (x, y). Tuy nhiên có thể biểu diễn mở rộng theo bảng sau:
+%\begin{center}
+%\begin{tabular}{rll}
+%$(x ,y)$ & affine	 \\
+%$(X, Y, Z, ZZ)$ & standard & với $x = X/Z$ và $y = Y/Z$ và %$ZZ = Z^2$ \\
+%$(X, Y, Z)$ & projective & với $x = X/Z$ và $y = Y/Z$ \\
+%$(X, Y, Z)$ & Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
+%$(X, Y, Z)$ & Jacobian & với $x = X/Z^2$ và	$y = Y/Z^3$ \\
+%$(X, Y, Z, Z^2, XZ )$ & Extended Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
+%$(X, Y, Z, Z^2)$ &  Extended Jacobian & với $x = X/Z^2$ và %$y = Y/Z^3$ \\
+%$(X, Y, Z, T)$ & Extended Twisted Edwards & với $x = X/Z and Y = Y/Z$ với $T = X \cdot Y$ 
+%\end{tabular}
+%\end{center}
+%\subsection*{Weierstrass curve}
 \subsection*{Montgomery curve}
+Trong toán học những đường cong Montgomery là một dạng của đường cong elliptic , khác với Weierstrass , được giới thiệu bởi Peter L. Montgomery vào năm 1987. Nó được sử dụng cho một số tính toán nhất định, và đặc biệt trong mật mã ứng dụng khác nhau.
+
+Một đường cong Montgomery trên trường K được định nghĩa bởi phương trình 
+\begin{displaymath}
+M_{A,B}: By^2 = x^3 + Ax^2 + x
+\end{displaymath}
+với điều kiện $A, B \in K$ và với $B(A^2 - 4) \neq 0$. Đường cong này được xem xét trên một trường hữu hạn $K$($K = F_q$) với hai đặc điểm khác như $A \in K \setminus \{-2, 2\}, B \in K \setminus\{0\}$
+\subsubsection*{Luật cộng}
+Cho hai điểm $P_{1} = (x_{1}, y_{1}), P_{2}=(x_{2},y_{2})$ trên đường cong Montgomery $M_{A, B}$ trong hệ tọa độ affine, điểm $P_{3} = P_{1} + P_{2}$ biểu diễn hình học, điểm thứ ba là giao điểm giữa $M_{A, B}$ và đường thẳng đi qua $P_{1}$ và $P_{2}$. Có thể tìm tọa độ $(x_3, y_3)$ của $P_{3}$, theo cách sau:
+\begin{itemize}
+\item[1, ] Xem xét một đường thẳng $y = lx + m$ trong mặt phẳng affine và để nó đi qua $P_{1}$ và $P_{2}$ (áp đặt điều kiện), theo cách này, người ta có được $\displaystyle{l = \frac {y_{2} - y_{1}}{x_{2} - x_{1}}}$ và $\displaystyle{m = y_ {1} - \left({\frac {y_ {2} -y_ {1}} {x_ {2} -x_ {1}}} \right)x_{1}}$
+\item[2, ] giao của đường thẳng với đường cong $M_{A, B}$, thay thế $y$ biến trong phương trình đường cong với $y = lx + m$ phương trình thu được:
+\begin{displaymath}
+x^3 + (A - Bl^2)x^2 + (1 - 2Blm)x - Bm^2 = 0.
+\end{displaymath}
+Như đã được quan sát trước đây, phương trình này có ba giải pháp tương ứng với tọa độ x của $P_{1}$,$P_{2}$ và $P_{3}$. Đặc biệt phương trình này có thể được viết lại thành:
+\begin{displaymath}
+(x - x_1)(x - x_2)(x - x_3) = 0
+\end{displaymath}
+\item[3, ] So sánh các hệ số của hai phương trình giống hệt nhau đã nêu ở trên, đặc biệt là các hệ số của các số hạng thứ hai, thu được:
+\begin{displaymath}
+-x_1 - x_2 - x_3 = A - Bl^2
+\end{displaymath}
+Vì thế, $x_3$ có thể được viết dưới dạng $x_{1}$, $y_{1}$, $x_{2}$, $y_{2}$, như:
+\begin{displaymath}
+x_3 = B\left(\frac{y_2 - y_1}{x_2 - x_1} \right)^2 - A - x_1 - x_2
+\end{displaymath}
+\item[4, ] Để tìm tọa độ y của điểm $P_{3}$, thay thế giá trị $x_{3}$ vào đường thẳng $y = lx + m$. Lưu ý rằng điều này sẽ không cho điểm $P_{3}$ trực tiếp. Thật vậy, với phương pháp này ta tìm thấy tọa độ của điểm $R$ sao cho $R + P_1 + P_2 = P_\infty$, nhưng  kết quả cần là tổng giữa $P_{1}$ và $P_{2}$, thì cần phải quan sát rằng: $R + P_1 + P_2 = P_\infty$ nếu và chỉ nếu $-R = P_1 + P_2$. Vì vậy, cho điểm $R$, nó là cần tìm $-R$, nhưng điều này có thể được thực hiện dễ dàng bằng cách thay đổi dấu y tọa độ của $R$. Nói cách khác, nó sẽ là cần thay đổi dấu của y bằng cách thay thế giá trị  $x_{3}$ trong phương trình đường thẳng.
+Tóm lại tọa độ của điểm $P_3 = (x_3, y_3), P_3 = P_1 + P_2$ là:
+\begin{displaymath}
+x_3 = \frac{B(y_2-y_1)^2}{(x_2-x_1)^2}-A-x_1-x_2=\frac{B(x_2y_1-x_1y_2)^2}{x_1x_2(x_2-x_1)^2}
+\end{displaymath}
+\begin{displaymath}
+y_3 = \frac{(2x_1+x_2+A)(y_2-y_1)}{x_2-x_1}-\frac{B(y_2-y_1)^3}{(x_2-x_1)^3}-y_1
+\end{displaymath}
+\end{itemize}
+\subsubsection*{Doubling}
+Cho một điểm $P_{1}$ trên đường cong Montgomery $M_{A, B}$, điểm $[2]P_1$ đại diện cho điểm hình học của điểm giao nhau thứ ba giữa đường cong và đường tiếp tuyến tại $P_{1}$; vì vậy, để tìm tọa độ của điểm $P_3 = 2P_1$, trong trường hợp này, đường thẳng $y  =  lx  +  m$ phải tiếp xúc với đường cong tại $P_{1}$, do đó, nếu $M_{A, B}: f(x, y) = 0$ với
+\begin{displaymath}
+f(x, y) = x^3 + Ax^2 + x - By^2
+\end{displaymath}
+giá trị của l biểu diễn hệ số góc của đường thẳng, cho bởi:
+\begin{displaymath}
+ l=-\left.\frac{\partial f}{\partial x}\right/\frac{\partial f}{\partial y}
+\end{displaymath}
+Vì vậy $l = \frac{3x_1^2 + 2Ax_1 + 1}{2By_1}$ và tọa độ điểm $P_3,P_3 = 2P_1$ là:
+\begin{displaymath}
+{\displaystyle {\begin{aligned}x_{3}&=Bl^{2}-A-x_{1}-x_{1}={\frac {B(3x_{1}^{2}+2Ax_{1}+1)^{2}}{(2By_{1})^{2}}}-A-x_{1}-x_{1}\\&={\frac {(x_{1}^{2}-1)^{2}}{4By_{1}^{2}}}={\frac {(x_{1}^{2}-1)^{2}}{4x_{1}(x_{1}^{2}+Ax_{1}+1)}}\\[8pt]y_{3}&=(2x_{1}+x_{1}+A)l-Bl^{3}-y_{1}\\&={\frac {(2x_{1}+x_{1}+A)(3{x_{1}}^{2}+2Ax_{1}+1)}{2By_{1}}}-{\frac {B(3{x_{1}}^{2}+2Ax_{1}+1)^{3}}{(2By_{1})^{3}}}-y_{1}.\end{aligned}}}
+\end{displaymath}
 \subsection*{Edwards curve}
+Trong toán học , các đường cong Edwards là một họ các đường cong elip được Harold Edwards nghiên cứu năm 2007. Khái niệm về các đường cong elliptic trên các trường hữu hạn được sử dụng rộng rãi trong mã hóa đường cong elip. Các ứng dụng của các đường cong Edwards tới mật mã được Bernstein và Lange phát triển : chúng đã chỉ ra một số ưu điểm của dạng Edwards so với dạng Weierstrass.
+
+Phương trình của một đường cong Edwards trên một trường K mà không có đặc tính 2 là:
+\begin{displaymath}
+x^{2}+y^{2}=1+dx^{2}y^{2}
+\end{displaymath}
+cho một số vô hướng  $d \in K \setminus \{0,1\}$. Ngoài ra dạng sau với các tham số c và d được gọi là đường cong Edwards:
 \subsection*{Twisted Edwards curve}
 \section{Mật mã dựa trên đường cong Elliptic}
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
