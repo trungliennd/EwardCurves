@@ -1071,7 +1071,7 @@ Việc triển khai sử dụng cả ECQV lẫn các thuật toán ECC khác nê
 \subsection{Tổng quan}
 Sơ đồ chứng chỉ số ẩn được sử dụng bởi ba thực thể - Tổ chức phát hành chứng chỉ
 CA, người yêu cầu chứng chỉ U và bộ xử lý chứng chỉ V. Người yêu cầu U sẽ nhận được chứng chỉ số ẩn từ CA, xác nhận danh tính của U và cho phép V lấy khóa công khai của U. 
-\begin{figure}[h]
+\begin{figure}[h]\label{h3.1}
 \begin{center}
 \includegraphics[scale=0.9]{../im8.png}
 \caption{}
@@ -1084,7 +1084,122 @@ Sơ đồ chứng thư số ẩn bao gồm sáu phần. Những phần này sẽ
 \textbf{Cert\_Generate}: Khi nhận được yêu cầu chứng chỉ từ U, CA xác nhận danh tính của U và tạo chứng chỉ số ẩn. CA gửi phản hồi cho U. \\ [6pt]
 \textbf{Cert\_PK\_Extraction}: Với chứng chỉ số ẩn cho U người dùng, thông số và khóa công khai của CA, thuật toán trích xuất khóa công khai tính toán khóa công khai của U. \\ [6pt]
 \textbf{Cert\_Reception}: Sau khi nhận được phản hồi cho yêu cầu chứng chỉ của mình, U đảm bảo tính hợp lệ của cặp khóa được chứng nhận ngầm
-\subsection{}
+
+Cấp chứng thư là quy trình gồm hai bước, trong đó bước đầu tiên nhận được yêu cầu cấp chứng thư từ U và bước thứ hai là tạo phản hồi, chứa chứng thư. Hình \ref{h3.1} đã mô tả giao thức (thông tin).
+
+Một số khác biệt giữa ECQV và chứng chỉ truyền thống liên quan đến việc ràng buộc giữa danh tính của người dùng và khóa công khai
+
+Mộ
+\subsection{Điều kiện tiên quyết: Cài đặt ECQV}
+Tất cả các bên (CA nhà phát hành chứng thư, chủ sở hữu chứng thư U và bộ xử lý chứng thư V) sẽ phải thiết lập các điều kiện tiên quyết sau để sử dụng ECQV.
+\begin{itemize}
+\item[1, ] CA đã thiết lập một tập hợp các tham số EC để sử dụng với ECQV bao gồm $q, a, b, G, n$ và $h$. Các tham số phải được tạo bằng phương thức được chấp nhận chúng phải được đảm bảo tính hợp lệ trên EC và cung cấp mức độ bảo mật mong muốn(có thể tham khảo các phương thức tạo tham số hoặc các tham số sẵn có ở [SEC 1, 3.1] và [SEC 2]).
+\item[2, ] CA đã chọn một hàm băm được chấp nhận với mức độ bảo mật mong muốn để sử dụng trong quy trình tạo chứng thư ECQV. Giả sử $H$ là hàm băm đã chọn và hashlen là độ dài của đầu ra hàm $H$. Như trong phần trước đã mô tả convert đâu ra của $H$ là một số nguyên dương n.
+\item[3, ] CA và U chọn và khởi một số ngẫu nhiên đảm bảo được mức độ bảo mật mong muốn. Số ngẫu nhiên này được sử dụng để tạo khóa private trong quá trình yêu cầu chứng thư và quá trình tạo chứng thư.
+\item[4, ] CA tạo được cặp khóa trên EC $(d_{CA}, Q_{CA})$ liên quan với các tham số EC được thiết lập từ ban đầu để sử dụng trong quá trình tạo chứng thư. Cặp khóa sẽ được tạo ra bằng cách sử dụng điểm  sinh và số ngẫu nhiên tạo ở mục 3(xem ở [SEC 1, §3.2.1]). CA sẽ đảm bảo tính hợp lệ của cặp khóa và sự đảm bảo của quyền sở hữu của khóa riêng (xem [SEC 1]).
+\item[5, ] Chủ sở hữu $U$ của chứng thư cùng với bộ xử lý $V$ sẽ thu được tham số đường cong, hàm băm và khóa công khai của CA là $Q_{CA}$. U và V sẽ có một số đảm bảo sau:
+\begin{itemize}
+\item[5.1, ] Tính hợp lệ các tham số đường cong EC.
+\item[5.2, ] Tính hợp lệ khóa công khai của CA, $Q_{CA}$
+\item[5.3, ] Sở hữu khóa riêng, $d_{CA}$ của CA
+\end{itemize}
+\end{itemize}
+\subsubsection{Mã hóa chứng thư} \label{subsec:3.5.2.1}
+Mã hóa chứng chứng thư mô tả cách thông tin được thêm vào trong chứng thư phải được mã hóa dưới dạng chuỗi octet. Nó cũng chỉ định thông tin nào phải được thêm vào và thông tin nào là tùy chọn và mọi ràng buộc hoặc mối quan hệ giữa các phần của thông tin chứng thư.
+
+Có ba kiểu mã hóa chứng thư(tham khỏa mô tả chi tiết xem ở[?])
+\begin{itemize}
+\item[•] \textbf{Fixed-length Fields}: là một mã hóa đơn giản, tối giản giúp đặt hiệu quả băng thông lên trước tất cả các mối quan tâm khác. Chứng chỉ bao gồm danh sách các trường, mỗi trường có độ dài cố định và định dạng được chia sẻ giữa tất cả các bên. Tiêu chuẩn này chỉ yêu cầu dữ liệu tái tạo khóa công khai PU là một trong các trường, để phần còn lại của định dạng mở cho người triển khai.
+\item[•] \textbf{Minimal ASN.1 Encoding Scheme}: cũng được thiết kế để có hiệu quả băng thông. Đặc tả ASN.1 bao gồm các trường bắt buộc cơ bản và cho phép các phần mở rộng. Các trường cơ bản được đề xuất trong mã hóa này có độ dài cố định và do đó cũng có thể được sử dụng với định dạng độ dài cố định đơn giản hơn.
+\item[•] \textbf{X.509-Compliant ASN.1 Encoding}: được thiết kế để bao gồm thông tin đầy đủ để cho phép chứng chỉ ECQV này được mã hóa lại dưới dạng chứng chỉ X.509 chuẩn.
+\end{itemize}
+\subsection{Yêu cầu chứng thư: Cert\_Request}
+Người yêu cầu chứng chỉ U, sẽ sử dụng quy trình dưới đây để tạo yêu cầu chứng chỉ.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi CA.
+\item[2. ] Xâu biểu diễn định danh của U.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Khởi tạo cặp khóa $(k_u, R_u)$  trên EC liên quan tới các tham số được thiết lập với đường cong(tham khảo cách tạo cặp khóa ở [SEC 1, 3.2.1])
+\item[2. ] Convert $R_u$ thành xâu octet $RU$ sử dụng  Elliptic-Curve-Point-to-Octet-String trong [SEC 1, 2.3]
+\end{itemize}
+\item[] \textbf{Output} khóa $k_U$ và yêu cầu chứng thư $(U, RU)$.
+\end{itemize}
+
+Giá trị $RU$ cùng với danh tính được định nghĩa $U$, tạo thành nội dung của yêu cầu chứng chỉ. Giá trị $k_U$ là bắt buộc trong các bước tương lai (để tính toán khóa riêng) và phải được giữ riêng tư. Yêu cầu chứng chỉ sẽ được gửi tới CA bằng cách sử dụng phương pháp bảo toàn tính toàn vẹn dữ liệu của thông báo.
+\subsection{Xử lý tạo chứng thư: Cert\_Generate}
+$CA$ sẽ sử dụng quy trình dưới đây để tạo ra một chứng thư và dữ liệu đóng góp khóa cá nhân để đáp ứng với một Cert\_Request từ $U$. Giả sử rằng $CA$ đã nhận được $U$, và $RU$ theo cách được xác thực và đã quyết định cấp chứng chỉ.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm được lựa chọn bơi $CA$.
+\item[3. ] Khóa bí của $CA$, $d_{CA}$. 
+\item[4. ] Một cái yêu cầu tạo chứng thư $(U, RU)$
+\item[5. ] Phương thức mã hóa chứng thư (xem phần \ref{subsec:3.5.2.1})
+\item[6. ] Các trường nhập bổ sung cho chứng thư.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Chuyển đổi chuỗi octet $RU$ thành một điểm trên đường cong elliptic bằng thuật toán chuyển đổi Octet-String-to-Elliptic Curve-Point(xem trong [SEC 1, §2.3.4]).
+\item[2. ] Xác thực $RU$ bằng cách sử dụng kỹ thuật xác thực khóa công khai(xem ở [SEC 1, §3.2.2]). Nếu xác thực kết quả đầu ra là 'không hợp lệ' dừng lại.
+\item[3. ] Tạo cặp khóa EC (k, kG) với các tham số đường cong elliptic đã được thiết lập. 
+\item[4. ] Tính toán đường cong elliptic điểm $P_U = R_U + kG$
+\item[5. ] Chuyển đổi $P_U$ sang chuỗi octet PU bằng cách sử dụng chuyển đổi Elliptic-Curve-Point-to-Octet-String [SEC 1]
+\item[6. ] Mã hóa chứng thư với các trường nhập cần thiết và chuỗi octet PU như được chỉ ra
+\item[7. ] Sự dụng hàm băm để tính $e = H_n(Cert_U)$ với modulo n.
+\item[8. ] Nếu $eP_U + Q_{CA} = \mathcal{O}$, với $\mathcal{O}$ là điểm cơ sở, quay về bước 3.
+\item[9. ] Tính số nguyên $r = ek + d_{CA} (mod \ n)$.
+\end{itemize}
+\item[] \textbf{Output} $(r, Cert_U)$, Ở đây $r$ là khóa đóng góp  và $Cert_U$ là chứng thư.
+\end{itemize}
+
+Phản hồi từ $CA$ có thể được công khai. Ngoài ra, nó có thể được truyền thông qua một kênh không an toàn, vì $U$ có thể xác minh rằng thông tin nhận được là hợp lệ. Để bảo mật, giá trị tạm thời $k$ phải được giữ riêng.
+
+\subsection{Trích rút khóa công khai từ chứng thư: Cert\_PK\_Extraction}
+Khóa công khai được liên kết với chứng thư được lấy từ chứng thư bằng khóa công khai của $CA$ và được khôi phục bằng quy trình sau. Bước này không yêu cầu bất kỳ thông tin bí mật nào và có thể được thực hiện bởi bất kỳ người dùng nào biết về $Cert_U$ và các tham số công khai được tạo bởi Thiết lập $ECQV$.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm $H$ được lựa chọn bởi $CA$.
+\item[3. ] Khóa công khai của $Q_{CA}$.
+\item[4. ] Chứng thư $Cert_U$.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Giải mã chứng thư $Cert_U$ theo các phương thức và các quy tắc giải mã chứng chỉ. Nếu giá trị trả lại là 'không hợp lệ' thì đầu ra 'không hợp lệ' và dừng lại, nếu không một chuỗi octet PU sẽ được trả lại.
+\item[2. ] Chuyển đổi PU thành điểm $P_U$ bằng cách sử dụng chuyển đổi Octet-String-to-Elliptic-Curve-Point (xem [SEC 1, 2.3])
+\item[3. ] Xác thực điểm $P_U$ sử dụng các kĩ thuật xác thực.
+\item[4. ] Sử dụng hàm băm tính $e = H_n(Cert_U)$ với modulo $n$.
+\item[5. ] Tính điểm $Q_U = eP_U + Q_{CA}$.
+\end{itemize}
+\item[] \textbf{Output} Hoặc là 'không hợp lệ' hoặc một public key $Q_U$
+\end{itemize}
+\subsection{Xử lý phản hồi cho yêu cầu chứng thư: Cert\_Reception}
+Quy trình này xác thực nội dung của chứng thư ẩn và dữ liệu đóng góp khóa cá nhân do $CA$ cung cấp. Đầu ra của Cert\_PK\_Extraction và khóa riêng được tính ở đây, tạo thành một cặp khóa. Cert\_PK\_Extraction thực hiện kiểm tra tính hợp lệ của khóa công khai, vì vậy nó không được lặp lại ở đây. Người yêu cầu chứng chỉ $U$ sẽ sử dụng quy trình dưới đây, sau khi nhận được phản hồi yêu cầu chứng chỉ của họ, để tính toán khóa riêng cho đầu ra khóa công khai bằng Cert\_PK\_Extraction và xác nhận hợp lệ cặp khóa.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm $H$.
+\item[3. ] Khóa riêng tạo bởi $U$, $k_U$.
+\item[4. ] Đầu ra của Cert\_Generate: chứng thư $Cert_U$ và dữ liệu đóng góp khóa riêng, một số nguyên $r$.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Tính khóa công khai $Q_U$ sử dụng Cert\_PK\_Extraction .
+\item[2. ] Sử dụng hàm băm để tính $e = H_n{Cert_U}$ vơi modulo n.
+\item[3. ] Tính khóa bí mật $d_U = r + ek_U (mod \ n)$
+\item[4. ] Tính $Q_U' = d_UG$.
+\end{itemize}
+\item[] \textbf{Output} 'hợp lệ' và $d_U$ nếu $Q_U = Q_U'$ nếu không 'không hợp lệ'.
+\end{itemize}
+\subsection{Sơ đồ tạo chứng chỉ tự ký ECQV}
+\subsection{Trích rút khóa công khai từ chứng thư tự ký ECQV}
 \chapter{Cài đặt cho thiết bị IoT}
 \chapter*{Kết luận và hướng phát triển}
 \begin{thebibliography}{9}
