@@ -967,7 +967,7 @@ mà họ có thể sử dụng như một chìa khóa để giao tiếp riêng t
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.9]{../im7.png}
-\caption{}
+\caption{Trao đồi khóa Diffe-Hellman sử dụng đường cong elliptic}
 \end{center}
 \end{figure}
 \subsection*{Hệ thống mã khóa công khai Elgamal}
@@ -983,7 +983,7 @@ C_2 - n_AC_1 = (M + kQ_A) - n_A(kP) = M + k(n_AP) - n_A(kP) = M
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.9]{../im5.png}
-\caption{}
+\caption{Tạo khóa, mã hóa, giải mã sử dụng Elliptic Elgamal}
 \end{center}
 \end{figure}
 Trong thực tế, hệ mã khóa công khai Elgamal elliptic hoạt động tốt, nhưng có một số khó khăn thực tế
@@ -1006,7 +1006,7 @@ Thuật toán chũ ký số với Elliptic được mô tả sau đây:\\
 \begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.9]{../im6.png}
-\caption{}
+\caption{Chữ ký số ECDSA}
 \end{center}
 \end{figure}
 tương tự như thuật toán chữ ký số đơn giản của DSA. ECDSA đang được sử dụng rộng rãi, đặc biệt là trong các tình huống mà kích thước chữ ký là quan trọng. \\
@@ -1066,11 +1066,6 @@ Việc tạo và xác nhận tham sốđường cong elliptic phải tuân theo 
 
 Việc triển khai sử dụng cả ECQV lẫn các thuật toán ECC khác nên sử dụng điểm cơ sở ngẫu nhiên xác thực G, được xác định trong [SEC 2].
 
-Các tham số đường cong Elliptic bao gồm 6 tham số $q, a, b, G, n$ và $h$ Ở đây:
-\begin{itemize}
-\item[•] Kích thước trường q
-\item[•] Hệ số a,b tương ứng của đường cong curve.
-\end{itemize}
 
 \section{Sơ đồ chứng thư số thực ECQV}
 \subsection{Tổng quan}
