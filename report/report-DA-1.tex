@@ -139,99 +139,8 @@ Nội dung chính của đồ án bao gồm 4 chương:
 \chapter{Cơ sở lý thuyết}
 Trong chương này sẽ trình bày cơ sở lý thuyết chung bao quát cho các hệ mật mã, nó sẽ cung cấp một số khái niệm và các kiến thức qúy giá, hỗ trợ đắc lực cho việc làm quen với lĩnh vực này.
 \section{Cơ sở mật mã}
-Mật mã là một lĩnh vực khoa học chuyên nghiên cứu về các phương pháp và kỹ thuật đảm bảo an toàn và bảo mật trong truyền tin liên lạc với giả thiết sự tồn tại của
-các thế lực thù địch, những kẻ muốn ăn cắp thông tin để lợi dụng và phá hoại. Tên gọi trong tiếng Anh, Cryptology đợưc dẫn giải nguồn gốc từ tiếng Hy lạp, trong đó kryptos nghĩa là “che dấu”, logos nghĩa là “từ ngữ”.
-
-Các nhà nghiên cứu lĩnh vực này quan tâm xây dựng hoặc phân tích (để chỉ ra điểm yếu) các giao thức mật mã (cryptographic protocols), tức là các phương thức giao dịch có đảm bảo mục tiêu an toàn cho các bên tham gia (với giả thiết môi trường có kẻ đối địch, phá hoại). 
-
-Ngành Mật mã (cryptology) thường được quan niệm như sự kết hợp của 2 lĩnh vực con:
-\begin{itemize}
-\item[1. ] Sinh, chế mã mật (cryptography): nghiên cứu các kỹ thuật toán học nhằm cung cấp các công cụ hay dịch vụ đảm bảo an toàn thông tin.
-\item[2. ] Phá giải mã (cryptanalysis): nghiên cứu các kỹ thuật toán học phục vụ phân tích phá mật mã và/hoặc tạo ra các đoạn mã giản nhằm đánh lừa bên nhận tin
-\end{itemize}
-
-Hai lĩnh vực con này tồn tại như hai mặt đối lập, "đấu tranh để cùng phát triển" của một thể thống nhất là ngành khoa học mật mã (cryptology).
-
-Mặc dù mật mã có thể coi là một ngành toán học phát triển cao, đòi hỏi tư duy cao để nắm được các thành tựu hiện đại của nó, nhưng cơ sở xuất phát ban đầu của nó lại là một mô hình thực tiễn khá đơn giản như sau:\\
-\textbf{hình vẽ}
-
-Như vậy trong một hệ thống mật mã khái quát sẽ có các thành phần sau:
-\begin{itemize}
-\item \textbf{Văn bản trơn}(plaintext $X$): tức là thông điệp nguyên gốc chưa được mã hóa.
-\item \textbf{Văn bản mã hóa}(ciphertext $Y$): tức là thông điệp đã được mã hóa.
-\item \textbf{Thuật toán mã hóa}(enciphering algorithm $E_z(X)$): là các giao thức hoặc hướng dẫn có tác dụng chuyển đổi văn bản trơn thành văn bản mã hóa. Đối với các hệ thống mật mã truyền thống, chỉ có người gửi thông điệp biết được thuật toán mã hóa, tuy nhiên đối với các hệ thống dùng mật mã hóa khóa công khai (Public key code - PKC), tất cả mọi người đều có thể biết thuật toán mã hóa mà không ảnh hưởng tiêu cực đến an ninh của hệ thống.
-\item \textbf{Khóa mã hóa}(enciphering key $Z$): là một hoặc nhiều đối tượng (thường là các con số hay là các hướng dẫn quan trọng nào đó) được dùng trong việc mã hóa văn bản trơn. Ngoại trừ trong hệ thống PKC, để đảm bảo bí mật an toàn thì khóa mã hóa thường chỉ được người gửi biết.
-\item \textbf{Thuật toán giải mã}(deciphering algorithm $D_z(Y)$): là các giao thức hoặc hướng dẫn có tác dụng chuyển đổi văn bản mã hóa trở về văn bản trơn. Để đảm bảo bí mật, chỉ có người nhận thông điệp biết được thuật toán giải mã.
-\item  \textbf{Khóa giải mã}(deciphering key $Z'$): là một hoặc nhiều đối tượng (thường là các con số hay là các hướng dẫn quan trọng nào đó) được dùng trong việc giải mã văn bản bị mã hóa. Để đảm bảo bí mật, chỉ có người nhận thông điệp biết được khóa giải mã.
-\item \textbf{Sản phẩm mật mã}(Cryptography Product): bao gồm các hệ thống thiết bị, module, mạch tích hợp và các chương trình phần mềm mã hoá chuyên dụng có tích hợp các thuật toán mật mã, được thiết kế, chế tạo để bảo vệ thông tin giao dịch điện tử và lưu trữ dưới dạng số hoá, trong đó sử dụng "Thuật toán mã đối xứng" hoặc "Thuật toán mã không đối xứng".
-\end{itemize}
 \section{Mật mã khóa đối xứng}
-Trong mật mã học, các thuật toán khóa đối xứng (symmetric-key algorithms) là một lớp các thuật toán mật mã hóa trong đó các khóa dùng cho việc mật mã hóa và giải mã có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia). Mã khóa loại này không công khai.
-
-Khóa dùng để mã hóa có liên hệ một cách rõ ràng với khóa dùng để giải mã có nghĩa chúng có thể hoàn toàn giống nhau, hoặc chỉ khác nhau nhờ một biến đổi đơn giản giữa hai khóa. Trên thực tế, các khóa này đại diện cho một bí mật được phân hưởng bởi hai bên hoặc nhiều hơn và được sử dụng để giữ gìn sự bí mật trong kênh truyền thông tin.
-
-Thuật toán đối xứng có thể được chia ra làm hai thể loại, mật mã dòng (stream ciphers) và mật mã khối (block ciphers). Mật mã dòng mã hóa từng bit của thông điệp trong khi mật mã khối gộp một số bit lại và mật mã hóa chúng như một đơn vị. Cỡ khối được dùng thường là các khối 64 bit(128 bit). Ngày nay được ưa chuộng sử dụng hơn là mật mã khối (block cipher) -- trong đó từng khối nhiều ký tự được mã hóa cùng một lúc. Trong mật mã khối, các tham số quan trọng là kích thước (độ dài khối) và kích thước khóa. Các khái niệm này được minh họa qua ví dụ sau đây.
-\begin{center}
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|}
-\hline
-key & 000 & 001 & 010 & 011 & 100 & 101 & 110 & 111 \\
-\hline
-0 & 001 & 111 & 110 & 000 & 100 & 010 & 101 & 011 \\
-\hline
-1 & 001 & 110 & 111 & 100 & 011 & 010 & 000 & 101 \\
-\hline
-2 & 001 & 000 & 100 & 101 & 110 & 111 & 010 & 011 \\
-\hline
-3 & 100 & 101 & 110 & 111 & 000 & 001 & 010 & 011 \\
-\hline
-4 & 101 & 110 & 100 & 010 & 011 & 001 & 011 & 111 \\
-\hline
-\end{tabular}
-\end{center}
-
-Qua ví dụ đơn giản này (chỉ có tính chất minh họa), ta thấy rằng nếu các
-tham số kích thước khối và khóa qua nhỏ thì mật mã rất dễ bị phá bằng các tấn công thông qua phân tích thống kê. Chẳng hạn trong ví dụ trên, nếu kẻ thù nhận được một khối mã ciphertext 001 thì nó có thể dễ dàng suy ra plaintext tương ứng chỉ có thể là 000 hoặc 101 (nhờ thống kê trên bảng biến đổi mã).
-
-Vì vây, các điều kiện cần cho mật mã khối an toàn là:
-\begin{itemize}
-\item Kích thước khối phải đủ lớn để chống lại các loại tấn công phá hoại bằng phương pháp thống kê. Tuy nhiên cần lưu ý rằng kích thước khối lớn sẽ làm thời gian trễ lớn.
-\item Không gian khóa phải đủ lớn (tức là chiều dài khóa phải đủ lớn) để chống lại tìm kiếm vét cạn.Tuy nhiên mặt khác, khóa cần phải đủ ngắn để việc làm khóa, phân phối và lưu trữ được hiệu quả.	
-\end{itemize}
-Về các nguyên lý thiết kế mật mã khối, người ta đã ghi nhận 2 nguyên tắc cơ sở sau để có bảo mật cao, đó là việc tạo ra confusion (tính hỗn loạn, rắc rối) và diffusion (tính khuếch tán).
-
-\textit{Confusion}. (Hỗn loạn, rắc rối) Sự phụ thuộc của bản mã đối với bản rõ phải thực phức tạp để gây rắc rối, cảm giác hỗn loạn đối với kẻ thù có ý định phân tích tìm qui luật để phá mã. Quan hệ hàm số của mã-tin là phi tuyến (non-linear).
-
-\textit{Diffusion}. (Khuếch tán) Làm khuếch tán những mẫu văn bản mang đặc tính thống kê (gây ra do dư thừa của ngôn ngữ) lẫn vào toàn bộ văn bản. Nhờ đó tạo ra khó khăn cho kẻ thù trong việc dò phá mã trên cơ sở thống kê các mẫu lặp lại cao. Sự thay đổi của một bit trong một khối bản rõ phải dẫn tới sự thay đối hoàn toàn trong khối mã tạo ra.
-
-Một cách đơn giản nhất, confusion có thể được thực hiện bằng phép thay thế (substitution) trong khi diffusion được tạo ra bằng các phép chuyển đổi chỗ (transposition/permutation) hay hoán vị. Toàn bộ sơ đồ biến đổi mật mã sẽ là một lưới các biến đổi thay thế-hoán vị (substitution-permutation network).
 \section{Mật mã khóa công khai}
-\subsection*{Giới thiệu}
-Mật mã hóa khóa công khai là một dạng mật mã hóa cho phép người sử dụng trao đổi các thông tin mật mà không cần phải trao đổi các khóa chung bí mật trước đó. Điều này được thực hiện bằng cách sử dụng một cặp khóa có quan hệ toán học với nhau là khóa công khai và khóa cá nhân (hay khóa bí mật). 
-
-Trong hệ mã khóa công khai, mỗi người sử dụng có hai khoá, một được gọi là khoá bí mật (secret key hay private key) và một được gọi là khoá công khai (public key). Khoá thứ
-nhất chỉ mình user biết và giữ bí mật, còn khoá thứ hai thì anh ta có thể tự do phổ biến
-công khai. Khoá thứ nhất thường đi liền với thuật toán giải mã, còn khoá thứ hai thường đi liền với thuật toán sinh mã, tuy nhiên điều đó không phải là bắt buộc. Ta hãy ký hiệu chúng là z (khóa riêng) và Z (khóa công khai)
-
-Hoạt động của chúng là đối xứng
-\begin{align}
-X = D(z, E(Z,X)) \label{eq1} \\
-X = E(Z, D(z,X)) \label{eq2}
-\end{align}
-
-Trong đó hệ thức (\ref{eq1}) biểu tượng cho bài toán truyền tin mật: bất kỳ người sử dụng nào khác như B,C,D \ldots muốn gửi tin cho A chỉ việc mã hoá thông tin với khoá công khai ($Z_A$) của A rồi gửi đi. Chỉ có A mới có thể khoá riêng để giải mã ($z_A$) và đọc được tin, kẻ nghe trộm Eve không thể giải mã để lấy được tin vì không có khoá $z_A$.
-
-Còn hệ thức (\ref{eq2}) sẽ được sử dụng để xây dựng các hệ chữ ký điện tử trong đó thao tác Ký chính là thực hiện $E(Z_A)$ còn kiểm định chữ ký là thông qua gọi $D(z_A)$.
-
-Hệ mật mã theo nguyên tắc nói trên được gọi là hệ mã với khoá công khai (public key cryptosystems) hay còn được gọi là mã khóa phi đối xứng (asymmetric key cryptosystems). Ta sẽ viết tắt hệ thống kiểu này bằng PKC.
-
-Hệ thống mật mã hóa khóa công khai có thể sử dụng với các mục đích:
-\begin{itemize}
-\item \textbf{Mã hóa}: giữ bí mật thông tin và chỉ có người có khóa bí mật mới giải mã được
-\item \textbf{Tạo chữ ký số}: cho phép kiểm tra một văn bản có phải đã được tạo với một khóa bí mật nào đó hay không.
-\item \textbf{Thỏa thuận khóa}: cho phép thiết lập khóa dùng để trao đổi thông tin mật giữa 2 bên.
-\end{itemize}
-
-Thông thường, các kỹ thuật mật mã hóa khóa công khai đòi hỏi khối lượng tính toán nhiều hơn các kỹ thuật mã hóa khóa đối xứng nhưng những lợi điểm mà chúng mang lại khiến cho chúng được áp dụng trong nhiều ứng dụng.
 \subsection*{Hệ thống khóa công khai}
 RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế, phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
 
@@ -528,21 +437,24 @@ Mục đích của chứng thư số dùng để nhận diện một đối tư�
 \item Thực hiện các kênh liên lạc trao đổi thông tin bí mật với các thực thể trên mạng như thực hiện kênh liên lạc mật giữa người dùng với webserver.
 \end{itemize}
 \end{itemize}
-\chapter{Mật mã dựa trên đường cong Elliptic}
- giơi thiệu 
-\section{Lý thuyết số}
-\subsection*{Nhóm}
-Một nhóm $(G, +)$ là tập hợp các phần tử $G$ cùng với phép toán hai ngôi $+$ kết hợp thành phần tử thứ ba thỏa mãn bốn tiên đề của nhóm (với $ a, b , c, e \in G$):
+\chapter{Lý thuyết số}
+Mỗi hàm cửa sập được định nghĩa trên một cấu trúc đại số. Bài toán logarithm rời rạc dựa trên đường cong elliptic cũng được định nghĩa trên một cấu trúc đại số là đường cong elliptic trên
+trường hữu hạn.
+\section{Nhóm}
+Trong toán học, nhóm là một cấu trúc đại số bao gồm một tập hợp các phần tử cùng với phép toán hai ngôi kết hợp hai phần tử bất kỳ của tập hợp thành một phần tử thứ ba thỏa mãn bốn điều kiện gọi là tiên đề nhóm, lần lượt là tính đóng, kết hợp, phần tử đơn vị và tính khả nghịch.
+
+Cụ thể hơn, một nhóm $(G, *)$ là tập hợp các phần tử $G$ cùng với phép toán hai ngôi $*$(hay còn gọi là luật nhóm) kết hợp thành phần tử thứ ba thỏa mãn bốn tiên đề của nhóm (với $ a, b , c, e \in G$):
 \begin{itemize}
-\item Tính đóng: $\forall a, b: (a + b) \in G$
-\item Tính kết hợp: $\forall a, b, c: (a + b) + c = a + (b + c)$
-\item Phần tử đơn vị: $\exists e \ \forall a: a + e = e + a = a$
-\item Tính khả nghịch: $\forall a \ \exists b: a + b = b + a = e$
+\item Tính đóng: $\forall a, b: (a * b) \in G$
+\item Tính kết hợp: $\forall a, b, c: (a * b) * c = a * (b * c)$
+\item Phần tử đơn vị: $\exists e \ \forall a: a * e = e * a = a$
+\item Tính khả nghịch: $\forall a \ \exists b: a * b = b * a = e$
 \end{itemize}
 $e$ được gọi là phần tử đơn vị(ví dụ nhóm số nguyên phần tử đơn vị là 0). Một nhóm được gọi là abelian khi thỏa mãn điều kiện:
 \begin{itemize}
-\item Tính giao hoán: $\forall a,b: a + b = b + a$
+\item Tính giao hoán: $\forall a,b: a * b = b * a$
 \end{itemize}
+
 Cho $\cdot$ là phép nhân kết quả của phép cộng lặp đi lặp lại nhiều lần của 1 phần tử. Cho nhóm $(G, \cdot)$ là nhóm và $x^n$ được định nghĩa như sau:
 \begin{displaymath}
 \begin{aligned}
@@ -551,26 +463,86 @@ x^{n + 1} & = x^n\cdot x \ \ with \ \ n \in \mathbb{N}
 \end{aligned}
 \end{displaymath}
 $\infty$ là phép nhân phân tử đơn vị. Cấp(order) r của một phần tử x được định nghĩa như một số nguyên nhỏ r > 0 sao cho $x^r = \infty$. Nếu một nhóm có phần tử g sao cho \{$g^n | n \in Z$\} là tất cả phần tử trong nhóm, g được gọi là phần tử sinh của nhóm vòng.
-\subsection*{Vành}
-Một vành được gọi là nhóm abelian với phép toàn hai ngôi thỏa mãn luật kết hợp và phân phối trên nhóm abelian:
+\section{Vành}
+Một vành được gọi là nhóm abelian với phép toán hai ngôi thỏa mãn luật kết hợp và phân phối trên nhóm abelian:
 \begin{displaymath}
 \forall a, b, c \in G: a\cdot (b + c) = a \cdot b + a \cdot c
 \end{displaymath}
-\subsection*{Trường}
+\section{Trường}
 Một trường là một vành giao hoán khác 0, chứa một nghịch đảo nhân cho mọi phần tử khác không. Như một vành, các phần tử khác không tạo thành một nhóm abelian dưới phép nhân.
 
+Cụ thể, cho tập $F$ và hai phép toán cộng và nhân trên $F$ thõa mãn các điều kiện:
+\begin{itemize}
+\item $F$ là nhóm giao hoán với phép cộng.
+\item $F$ là nhóm giao hoán với phép nhân.
+\item Trên $F$ phép nhân phân phối với phép cộng.
+\end{itemize}
+Hay, trong trường tập hợp $F \neq \emptyset$ trên đó xác định hai phép toán cộng và nhân:
+\begin{itemize}
+\item Phép cộng ($+$): $F \times F \rightarrow F: (a,b)\mapsto a + b$
+\item Phép nhân ($\cdot$): $F \times F \rightarrow F: (a,b)\mapsto a \cdot b$
+\end{itemize}
+Thỏa mãn các điều kiện sau:
+\begin{itemize}
+\item \textbf{Phép cộng có tính kết hợp}: $\forall a, b, c \in F, (a + b) + c = a + (b + c)$
+\item \textbf{Phép cộng có tính giao hoán}: $\forall a, b \in F, a + b = b + a$
+\item \textbf{Tồn tại phần tử 0}: $\exists 0 \in F, \forall a \in F, a + 0 = 0 + a = a$
+\item \textbf{Tồn tại phần tử đối}: $\forall a \in F, \exists (-a) \in F, a + (-a) = (-a) + a = 0$
+\item \textbf{Phép nhân có tính kết hợp}: $\forall a, b, c \in F, (a \cdot b) \cdot c = a \cdot (b \cdot c)$
+\item \textbf{Phép nhân có tính giao hoán}: $\forall a, b \in F, a \cdot b = b \cdot a$
+\item \textbf{Tồn tại phần tử đơn vị}: $\exists 1 \in F, 1 , 0, \forall a \in F, a \cdot 1 = 1 \cdot a = a$
+\item \textbf{Tồn tại phần tử nghịch đảo}: $\forall a \in F, a , 0, \exists a^{-1} \in F, a^{-1} \cdot a = a \cdot a^{-1} = 1$
+\item \textbf{Phép nhân phân phối với phép cộng}: $\forall a, b, c \in F, a \cdot (b + c) = a \cdot b + a \cdot c$
+\end{itemize}
 Ví dụ về trường:
 \begin{itemize}
 \item Trường số thực $(\mathbb{R})$
 \item Trường số phức $(\mathbb{C})$
 \item Trường số hữ tỉ $(\mathbb{Q})$
 \end{itemize}
+\section{Trường hữu hạn $\mathbb{F}_p$}
+Chọn $p$ là một số nguyên tố. Trường hữu hạn $\mathbb{F}_q$ gọi là trường nguyên tố bao gồm một tập số nguyên $\{0, 1, 2, 3, \ldots , p - 1\}$ và những phép tính sau:
+\begin{itemize}
+\item Phép cộng: Với $a, b \in \mathbb{F}_p$ thì $a + b = r, r$ là số dư của phép chia tổng $a + b$ cho $p$. Đây gọi là phép cộng modulo, ngắn gọn hơn có thể viết $a + b = r \ (mod \ p)$.
+\item Phép nhân: Với $a, b \in \mathbb{F}_p$ thì $a \cdot b = s$, s là số dư của phép chia tích $a \cdot b$ cho $p$. Đây gọi là phép nhân modulo, ngắn gọn hơn có thể viết $a \cdot b = s \ (mod \ p)$.
+\item Phép nghịch đảo: Với $a \in \mathbb{F}_p$ và $a , 0$ thì nghịch đảo của $a, a^{-1}$là một số nguyên $x$ sao cho $a \cdot x = 1 (mod p)$
+\end{itemize}
+\subsubsection*{Ví dụ}
+Cho trường đại số hữu hạn $\mathbb{F}_p$ bao gồm tập $\mathbb{F}$ với các phần tử ${0, 1, 2, \ldots , p - 1}$. Với điều kiện $p$ ở đây là một số nguyên tố. Tập $\mathbb{F}$ như vậy kết hợp với hai phép toán cộng và nhân trên module $p$ sẽ tạo thành một trường đại số.
+\begin{itemize}
+\item[]Tập $Z$ với $p = 11: \{0, 1, 2, \ldots , 10\}$
+\item[]Phép cộng ($+$): $F \times F \rightarrow F : (a, b) \mapsto a + b \ mod \  p$
+\item[]Phép nhân ($\cdot$): $F \times F \rightarrow F : (a, b) \mapsto a \cdot b \ mod \ p$
+\begin{itemize}
+\item[*] \textbf{Phép cộng có tính kết hợp}: $\forall a, b, c \in \mathbb{F}; (a + b) + c = a + (b + c) \ (mod \ p)$
+\item[*] \textbf{Phép cộng có tính giao hoán}: $\forall a, b \in F; a + b = b + a \ (mod \ p)$
+\item[*] \textbf{Tồn tại phần tử 0}: Phần tử 0 trong trường $\mathbb{F}_p$ chính là 0. $\forall a \in F, a + 0 = 0 + a = a \ (mod \ p)$
+\item[*] \textbf{Tồn tại phần tử đối}: $\forall a \in \mathbb{F}, \exists(-a) \in F; a + (-a) = (-a) + a = 0$. Phần tử đối của a trong $\mathbb{F}_p$ chính bằng $p - a$.
+\item[*] \textbf{Phép nhân có tính kết hợp}: $\forall a, b, c \in \mathbb{F}; (a \cdot b) \cdot c = a \cdot (b \cdot c) \ (mod \ p)$
+\item[*] \textbf{Phép nhân có tính giao hoán}: $\forall a, b \in F; a \cdot b = b \cdot a (mod p)$
+\item[*] \textbf{Tồn tại phần tử đơn vị}: Phần tử đơn vị trong $\mathbb{F}_p$ chính là phần tử $1 \exists 1 \in \mathbb{F}; 1 \neq 0, \forall a \in \mathbb{F}, a \cdot 1 = 1 \cdot a = a$
+\item[*] \textbf{Tồn tại phần tử nghịch đảo}: $\forall a \in \mathbb{F}, a \neq 0, \exists a^{-1} \in \mathbb{F}; a^{-1} \cdot a = a \cdot a^{-1} = 1 \ (mod \ p)$
+\item[*] \textbf{Phép nhân phân phối với phép cộng}: $\forall a, b, c \in \mathbb{F}; a \cdot (b + c) = a \cdot b + a \cdot c \ (mod \ p)$
+\end{itemize}
+\end{itemize}
+\subsection*{Một số vấn đề khác}
+\begin{itemize}
+\item \textbf{Phần tử nghịch đảo và số} $p$: Việc tìm phần tử nghịch đảo chính là tìm số $b = a^{-1}$ sao cho $a \cdot b = 1 \ (mod \ p)$. Tìm phần tử nghịch đảo của 2 theo ví dụ trên ta có: $\displaystyle b = \frac{p+1}{2} = 6$ (điều kiện là $p$ là số nguyên tố). \\ \\
+Khi ước chung nhỏ nhất của $p$ và $a$ là $gcd(p, a) = 1$ thì luôn có $b, x$ để: $a \cdot b + x \cdot p = 1 \ (mod \ p)$. Khi đó $a \cdot b = 1 \ (mod \ p)$. Nghĩa là ta luôn tìm được nghịch đảo của số $a$ khi $gcd(p, a) = 1$ \\ \\
+Với $gcd(p, a) > 1$ suy ra $gcd(a \cdot b, p) > 1$ với mọi $b$ suy ra $a \cdot b , 1 \ (mod \ p)$. \\ \\
+Vậy là điều kiện để tồn tại phần tử nghịch đảo của $a$ là với mọi số nguyên $a \in {0, 1, 2, \ldots , p-1}$ thì $gcd(a, p) = 1$. Điều này đồng nghĩa với việc $p$ phải là một số nguyên tố. Hay nói cách khác $\mathbb{F}_p$ là một trường đại số nếu và chỉ nếu $p$ là một số nguyên tố.
+\item \textbf{Phần tử sinh}: Cho $g$ là một số trong trường $\mathbb{F}_p$, $g$ là phần tử sinh của $\mathbb{F}_p$ để $\{1, g, g^2, g^3, g^4, \ldots, g^{p-2}\} = Z*$ ở đây Z được gọi là nhóm vòng và $g$ là phần tử sinh của Z. \\ \\
+Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 4, 5\}$. Ta có phần tử sinh là 3. Tuy nhiên không phải mọi phần tử của $Z*$ đều là phần tử sinh.
+\end{itemize}
+\section{Truờng hữu hạn $\mathbb{F}_{2^m}$}
+\chapter{Mật mã dựa trên đường cong Elliptic}
+ giơi thiệu 
 \section{Đường cong Elliptic}
 Một đường cong elliptic curve được xác định bởi phương trình đường cong và một số trường tọa độ cơ bản.
 
-Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong E. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với một số biểu diễn được thành $2^k$. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
+Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong E. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với 2. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
 
-$E(GF(p^k))$ là tập hợp các điểm thỏa mãn phươn trình đường cong (và cả điểm $\infty$). Lực lượng $|E(GF(p^k))|$ được định nghĩa là cấp (order) của đường cong. Nếu muốn xác định một số phần tử của 
+$E(GF(p^k))$ là tập hợp các điểm thỏa mãn phương trình đường cong (và cả điểm $\infty$). Lực lượng $|E(GF(p^k))|$ được định nghĩa là cấp (order) của đường cong. Nếu muốn xác định một số phần tử của 
 $E(GF(p^k))$ như một điểm sinh. Nó tạo ra nhóm con khác theo luật:
 \begin{displaymath}
 h = \frac{|E(GF(p^k))|}{o}
@@ -828,25 +800,6 @@ Do đó tổng thời gian tính toán $nP$ tối đa là 2r phép toán trong $
 \State Return the point $R$, which equals $nP$.
 \end{algorithmic}
 \end{algorithm}
-%\subsection*{Hệ tọa độ}
-%Trong phương trình đường cong tổng quát xem xét hai tọa độ x và y. Ví dụ: xem xét đường cong Montgomery trên trường F được xác định bởi:
-%\begin{center}
-%$By^2 = x^3 + Ax^2 + x$ \ \ \ \  $A, B \in F$ và $B(A^2 - 4) \neq 0$
-%\end{center}
-%A, B là các hằng số xác định đường cong. Phần tử trên đường cong là cặp tọa độ (x, y). Tuy nhiên có thể biểu diễn mở rộng theo bảng sau:
-%\begin{center}
-%\begin{tabular}{rll}
-%$(x ,y)$ & affine	 \\
-%$(X, Y, Z, ZZ)$ & standard & với $x = X/Z$ và $y = Y/Z$ và %$ZZ = Z^2$ \\
-%$(X, Y, Z)$ & projective & với $x = X/Z$ và $y = Y/Z$ \\
-%$(X, Y, Z)$ & Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
-%$(X, Y, Z)$ & Jacobian & với $x = X/Z^2$ và	$y = Y/Z^3$ \\
-%$(X, Y, Z, Z^2, XZ )$ & Extended Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
-%$(X, Y, Z, Z^2)$ &  Extended Jacobian & với $x = X/Z^2$ và %$y = Y/Z^3$ \\
-%$(X, Y, Z, T)$ & Extended Twisted Edwards & với $x = X/Z and Y = Y/Z$ với $T = X \cdot Y$ 
-%\end{tabular}
-%\end{center}
-%\subsection*{Weierstrass curve}
 \subsection*{Montgomery curve}
 Trong toán học những đường cong Montgomery là một dạng của đường cong elliptic , khác với Weierstrass , được giới thiệu bởi Peter L. Montgomery vào năm 1987. Nó được sử dụng cho một số tính toán nhất định, và đặc biệt trong mật mã ứng dụng khác nhau.
 
@@ -909,7 +862,7 @@ cho một số vô hướng  $d \in K \setminus \{0,1\}$. Ngoài ra dạng sau v
 x^2 + y^2 = c^2(1 + dx^2y^2)
 \end{displaymath}
 trong đó $c, d \in K$ với $cd(1 - c^4\cdot d) \neq 0$ \\
-Mỗi đường cong Edwards tương đương với đường cong elip ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu K là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $K$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có c = 1, không mất tính tổng quát. Trong các phần sau, giả sử rằng c = 1.
+Mỗi đường cong Edwards tương đương với đường cong elip ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu K là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $K$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có $c = 1$, không mất tính tổng quát. Trong các phần sau, giả sử rằng $c = 1$.
 \subsubsection{Luật cộng}
 Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phần tử đơn vị. Đối với đường cong Edwards, lấy phần tử trung tính là điểm (0, 1), tổng các điểm $(x_1,  y_1)$ và $(x_2 ,y_2)$ được đưa ra bởi công thức:
 \begin{displaymath}
