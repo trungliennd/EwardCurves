@@ -12,6 +12,7 @@
 %\usepackage{enumerate}
 %\usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{imakeidx}
 \newcounter{someCounter}
 %\usepackage{cases}
 \usepackage{fancybox}
@@ -34,7 +35,7 @@
 \usepackage{float}
 \usepackage{tikz}
 \usepackage{pgfplots}
-
+\makeindex
 \usepackage{tikz-uml}
 \usetikzlibrary{arrows.meta}
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}  
@@ -140,14 +141,8 @@ Nội dung chính của đồ án bao gồm 4 chương:
 \item \textbf{Chương 4:} Cài đặt cho thiết bị IoT
 \end{itemize}
 \chapter{Cơ sở lý thuyết}
-Trong chương này sẽ trình bày cơ sở lý thuyết chung bao quát cho các hệ mật mã, nó sẽ cung cấp một số khái niệm và các kiến thức qúy giá, hỗ trợ đắc lực cho việc làm quen với lĩnh vực này.
-\section{Cơ sở mật mã}
-\section{Mật mã khóa đối xứng}
 \section{Mật mã khóa công khai}
 \subsection*{Hệ thống khóa công khai}
-RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế, phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
-
-Cơ sở thuật toán RSA dựa trên tính khó của bài toán phân tích các số lớn ra thừa số nguyên tố: không tồn tại thuật toán thời gian đa thức (theo độ dài của biểu diễn nhị phân của số đó) cho bài toán này. Chẳng hạn, việc phân tích một hợp số là tích của 2 số nguyên tố lớn hàng trăm chữ số sẽ mất hàng ngàn năm tính toán với một máy PC trung bình có CPU khoảng trên 2Ghz.
 \subsubsection{Thuật toán RSA}
 \textbf{\underline{Xây dựng}}: Chọn các tham số
 \begin{itemize}
@@ -224,44 +219,26 @@ Mã là $Y = (a,b)$ và có độ dài gấp đôi bản rõ.
 \begin{displaymath}
 X = \frac{b}{a^u} (mod \ p)
 \end{displaymath}
-\section{Chữ ký điện tử và Hàm băm}
+\section{Chữ ký điện tử}
 \subsection*{Chữ ký điện tử}
-Khái niệm chữ ký điện tử được hai nhà bác học Diffie và Hellman đề xuất trong
-cùng bài báo nổi tiếng của các ông khai sáng nguyên lý của hệ thống mật mã công khai (1976). Ý tưởng về mô phỏng chữ ký tay trên văn bản trong đời thường đã có từ lâu, nhưng thực sự chỉ có thể thực hiện được cùng với sự ra đời của hệ mật mã KCK (khóa công khai). Như đã biết, hệ thống mật mã đối xứng đã được sử dụng phổ biến trước đó không có tính chất đại diện duy nhất cho một cá nhân. Trong khi đó, một hệ mã hóa khóa công khai (hay còn gọi là phi đối xứng) có thể được xem là được tạo lập để giúp bảo mật truyền tin trong liên lạc giữa 1 cá nhân và phần còn lại của xã hội. Nhờ có mật mã KCK, khái niệm chữ ký điện tử mới được hiện thực hóa và giúp cho giao dịch kinh tế thương mại trong đời sống có thể đi vào số hóa hoàn toàn, qua đó thúc đẩy hoạt động dịch vụ trực tuyến trên Internet phát triển như ngày này. 
+Chữ kí điện tử là một hệ mã khóa công khai với cặp khóa $A(s_A, p_A)$ trong đó $A$ là người giữ chữ kí, $s_A$ là khóa bí mật còn $p_A$ là khóa công khai. Với một thông điệp $m$ thì người cùng $A$ sẽ kí lên thông điệp $m$ bằng cách mã hóa $m$ bởi khóa bí mật được bản mã $c_m$. Mọi người có thể kiểm tra chữ kí này có hợp lệ hay không bằng cách dùng khóa công khai để giải mã $c_m$, nếu được đúng thông điệp $m$ thì chữ kí là hợp lệ còn không, chữ kí đó không hợp lệ hay nói cách khác, người kí lên thông điệp $m$ đó không phải là A.
 
-Chữ ký điện tử hay chữ ký và chữ ký tay thực ra không phải hoàn toàn tương tự. Chữ ký tay là dấu vết của con người tác động lên cùng bản giấy đã mang chứa văn bản (in/viết sẵn). Phần chữ ký tay và phần văn bản có sẵn là độc lập, không có quan hệ ràng buộc nào. Do các qui luật của thế giới vật lý, người ta không thể đánh tráo chữ ký theo kiểu đơn giản là xé bỏ phần tờ giấy chứa chữ ký và ghép nối vào một phần giấy mang chữ ký tạo mới khác. Tuy nhiên trong thế giới số hóa, các qui luật vật lý này không có mặt, và bất cứ lập trình viên nào cũng có thể tha hồ cắt ghép văn bản số hóa mà không bị phát hiện. 
+Chỉ có người dùng $A$ mới nắm giữ khóa bí mật $s_A$ bởi vậy chỉ có $A$ mới có khả năng kí còn tất cả mọi người đều có khóa công khai $p_A$ nên tất cả mọi người đều có khả năng kiểm tra xem một chữ kí có phải do $A$ kí hay không.
+
+Trong thực tế, thông điệp m có thể là một văn bản hay một cuốn sách, để mã hóa một khối lượng lớn dữ liệu như vậy bằng hệ mã hóa công khai sẽ rất tốn thời gian và tài nguyên hệ thống. Bởi vậy, người ta sẽ băm dữ liệu cần kí $m$ thành một chuỗi mã băm. Sau đó sẽ kí lên chuỗi mã băm đó. Thao tác xác nhận chữ kí cũng tương tự như vậy (Hình ?):
 \subsubsection{Sơ đồ chữ ký cơ bản}
-Do đó, nguyên lý tạo chữ ký điện tử là khác hẳn và phức tạp hơn. Khi có một văn bản ở dạng nhị phân $X$, người ta phải tạo ra một chữ ký ở dạng nhị phân $S$ sao cho $S$ phụ thuộc hàm vào $X$, tức là $S = f(X)$, hơn nữa quan hệ hàm này là bí mật (có tham số khóa bí mật) đối với người ngoài. Do đó nếu có kẻ nào thử đánh tráo (tức giả mạo) chữ ký, quan hệ hàm $S = f(X)$ sẽ không còn đúng và bị phát hiện.
 
-Tuy nhiên việc phát hiện xem một văn bản có chữ ký có là chuẩn hay bị giả mạo lại phải là một thao tác mà ai cũng làm được dễ dàng, không cần đến khóa bí mật kia (do người chủ chữ ký nắm giữ). Vì vậy hệ thống chữ ký điện tử được xây dựng trên nguyên tắc sử dụng hai thuật toán riêng rẽ cho việc tạo chữ ký và kiểm định chữ ký, thông qua việc sử dụng cặp 2 hàm toán học đối lập nhau, một cần khóa bí mật còn một thì không. Chính do điều này, mật mã khóa công khai đã được khai thác để giúp hiện thực điểm chốt của cơ chế đặc biệt này.
+Trong thuật toán trao đổi khóa bí mật Diffie-Hellman dựa trên đường cong elliptic, kẻ tấn công xen giữa Evil có thể giả mạo là Bob khi truyền thông với Alice và giả mạo làm Bob khi truyền thông với Alice. Khi đó thuật toán sẽ được thực hiện song song giữa Evil-Alice và EvilBob. Dữ liệu truyền thông giữa Alice và Bob sẽ được chuyển thông qua Evil và có thể dễ dàng bị Evil giải mã. Bởi thế, người ta dùng chữ kí điện tử để xác định xem đối tượng gửi nhận dữ liệu có đúng là đối tượng mà mình mong muốn gửi nhận dữ liệu hay không.
 
-Giả sử Alice đã thiết lập một hệ mật mã KCK với thành phần khóa bí mật $z_A$ và công khai $Z_A$, tức là có hàm sinh mã $E_{Z_A}()$ và hàm giải mã $D_{z_A}()$, khi đó Alice có thể tạo chữ ký điện tử bằng hàm $D_{z_A}()$ và bất kỳ người nào khác sẽ kiểm tra bằng hàm $E_{Z_A}()$. Cụ thể là, với văn bản nhị phân $X$, Alice sẽ tạo được chữ ký $S= D_{z_A}(X)$, văn bản có chữ ký sẽ là $Y=X||S$. Khi văn bản này đến tay Bob, Bob sẽ kiểm tra tính hợp lệ bằng việc tính $X'= E_{Z_A}(S)$ và đối chiếu $X = X'?$ Lưu ký, Bob sẽ cần kiếm được khóa công khai của Alice, $Z_A$, bằng một cách nào đó.
-
-Như vậy nếu Bob đã nhận được văn bản có chữ ký $X||S$ và dùng khóa công khai của Alice để kiểm định thành công, văn bản đó trở thành bằng chứng, ngay cả khi Alice có muốn chối cãi đã tạo ra và ký nó cũng không được. Bởi vì chỉ duy nhất Alice mới sở hữu khóa $d_A$ bí mật để tạo ra được chữ ký hợp lệ mà thôi. Ta gọi tính chất này của chữ ký điện tử là tính không thể chối cãi được (non-repudiation). Ngay cả khi Alice có khiếu nại bị oan với lý do chữ ký tạo ra bởi một kẻ đã ăn cắp được khóa bí mật của cô ta, thì điều này cũng không thể chứng minh được.
-
-\textbf{Công chứng}: Để có thể đảm bảo phòng tránh được tình trạng chữ ký giả mạo do kẻ gian ăn cắp được khóa bí mật của người bị hại, người ta đã giới thiệu thêm hệ thống công chứng – public notary. Ý tưởng thực hiện: có thêm một bên thứ ba tham gia, vô tư và có thẩm quyền hợp pháp, được gọi là công chứng viên (public notary), sẽ được thuê để ký xác nhận thêm vào sau chữ ký của Alice đối với những văn bản quan trọng mà Alice ký. Văn bản đầy đủ chữ ký sẽ có dạng $Y=X||S_A||S_N$ trong đó chữ ký của công chứng viên $S_N$ là ký trên văn bản $X||S_A$.
-
-\textbf{Bằng chứng biên nhận}: Trong truyền tin liên lạc, chữ ký điện tử có thể sử dụng để đảm bảo tính chính xác của tài liệu (bằng chữ ký của bên gửi A), và bên nhận B có thể gửi lại chữ ký của mình vào tài liệu đã nhận như là bằng chứng để A biết là B đã thực sự nhận được tài liệu đó. Nếu thủ tục này được thực hiện, sau này A có thể chứng minh được là mình đã gửi tài liệu cho B, ngay cả khi lúc đó B muốn chối cũng không được.
-
-$A \rightarrow B: Y = E_{Z_B}(X\||D_{z_A}(X))$
-
-$B:$ tính $E_{z_B}(Y)$ thu được $X$ và $S = D_{z_A}(X)$, kiểm tra xem $X =? E_{z_A}(S)$
-
-$B \rightarrow A: Y' = E_{Z_A}(D_{z_B}(X))$
-
-$A:$ tính $S_B(X) = D_{z_A}(Y')$, đó chính là chữ ký của $B$ trên $X$, bằng chứng xác nhận $B$ đã nhận được tài liệu X chính xác.
-\subsubsection{Nhược điểm của hệ chữ ký cơ sở}
-Hệ chữ ký điện tử theo tiếp cận ban đầu nói trên, tức là sử dụng $D_z$ để ký và $E_Z$ để kiểm định, là khá đơn giản và phạm phải nhược điểm lớn:
-\begin{itemize}
-\item Chữ ký quá dài, dài đúng bằng tài liệu: Với văn bản dài, ta cần dùng việc chia khối rồi ký lên nhiều khối; cụ thể là $X = X_1|| X_2|| X_3|| \ldots ||X_t \rightarrow S= S_A(X_1) ||$ $S_A(X_2) || S_A(X_3) || \ldots || S_A(X_t))$. Rõ ràng số lượng khối trên văn bản đã ký nhiều gấp đôi ban đầu.
-\item Không những dài, việc thực hiện nhiều lần thuật toán KCK (ký lên từng khối) sẽ làm thủ tục ký có thể diễn ra rất lâu, thời gian tỷ lệ với độ dài văn bản. Điều này là không chấp nhận được với các giao dịch trực tuyến.
-\item Kẻ tấn công có thể dễ dàng phá hệ thống chữ ký này bằng kiểu tấn công lắp ghép khối (thay đổi thứ tự, thêm hay bớt khối \ldots).
-\end{itemize}
-
-Vì vậy hệ thống chữ ký điện tử đơn giản kiểu này đã không được sử dụng. Giải pháp đầy đủ là có thêm sự hộ trợ của hàm băm, tức là "Băm" tài liệu trước khi ký, sẽ được trình bày tiếp theo đây.
-\subsection*{Hàm băm và ứng dụng chữ ký điện tử}
+Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là Evil (Hình 6.2):
+\section{Hàm băm và ứng dụng chữ ký điện tử}
 Một hàm băm H sẽ lấy ở đầu vào là một thông tin X có kích thước bất kỳ và sinh kết quả ra là một chuỗi $h_X=h(X)$ có độ dài cố định, thường là nhỏ hơn nhiều so với kích thước của $X$. Chuỗi này thường được gọi là cốt yếu, hay cốt (digest) của thông tin X.
-
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{../hash.png}
+\caption{Hình ảnh minh họa hàm băm}
+\end{figure}
+\end{center}
 Ví dụ: Thông tin X có thể là một tệp độ dài hàng trăm Kb trong khi cốt của nó chỉ là một khối có độ dài 128bit. Tất nhiên, điều đó dẫn đến khả năng có thể có 2 thông tin $X \neq X'$ mà cho cùng một cốt giống nhau với một hàm băm, tức là $H(X) = H(X')$. Trường hợp này gọi là đụng độ (collision).
 
 Tuy nhiên với hàm băm thiết kế tốt, đụng độ là gần như không thể xảy ra được trên thực tế. Nói cách khác nếu cố đi tìm, khối lượng tính toán phải thực hiện là rất lớn, không khả thi với công cụ tính toán hiện thời.
@@ -274,9 +251,6 @@ Hàm băm có ứng dụng chủ chốt trong các hệ chữ ký điện tử �
 \item[2. ] Có tính một chiều: biết $X$, có thể dễ dàng tính được giá trị băm $h_X$, nhưng không thể tính ngược được $X$ khi chỉ biết $h_X$, với công cụ tính toán hiện nay (bất khả thi về tính toán).
 \item[3. ] Có tính phi đụng độ cao (collision free), tức là thực tế không thể tim được hai thông tin $X \neq X'$ sao cho $H(X) = H(X')$. Tất nhiên, đây là bất khả thi về mặt tính toán.
 \end{itemize}
-
-\textbf{hình}
-
 \subsubsection{Đụng độ}
 Rõ ràng là với không gian giá trị băm nhỏ hơn không gian tin về mặt kích thước thì chắc chắn sẽ tồn tại đụng độ (collision), nghĩa là có hai bản rõ $X \neq X’$ mà giá trị băm của chúng giống nhau nghĩa là $h_X=h_{X’}$. Điều này có thể thấy rõ ràng qua nguyên lý Diricle - Nếu có n+1 con thỏ được thả vào n cái chuồng thì phải tồn tại ít nhất một cái chuồng mà trong đó có ít ra là hai con thỏ ở chung.
 
@@ -638,7 +612,7 @@ h được gọi là cofactor và o được gọi là cấp(order) của điể
 Số lượng điểm sinh của trường $GF(n)$ là $\phi (n - 1)$ ở đây $\phi$ là một hàm Ơ-le của Euler. Điều này cũng là yếu tố cho phép nhân trong nhóm vòng[*].
 
 Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve, Montgomery Curve, Edwards Curve, Twisted Edwards Curve, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
-\subsection{Luật cộng}
+\subsection*{Luật cộng}
 Một đường cong elliptic là tập hợp các nghiệm của phương trình:
 \begin{displaymath}
 Y^2 = X^3 + AX + B.
@@ -921,7 +895,20 @@ Chọn điểm $P = (7, 13)$ suy ra điểm $-P = (7, -13 \ (\ mod \ 29 )= (7, 1
 \caption{Biểu diễn $2*P$ với ($P \neq \mathcal{O}$)}  \label{h19-1}
 \end{figure}
 \end{center}
-
+Trong vị dụ trên ta thấy điểm $P = (19, 15)$ là phần tử sinh của đường cong trên trường $\mathbb{F}_{29}$
+\begin{center}
+\begin{tabular}{lllllllll}
+$P = (19, 15)$ & & $2P = (15, 8)$ & & $3P = (18, 23)$ & & $4P = (27, 20)$ \\
+$5P = (21, 20)$ & & $6P = (17, 19)$ & & $7P = (26, 28)$ & & $8P = (20, 8)$ \\
+$9P = (10, 9)$ & & $10P = (23, 21)$ & & $11P = (11, 26)$ & & $12P = (24, 10)$ \\
+$13P = (16, 11)$ & & $14P = (28, 2)$ & & $15P = (7, 16)$ & & $16P = (2, 15)$ \\
+$17P = (8, 14)$ & & $18P = (8, 15)$ & & $19P = (2, 14)$ & & $20P = (7, 13)$ \\
+$21P = (28, 17)$ & & $22P = (16, 18)$ & & $23P = (24, 19)$ & & $24P = (11, 3)$ \\
+$25P = (23, 8)$ & & $26P = (10, 20)$ & & $27P = (20, 21)$ & & $28P = (26, 1)$ \\
+$29P = (17, 10)$ & & $30P = (21, 9)$ & & $31P = (27, 9)$ & & $32P = (18, 6)$ \\
+$33P = (15, 21)$ & & $34P = (19, 14)$  \\
+\end{tabular}
+\end{center}
 \section{Thuật toán Double-and-Add}
 Xuất phát từ việc khó phục hồi lại giá trị của n từ điểm $P$ và $Q = n\cdot P$ trong $E(\mathbb{F}_{p})$ đây là vấn đề khó của ECDLP. Tuy nhiên để sử dụng
 \begin{displaymath}
@@ -957,7 +944,7 @@ Do đó tổng thời gian tính toán $nP$ tối đa là 2r phép toán trong $
 \State Return the point $R$, which equals $nP$.
 \end{algorithmic}
 \end{algorithm}
-\subsection*{Montgomery curve}
+\section{Montgomery curve}
 Trong toán học những đường cong Montgomery là một dạng của đường cong elliptic , khác với Weierstrass , được giới thiệu bởi Peter L. Montgomery vào năm 1987. Nó được sử dụng cho một số tính toán nhất định, và đặc biệt trong mật mã ứng dụng khác nhau.
 
 Một đường cong Montgomery trên trường $\mathbb{K}$ được định nghĩa bởi phương trình 
@@ -965,7 +952,7 @@ Một đường cong Montgomery trên trường $\mathbb{K}$ được định ng
 M_{A,B}: By^2 = x^3 + Ax^2 + x
 \end{displaymath}
 với điều kiện $A, B \in \mathbb{K}$ và với $B(A^2 - 4) \neq 0$. Đường cong này được xem xét trên một trường hữu hạn $\mathbb{K}$($\mathbb{K} = \mathbb{F}_q$) với hai đặc điểm khác như $A \in \mathbb{K} \setminus \{-2, 2\}, B \in \mathbb{K} \setminus\{0\}$
-\subsubsection*{Luật cộng}
+\subsection*{Luật cộng}
 Cho hai điểm $P_{1} = (x_{1}, y_{1}), P_{2}=(x_{2},y_{2})$ trên đường cong Montgomery $M_{A, B}$ trong hệ tọa độ affine, điểm $P_{3} = P_{1} + P_{2}$ biểu diễn hình học, điểm thứ ba là giao điểm giữa $M_{A, B}$ và đường thẳng đi qua $P_{1}$ và $P_{2}$. Có thể tìm tọa độ $(x_3, y_3)$ của $P_{3}$, theo cách sau:
 \begin{itemize}
 \item[1, ] Xem xét một đường thẳng $y = lx + m$ trong mặt phẳng affine và để nó đi qua $P_{1}$ và $P_{2}$ (áp đặt điều kiện), theo cách này, người ta có được $\displaystyle{l = \frac {y_{2} - y_{1}}{x_{2} - x_{1}}}$ và $\displaystyle{m = y_ {1} - \left({\frac {y_ {2} -y_ {1}} {x_ {2} -x_ {1}}} \right)x_{1}}$
@@ -994,7 +981,7 @@ x_3 = \frac{B(y_2-y_1)^2}{(x_2-x_1)^2}-A-x_1-x_2=\frac{B(x_2y_1-x_1y_2)^2}{x_1x_
 y_3 = \frac{(2x_1+x_2+A)(y_2-y_1)}{x_2-x_1}-\frac{B(y_2-y_1)^3}{(x_2-x_1)^3}-y_1
 \end{displaymath}
 \end{itemize}
-\subsubsection*{Doubling}
+\subsection*{Doubling}
 Cho một điểm $P_{1}$ trên đường cong Montgomery $M_{A, B}$, điểm $[2]P_1$ đại diện cho điểm hình học của điểm giao nhau thứ ba giữa đường cong và đường tiếp tuyến tại $P_{1}$; vì vậy, để tìm tọa độ của điểm $P_3 = 2P_1$, trong trường hợp này, đường thẳng $y  =  lx  +  m$ phải tiếp xúc với đường cong tại $P_{1}$, do đó, nếu $M_{A, B}: f(x, y) = 0$ với
 \begin{displaymath}
 f(x, y) = x^3 + Ax^2 + x - By^2
@@ -1007,7 +994,7 @@ Vì vậy $\displaystyle l = \frac{3x_1^2 + 2Ax_1 + 1}{2By_1}$ và tọa độ �
 \begin{displaymath}
 {\displaystyle {\begin{aligned}x_{3}&=Bl^{2}-A-x_{1}-x_{1}={\frac {B(3x_{1}^{2}+2Ax_{1}+1)^{2}}{(2By_{1})^{2}}}-A-x_{1}-x_{1}\\&={\frac {(x_{1}^{2}-1)^{2}}{4By_{1}^{2}}}={\frac {(x_{1}^{2}-1)^{2}}{4x_{1}(x_{1}^{2}+Ax_{1}+1)}}\\[8pt]y_{3}&=(2x_{1}+x_{1}+A)l-Bl^{3}-y_{1}\\&={\frac {(2x_{1}+x_{1}+A)(3{x_{1}}^{2}+2Ax_{1}+1)}{2By_{1}}}-{\frac {B(3{x_{1}}^{2}+2Ax_{1}+1)^{3}}{(2By_{1})^{3}}}-y_{1}.\end{aligned}}}
 \end{displaymath}
-\subsection*{Edwards curve}
+\section{Edwards curve}
 Trong toán học , các đường cong Edwards là một họ các đường cong elip được Harold Edwards nghiên cứu năm 2007. Khái niệm về các đường cong elliptic trên các trường hữu hạn được sử dụng rộng rãi trong mã hóa đường cong elip. Các ứng dụng của các đường cong Edwards tới mật mã được Bernstein và Lange phát triển : chúng đã chỉ ra một số ưu điểm của dạng Edwards so với dạng Weierstrass.
 
 Phương trình của một đường cong Edwards trên một trường K mà không có đặc tính 2 là:
@@ -1020,7 +1007,7 @@ x^2 + y^2 = c^2(1 + dx^2y^2)
 \end{displaymath}
 trong đó $c, d \in K$ với $cd(1 - c^4\cdot d) \neq 0$ \\
 Mỗi đường cong Edwards tương đương với đường cong elip ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu K là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $K$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có $c = 1$, không mất tính tổng quát. Trong các phần sau, giả sử rằng $c = 1$.
-\subsubsection{Luật cộng}
+\subsection*{Luật cộng}
 Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phần tử đơn vị. Đối với đường cong Edwards, lấy phần tử trung tính là điểm (0, 1), tổng các điểm $(x_1,  y_1)$ và $(x_2 ,y_2)$ được đưa ra bởi công thức:
 \begin{displaymath}
 (x_1, y_1) + (x_2, y_2) = \left( \frac{x_1y_2 + x_2y_1}{1 + dx_1x_2y_1y_2}, \frac{y_1y_2 - x_1x_2}{1 - dx_1x_2y_1y_2} \right).
@@ -1029,13 +1016,13 @@ Nghịch đảo của bất kì điểm nào $(x_1, y_1)$ là $(-x_1, y_1)$. Ng�
 Nếu d không phải là một bình phương trong $K$ và $\displaystyle (x_{1}, y_{1}), (x_{2}, y_{2}) \in \{(x, y)|x^{2} + y^{2} = 1 + dx^{2}y^{2} \}$, không có điểm đặc biệt có mẫu số $1 +  dx_1x_2y_1y_2 và 1 -  dx_1 x_2y_1y_2$ bằng 0. Do đó, luật cộng Edwards là hoàn tất khi d không phải là một bình phương trong trường $K$. Điều này có nghĩa là các công thức sẽ làm việc tốt và không có lỗi với các phép toán doubling, phần tử đơn vị, phần tử âm. Nói cách khác, nó được định nghĩa cho tất cả các cặp điểm đầu vào trên đường cong Edwards trên $K$ và kết quả cho tổng của các điểm đầu vào.
 Nếu $d$ là một bình phương $K$ , thì phép toán tương tự có thể có các điểm đặc biệt, tức là có thể có cặp $(x_1, y_1)$ và $(x_2, y_2)$ trong đó 1$ +  dx_1x_2y_1y_2 = 0$ hoặc $1 -  dx_1x_2y_1y_2 = 0$.
 Một trong những tính năng hấp dẫn của luật cộng của Edwards là nó được thống nhất mạnh mẽ, tức là nó cũng có thể được sử dụng để gấp đôi một điểm, đơn giản hóa việc bảo vệ chống lại tấn công bên kênh. Công thức cộng ở trên nhanh hơn các công thức thống nhất khác và có tính chất hoàn chỉnh mạnh.
-\subsubsection*{Doubling}
+\subsection*{Doubling}
 Doubling có thể được thực hiện với chính xác công thức tương tự như cộng. Doubling đề cập đến trường hợp trong đó các đầu vào $(x_1, y_1)$ và $(x_2, y_2)$ được biết là bằng nhau. Vì $(x_1, y_1)$ nằm trên đường cong Edwards, ta có thể thay thế hệ số bằng $(x_1^2 + y_1^2  - 1)/x_1^2y_1^2$ như sau:
 \begin{displaymath}
 {\begin{aligned}2(x_{1},y_{1})&=(x_{1},y_{1})+(x_{1},y_{1})\\[6pt]2(x_{1},y_{1})&=\left({\frac  {2x_{1}y_{1}}{1+dx_{1}^{2}y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{1-dx_{1}^{2}y_{1}^{2}}}\right)\\[6pt]&=\left({\frac  {2x_{1}y_{1}}{x_{1}^{2}+y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{2-x_{1}^{2}-y_{1}^{2}}}\right)\end{aligned}}
 \end{displaymath}
 Điều này làm giảm mức độ mẫu số từ 4 đến 2, được phản ánh trong doubling. Luật cộng chung trong các tọa độ Edwards mất $10M + 1S + 1C + 1D + 7a$ và chi phí phép doubling là $3M + 4S + 3C + 6a$. Trong đó M là phép nhân trường, S là các phép bình phương trong trường , D là chi phí nhân với một tham số đường cong có thể lựa chọn và một trường bổ sung.
-\subsection*{Twisted Edwards curve}
+\section{Twisted Edwards curve}
 Trong hình học đại số , các đường cong Twisted Edwards là mô hình mặt phẳng của các đường cong elip , một sự tổng quát của các đường cong Edwards được giới thiệu bởi Bernstein , Birkner, Joye, Lange và Peters trong năm 2008. Bộ đường cong được đặt tên theo nhà toán học Harold M. Edwards . Đường cong Elliptic rất quan trọng trong mật mã khóa công khai và các đường cong Twist Edwards nằm ở trung tâm của một lược đồ chữ ký điện tử gọi là EdDSA mang lại hiệu năng cao trong khi tránh các vấn đề bảo mật xuất hiện trong các chương trình chữ ký số khác.
 
 Như tên cho thấy, mỗi đường cong Twist Edwards là một xoắn của một đường cong Edwards. Đường cong Twist Edwards $E_{a, d}$ trên một trường $\displaystyle \mathbb{K}$ trong đó có $\displaystyle \mathrm{char}(\mathbb{K}) \neq 2$ là một đường cong mặt phẳng affine được xác định bởi phương trình:
@@ -1044,7 +1031,7 @@ E_{E_{a,d}}: ax^2 + y^2 = 1 + dx^2y^2
 \end{displaymath}
 Ở đâu $a, d$ là các phần tử khác 0 của $\displaystyle \mathbb{K}$. Đường cong Edwards là đường cong Twist Edwards với a = 1.
 Mỗi đường cong Twist Edwards đều tương đương với đường cong elip ở dạng Montgomery và ngược lại.
-\subsubsection*{Luật cộng}
+\subsection*{Luật cộng}
 Cho $\displaystyle \mathbb{K}$ là một trường có đặc điểm là khác 2. Để $\displaystyle (x_{1}, y_{1})$ và $\displaystyle (x_{2}, y_{2})$ là điểm trên đường cong Twist Edwards. Phương trình của đường cong Twist Edwards được viết như:
 \begin{displaymath}
 E_{E,a,d}: ax^2 + y^2 = 1 + dx^2y^2.
@@ -1054,7 +1041,7 @@ Tổng của $(x_1, y_1)$ và $(x_2, y_2)$ trên $E_{E,a,d}$ là:
 (x_{1}, y_{1}) + (x_{2}, y_{2}) = \left({\frac {x_{1}y_{2} + y_{1}x_{2}} { 1 + dx_{1}x_{2}y_{1}y_{2}}}, {\frac{y_{1}y_{2} - ax_{1}x_{2}} {1 - dx_{1}x_{2}y_{1}y_{2}}} \right)
 \end{displaymath}
 Phần tử đơn vị là $(0,1)$ và âm của điểm $(x_1, y_1)$ là $(-x_1, y_1)$. Công thức này cũng làm việc với doubling. Nếu a là một bình phương trong $\mathbb{K}$ và d không phải bình phương trong $\mathbb{K}$, công thức trên là hoàn tất. Điều này có nghĩa là chúng ta có thể công thức cho tất cả các cặp điểm mà không xảy ra ngoai lệ.
-\subsubsection*{Doubling}
+\subsection*{Doubling}
 Doubling có thể được thực hiện với chính xác công thức tương tự như phép cộng. Doubling một điểm $(x_1 , y_1)$ trên đường cong $E_{E,a,d}$ là: $[2](x_1, y_1) = (x_3, y_3)$ ở đây
 \begin{displaymath}
 \begin{aligned}
@@ -1180,10 +1167,93 @@ Do đó:
 x(v_1G + v_2V) \mod \ q = x(eG)
 \end{displaymath}
 Chữ kí được chấp nhận là hợp lệ.
+\chapter{Đường cong curve25519}
+\section{Định nghĩa}
+
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../mo.png}
+\caption{ Đường cong Montgomery (nguồn: wikipedia.org)}
+\end{figure}
+\end{center}
+
+Curve25519 là một đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ với $p = 2^{255} - 19$, được Daniel J. Brenstein giới thiệu trong bài báo "Curve25519: new Diffie-Hellman speed records". Curve25519 có rất nhiều ưu điểm vượt trội so với các đường cong khác như tốc độ tính toán,
+khả năng bảo mật cao. Công thức của đường cong Curve25519:
+\begin{displaymath}
+By^2 = x^3 + Ax^2 + x
+\end{displaymath}
+Công thức này đã được đề cập ở phần trước. Nhờ sử dụng công thức của Montgomery, đường cong Curve25519 có được nhiều ưu điểm nổi bật mà các đường cong khác không sử dụng công thức của Montgomery không có được. Cụ
+thể hơn, nhờ sử dụng công thức cộng và nhân đôi của Montgomery, curve25519 có thể chống lại timing-attack.
+\begin{itemize}
+\item[] \textbf{Ưu điểm đường cong Curve25519}
+\begin{itemize}
+\item[1. ] \textbf{Tốc độ tính toán cao}: Curve25519 cho tốc độ tính toán cao hơn so với các đường cong khác mà vẫn giữ được tính bảo mật cao.
+\item[2. ] \textbf{Có khả năng chống lại timing-attack}: Nhờ sử dụng công thức cộng và bình phương Montgomery, Curve25519 có khả năng chống lại timing-attack mà vẫn đảm bảo được tốc độ tính toán cao
+\item[3. ] \textbf{Khóa bí mật và khóa công khai ngắn}: Curve25519 sử dụng khóa bí mật có độ dài chỉ 32-byte(256-bit). Đây là độ dài tiêu chuẩn nhưng vẫn cho độ bảo mật cao. Khóa công khai của Curve25519 cũng chỉ có độ dài 32-byte.
+\end{itemize}
+\end{itemize}
+\section{Trao đổi khóa với đương cong Curve25519}
+Đường cong Curve25519 sử dụng một khóa bí mật và một khóa công khai, cả hai đều có độ dài 32-byte (256-bit). Với những phương pháp tấn công đã biết thì với độ dài khóa như vậy, Curve25519 có mức độ bảo mật tương đương một hệ mã khóa đối xứng 128-bit. Có nghĩa là để tấn công hệ mã này, người ta sẽ phải vét cạn một không gian khóa có độ lớn $2^128$.
+
+Hàm Curve25519(a, b) có a, b là các phần tử của trường hữu hạn $\mathbb{F}_p$ với $p = 2^{255} - 19$ như đã nói ở trên. Hàm này cho kết quả là một số $n \in Fp$. Hay nói cách khác:
+\begin{displaymath}
+Curve25519(a, b): \mathbb{F}_{p^2} \rightarrow \mathbb{F}_p
+\end{displaymath}
+Với hàm Curve25519(a, b) như thế, Alice và Bob muốn thống nhất với nhau một khóa bí mật $k$, họ làm như sau với đường cong:
+\begin{displaymath}
+y^2 = x^3 + 486662x^2 + x
+\end{displaymath}
+\begin{itemize}
+\item[1. ] Alice tạo khóa bí mật $a \in 2^{254} + 8\{0, 1, 2, \ldots, 2^{251} - 1\}$. Alice tính khóa công khai là $A = Curve25519(a, 9)$.
+\item[2. ] Bob tạo khóa bí mật $b \in 2254 + 8\{0, 1, 2, ..., 2^{251} - 1\}$. Bob tính khóa công khai là $B = Curve25519(b, 9)$.
+\item[3. ] Alice tính $S: S = Curve25519(a, B)$.
+\item[4. ] Bob tính $S: S = Curve25519(b, A)$.
+\end{itemize}
+Từ giá trị $S$ tính được, Alice và Bob sẽ sử dụng hàm băm để có giá trị khóa bí mật $s$ cần thống nhất $s = Hash(S)$.
+\subsection*{Hàm Curve25519}
+Trong phần này chúng ta sẽ tìm hiểu cách chọn khóa bí mật $n$ và tính $Curves25519(n, 9)$ ở phần trước đã mô tả.
+\begin{theorem} \label{dl4.1}
+Chọn p là một số nguyên tố, $p \geq 5$. Chọn A là một số nguyên thõa mãn $A^2 - 4$ không phải là bình phương của một số nào đó theo modulo $p$. E là đường cong elliptic $y^2 = x^3 + Ax^2 + x$ trên trường hữu hạn $\mathbb{F}_p$. Định nghĩa hàm $X_0 : E(\mathbb{F}_{p^2} ) \rightarrow  \mathbb{F}_{p^2}$ như sau: $X_0(\infty) = 0$; $X_0(x, y) = x$. Với $n$ là một số nguyên, $q$ là một phần tử của $\mathbb{F}_p$. Thì sẽ tồn tại một phần tử $s$ đặc biệt $s \in \mathbb{F}_p$ sao cho $X_0(nQ) = s$ với tất cả các điểm $Q \in E(\mathbb{F}_{p^2} )$ thõa mãn $X_0(Q) = q$ (theo [?])
+\end{theorem}
+
+Theo định lý trên, lấy $p = 2^255 - 19$, từ $p$ ta có trường hữu hạn $\mathbb{F}_{2^{255}-19}$. Chọn $A = 486662,A^2 - 4$ không phải là bình phương của bất kì số nào trên trường $\mathbb{F}_p$. $E$ là đường cong elliptic $y^2 = x^3 + 486662x^2 + x$ trên trường hữu hạn $\mathbb{F}_p$. Định nghĩa hàm $X_0 : E(\mathbb{F}_{p^2} ) \rightarrow \mathbb{F}_{p^2}$ như sau: $X_0(\infty) = 0; X_0(x, y) = x$. Với $n \in 2^{254} + 8\{0, 1, 2, \ldots, 2^{251} - 1\}$ và $q \in \mathbb{F}_p$, hàm Curve25519 sẽ cho kết quả là giá trị $s$.
+
+Từ định lý trên giá trị $q = 9$ là hoành độ của điểm $Q \in E(\mathbb{F}_p)$. Điểm $Q$ này chính là điểm cơ sở của đường cong $E : y^2 = x^3 + 486662x^2 + x$ trên trường $\mathbb{F}_p$. Hay nói cách khác điểm $Q$ ở đây với hoành độ $x_Q = 9$ cũng là một phần tử sinh. Bởi vậy, để tính khóa công khai của Alice ta dùng hàm $Curve25519(a, 9)$.
+
+Mặt khác $n \in 2^{254} + 8\{0, 1, 2, \l,dots 2^251 - 1\}$ để đảm bảo cho $n_Q$ với $Q$ có hoành độ $x_Q = 9$ khác $\infty$ để $X_0(n_Q)$ , $\infty$ hay $Curve25519(n, 9) \neq 0$.
+
+\subsection*{Công thức cộng và nhân đôi Montgomery}
+Đường cong elliptic như đã giới thiệu trong chương 3 sử dụng công thức cộng và nhân trên cả hai tọa độ $x$ và $y$. Kết quả của phép cộng và phép nhân hai điểm là một điểm thứ ba. Tuy nhiên với Curve25519, Daniel J. Bernstein có cái hay là thức cộng và nhân đôi Montgomery và tọa độ $y$ không tham gia vào các phép tính cộng và nhân. Thay vào đó, với điểm $Q$ có tọa độ
+$(x_Q, y_Q)$ thì $x_Q$ sẽ được viết dưới dạng phân số $x/z$. Các phép toán cộng và bình phương sẽ được thực hiện trên $x$ và $z$ thay vì $x$ và $y$. Dĩ nhiên với cách viết như vậy ta sẽ không thể nào phân biệt được hai điểm $Q$ và $-Q$.
+\begin{theorem}
+Gọi tọa độ điểm $P$ là $(xP, zP)$, tọa độ điểm $Q$ là $(xQ, zQ)$, tọa độ điểm $P - Q$ là $(x_{P-Q}, z_{P-Q})$, tọa độ điểm $P + Q$ là $(x_{P+Q}, z_{P+Q})$, tọa độ của $2P$ là $(x_{2P}, z_{2P})$, tất cả các tọa độ trên đều khác với tọa độ của điểm $\mathcal{O}$.
+
+Chọn $p$ là một số nguyên tố, $p \geq 54$. Chọn $A$ là một số nguyên thõa mãn $A^2 - 4$ không phải là bình phương của một số nào đó theo modulo $p$. $E$ là đường cong elliptic $y^2 = x^3 + Ax^2 + x$ trên trường hữu hạn $\mathbb{F}_p$. Định nghĩa hàm $X : E(\mathbb{F}_{p^2}) \rightarrow \mathbb{F}_{p^2}$ như sau: $X(\infty) = 0; X(x, y) = x$. Với các tọa độ các điểm được xác định như trên ta có [?]:
+\end{theorem} 
+\begin{itemize}
+\item[] Phép cộng $P + Q (P \neq Q)$:
+\begin{displaymath}
+\begin{aligned}
+x_{P+Q} & = 4(x_P x_Q - z_Pz_Q)^2z_{P-Q} & = ((x_P - z_P)(x_Q + z_Q) + (x_P + z_P)(x_Q - z_Q))^2z_{P-Q} \\
+z_{P+Q} & = 4(x_Pz_Q - z_Px_Q)^2x_{P-Q} & = ((x_P - z_P)(x_Q + z_Q) - (x_P + z_P)(x_Q - z_Q))^2x_{P-Q}
+\end{aligned}
+\end{displaymath}
+\item[] Phép double $2P$:
+\begin{displaymath}
+\begin{aligned}
+x_{2P} & = (x^2_P - z^2_P)^2  = (x_P - z_P)^2(x_P + z_P)^2 \\
+z_{2P} & = 4x_Pz_P(x^2_P + Ax_Pz_P + z^2_P) \\ & = ((x_P + z_P)^2 - (x_P - z_P)^2)\left((x_P + z_P)^2 + \frac{A - 2}{4}((x_P + z_P)^2 - (x_P - z_P)^2) \right)
+\end{aligned}
+\end{displaymath}
+\end{itemize}
+
+Theo như định lý trên, ta có thể tính được tọa độ của điểm $P + Q$ dựa trên tọa độ của ba điểm $P, Q$ và $P-Q$, tính được tọa độ của điểm $2P$ dựa trên tọa độ điểm $P$.
+
+Tọa độ điểm $P+Q$ có thể tính được dựa vào tọa độ $P, Q$ và tọa độ của điểm $P-Q$ (tức tọa độ của điểm $((x_P, y_P) + (x_Q, -y_Q)))$ điều này có vẻ như mâu thuẫn với định lý \ref{dl4.1}, tuy nhiên trong định lý \ref{dl4.1} không có nhắc đến việc cộng hai điểm $P$ và $Q$ có tọa độ bất kì nên việc công thức cộng Montgomery có liên quan đến tọa độ $y$ là không vô lý.
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
 Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone (ECQV). Sơ đồ chứng thư số ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
 
-Mục đích của chương này là để xem xét việc triển khai sơ đồ chứng thư số ẩn %ECQV. Việc triển khai có thể yêu cầu tuân thủ các sơ đồ mã hóa được chỉ định trong tài liệu này miễn là giao diện ngoài (đầu vào và đầu ra) cho các lược đồ tương đương với giao diện được chỉ định tại đây. Các tính toán nội bộ có thể được thực hiện như được chỉ định ở đây, hoặc có thể được thực hiện thông qua một chuỗi hoạt động tương đương.
+Mục đích của chương này là để xem xét việc triển khai sơ đồ chứng thư số ẩn 
 \section{Hàm băm}
 Hàm băm được sử dụng trong lược đồ ECQV để tính toán thông điệp của chứng chỉ được tạo hoặc xác minh. Hàm băm cũng được sử dụng trong việc tạo và xác thực tham số miền elliptic ngẫu nhiên một cách chính xác, và cũng có thể được sử dụng trong các quá trình tạo số ngẫu nhiên.
 
@@ -1214,22 +1284,21 @@ Trong nhiều bước của ECQV, một chuỗi octet(mỗi một ký tự trong
 \item[] \textbf{Output} Số nguyên e, nằm trong khoảng $[0,\ldots , n - 1]$.
 \end{itemize}
 Lưu ý rằng nếu miền $H$ bị giới hạn ở kích thước tối đa thì miền $H_n$ bị hạn chế theo cùng một cách.
-\section{Khởi tạo một số ngẫu nhiên}
-Với tiêu chuẩn chứng thư số, tất cả các giá trị ngẫu nhiên phải được tạo bằng trình tạo số ngẫu nhiên được chấp thuận có mức độ bảo mật ít nhất là mức độ bảo mật của việc thực hiện ECQV. Trình tạo số ngẫu nhiên phải tuân thủ ANSI X9.82 hoặc NIST Special Publication 800-90A [NIST 800-90A]. Một bộ tạo số ngẫu nhiên phù hợp cũng được mô tả trong [SEC 1, 3.10]
-\section{Các tham số khởi tạo và hợp lệ}
-Việc tạo và xác nhận tham sốđường cong elliptic phải tuân theo [SEC 1].
+%\section{Khởi tạo một số ngẫu nhiên}
+%Với tiêu chuẩn chứng thư số, tất cả các giá trị ngẫu nhiên phải được tạo bằng trình tạo số ngẫu nhiên được chấp thuận có mức độ bảo mật ít nhất là mức độ bảo mật của việc thực hiện ECQV. Trình tạo số ngẫu nhiên phải tuân thủ ANSI X9.82 hoặc NIST Special Publication 800-90A [NIST 800-90A]. Một bộ tạo số ngẫu nhiên phù hợp cũng được mô tả trong [SEC 1, 3.10]
+%\section{Các tham số khởi tạo và hợp lệ}
+%Việc tạo và xác nhận tham sốđường cong elliptic phải tuân theo [SEC 1].
 
-Việc triển khai sử dụng cả ECQV lẫn các thuật toán ECC khác nên sử dụng điểm cơ sở ngẫu nhiên xác thực G, được xác định trong [SEC 2].
+%Việc triển khai sử dụng cả ECQV lẫn các thuật toán ECC khác nên sử dụng điểm cơ sở ngẫu nhiên xác thực G, được xác định trong [SEC 2].
 
 
 \section{Sơ đồ chứng thư số thực ECQV}
 \subsection{Tổng quan}
-Sơ đồ chứng chỉ số ẩn được sử dụng bởi ba thực thể - Tổ chức phát hành chứng chỉ
-CA, người yêu cầu chứng chỉ U và bộ xử lý chứng chỉ V. Người yêu cầu U sẽ nhận được chứng chỉ số ẩn từ CA, xác nhận danh tính của U và cho phép V lấy khóa công khai của U. 
+Sơ đồ chứng chỉ số ẩn được sử dụng bởi ba thực thể - Tổ chức phát hành chứng chỉ CA, người yêu cầu chứng chỉ U và bộ xử lý chứng chỉ V. Người yêu cầu U sẽ nhận được chứng chỉ số ẩn từ CA, xác nhận danh tính của U và cho phép V lấy khóa công khai của U. 
 \begin{figure}[h]\label{h3.1}
 \begin{center}
 \includegraphics[scale=0.9]{../im8.png}
-\caption{}
+\caption{Sơ đồ chứng thư ẩn ECQV}
 \end{center}
 \end{figure}
 
@@ -1355,10 +1424,50 @@ Quy trình này xác thực nội dung của chứng thư ẩn và dữ liệu �
 \end{itemize}
 \subsection{Sơ đồ tạo chứng chỉ tự ký ECQV}
 \subsection{Trích rút khóa công khai từ chứng thư tự ký ECQV}
-\chapter{Cài đặt cho thiết bị IoT}
+\chapter{Cài đặt và thử nghiệm}
+\section{Chuyển file bí mật}
+\subsection*{Mục tiêu cơ bản}
+\begin{itemize}
+\item Truyền file bí mật giữa A và B.
+\item Sử dụng thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong Curve25519(biến đổi thành đương cong Twisted Edwards curve) trong trao đổi khóa đối xứng bí mật.
+\item Chống lại kiểu tấn công MITM (Man In The Middle)
+\end{itemize}
+\subsection*{Các bước thực hiện chuyển file}
+\begin{itemize}
+\item Xác thực đối tượng(có đúng người cần chuyển hay ko)
+\item Trao đổi khóa.
+\item Chuyển file.
+\end{itemize}
+\subsubsection*{Xác thực đối tượng}
+Thao tác xác nhận đối tượng cần chuyển giúp chống lại kiểu tấn công xen giữa - MITM.
+Thao tác này sử dụng chữ kí điện tử.
+
+A và B muốn gửi nhận dữ liệu với nhau, họ thực hiện kí - xác nhận chữ kí như sau:
+\begin{itemize}
+\item[1. ] Thao tác kí: A tạo ra một chuỗi kí tự bất kì và kí lên chuỗi kí tự đó bằng khóa bí mật (dùng cho chữ kí, khác với khóa bí mật dùng cho trao đổi khóa) sau đó gửi chuỗi kí tự đã kí (chuỗi này có gắn kèm chuỗi kí tự ban đầu để phục vụ việc xác nhận) cho B. B cũng làm tương tự với A.
+\item[2. ] Thao tác xác nhận: A sẽ lấy khóa công khai của B để thực hiện xác nhận chữ kí mà B gửi cho mình. B cũng làm tương tự. Chuỗi kí tự đã kí có cấu trúc: <chuỗi kí tự đã kí>|<chuỗi kí tự nguyên gốc>
+\end{itemize}
+\subsubsection*{Trao đổi khóa}
+Trao đổi khóa đối xứng bí mật giữa các bên.Việc trao đổi khóa được thực hiện nhờ sự hỗ trợ của thư viện libsodium và hàm curve25519 thực hiện việc trao đổi khoá theo giao thức a Diffie-Hellman với Curve25519 đã trình bày. Sau khi có được giá trị khóa chung sử dụng hàm băm SHA-256 để có được khóa chung thống nhất.
+\begin{itemize}
+\item[1. ] A tạo khóa bí mật $s_A$ là một chuỗi 32-byte bất kì. $p_A$ tính khóa công khai là $p_A = Curve25519(s_A, 9)$ và gửi $p_A$ cho B.
+\item[2. ] B tạo khóa bí mật $s_B$ bất kì. B tính khóa công khai là $p_B = Curve25519(s_B, 9)$ và gửi $p_B$ cho A.
+\item[3. ] A tính $K: K = Curve25519(s_A, p_B)$. Khóa đối xứng bí mật cần thống nhất là $k = SHA256(K)$.
+\item[4. ] B tính $K: K = Curve25519(s_B, p_A)$. Khóa đối xứng bí mật cần thống nhất là $k = SHA256(K)$
+\end{itemize}
+\subsubsection*{Chuyển file}
 \chapter*{Kết luận và hướng phát triển}
+\printindex
 \begin{thebibliography}{9}
 \bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
+\bibitem{Daninel} Daniel J. Bernstein. Cryptography in nacl, March 28 2012.
+\bibitem{Daninel} Daniel J. Bernstein, Niels Duif, Tanja Lange, Peter Schwabe, and Bo-Yin Yang. \textit{High-speed high-security signatures}. Journal of Cryptographic Engineering, 2(2):77–89, 2012.
+\bibitem{Daniel} Daniel J. Bernstein. \textit{Curve25519: New diffie-hellman speed records. In Public Key Cryptography - PKC 2006, 9th International Conference on Theory and Practice of Public-Key Cryptography}, volume 3958 of Lecture Notes in Computer Science, pages 207–228. Springer, 2006.
+\bibitem{Jonathan} Jonathan Katz and Yehuda Lindell. \textit{Introduction to Modern Cryptography, Second Edition}. Chapman \& Hall/CRC,2\textsuperscript{nd} edition, 2014.
+\bibitem{Standards for Efficient Cryptography} Certicom Research, \textit{SEC 1: Elliptic Curve Cryptography}, May 21-2009 version 2.0, \url{www.secg.org}.
+\bibitem{Standards for Efficient Cryptography}Certicom Research, \textit{SEC 2: Recommended Elliptic Curve Domain Parameters}, Jan. 2010. Version 2.0. \url{www.secg.org}.
+\bibitem{Standards for Efficient Cryptography} Certicom Research, \textit{SEC 4: Elliptic Curve Qu-Vanstone Implicit Certificate Scheme (ECQV)}. January 24, 2013. Version 1.0. \url{www.secg.org}
+\bibitem{Undergraduate Texts in Mathematics}Jeffrey Hoffstein, Jill Pipher, Joseph H. Silverman, \textit{An Introduction to Mathematical Cryptography  Second Edition},  
+\bibitem{book} Alfred J. Menezes, Scott A. Vanstone, and Paul C. Van Oorschot. \textit{Handbook of Applied Cryptography}. CRC Press, Inc., Boca Raton, FL, USA, 1\textsuperscript{st} edition, 1996.
 \end{thebibliography}
-
 \end{document}
