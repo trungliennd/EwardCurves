@@ -12,7 +12,7 @@
 %\usepackage{enumerate}
 %\usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{imakeidx}
+%\usepackage{imakeidx}
 \newcounter{someCounter}
 %\usepackage{cases}
 \usepackage{fancybox}
@@ -220,17 +220,28 @@ Mã là $Y = (a,b)$ và có độ dài gấp đôi bản rõ.
 X = \frac{b}{a^u} (mod \ p)
 \end{displaymath}
 \section{Chữ ký điện tử}
-\subsection*{Chữ ký điện tử}
 Chữ kí điện tử là một hệ mã khóa công khai với cặp khóa $A(s_A, p_A)$ trong đó $A$ là người giữ chữ kí, $s_A$ là khóa bí mật còn $p_A$ là khóa công khai. Với một thông điệp $m$ thì người cùng $A$ sẽ kí lên thông điệp $m$ bằng cách mã hóa $m$ bởi khóa bí mật được bản mã $c_m$. Mọi người có thể kiểm tra chữ kí này có hợp lệ hay không bằng cách dùng khóa công khai để giải mã $c_m$, nếu được đúng thông điệp $m$ thì chữ kí là hợp lệ còn không, chữ kí đó không hợp lệ hay nói cách khác, người kí lên thông điệp $m$ đó không phải là A.
 
 Chỉ có người dùng $A$ mới nắm giữ khóa bí mật $s_A$ bởi vậy chỉ có $A$ mới có khả năng kí còn tất cả mọi người đều có khóa công khai $p_A$ nên tất cả mọi người đều có khả năng kiểm tra xem một chữ kí có phải do $A$ kí hay không.
 
-Trong thực tế, thông điệp m có thể là một văn bản hay một cuốn sách, để mã hóa một khối lượng lớn dữ liệu như vậy bằng hệ mã hóa công khai sẽ rất tốn thời gian và tài nguyên hệ thống. Bởi vậy, người ta sẽ băm dữ liệu cần kí $m$ thành một chuỗi mã băm. Sau đó sẽ kí lên chuỗi mã băm đó. Thao tác xác nhận chữ kí cũng tương tự như vậy (Hình ?):
-\subsubsection{Sơ đồ chữ ký cơ bản}
+Trong thực tế, thông điệp m có thể là một văn bản hay một cuốn sách, để mã hóa một khối lượng lớn dữ liệu như vậy bằng hệ mã hóa công khai sẽ rất tốn thời gian và tài nguyên hệ thống. Bởi vậy, người ta sẽ băm dữ liệu cần kí $m$ thành một chuỗi mã băm. Sau đó sẽ kí lên chuỗi mã băm đó. Thao tác xác nhận chữ kí cũng tương tự như vậy (Hình \ref{sign1}):
+\subsection*{Sơ đồ chữ ký cơ bản}
+\begin{center}
+\begin{figure}[H] 
+\includegraphics[width=0.8\linewidth]{../im20.png}
+\caption{Quy trình thực hiện kí và xác nhận} \label{sign1}
+\end{figure}
+\end{center}
 
 Trong thuật toán trao đổi khóa bí mật Diffie-Hellman dựa trên đường cong elliptic, kẻ tấn công xen giữa Evil có thể giả mạo là Bob khi truyền thông với Alice và giả mạo làm Bob khi truyền thông với Alice. Khi đó thuật toán sẽ được thực hiện song song giữa Evil-Alice và EvilBob. Dữ liệu truyền thông giữa Alice và Bob sẽ được chuyển thông qua Evil và có thể dễ dàng bị Evil giải mã. Bởi thế, người ta dùng chữ kí điện tử để xác định xem đối tượng gửi nhận dữ liệu có đúng là đối tượng mà mình mong muốn gửi nhận dữ liệu hay không.
 
-Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là Evil (Hình 6.2):
+Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là Evil (Hình \ref{sign2}):
+\begin{center}
+\begin{figure}[H] 
+\includegraphics[width=0.8\linewidth]{../im21.png}
+\caption{Tấn công Man In The Middle (nguồn: owasp)} \label{sign2}
+\end{figure}
+\end{center}
 \section{Hàm băm và ứng dụng chữ ký điện tử}
 Một hàm băm H sẽ lấy ở đầu vào là một thông tin X có kích thước bất kỳ và sinh kết quả ra là một chuỗi $h_X=h(X)$ có độ dài cố định, thường là nhỏ hơn nhiều so với kích thước của $X$. Chuỗi này thường được gọi là cốt yếu, hay cốt (digest) của thông tin X.
 \begin{center}
@@ -1210,6 +1221,7 @@ y^2 = x^3 + 486662x^2 + x
 \item[4. ] Bob tính $S: S = Curve25519(b, A)$.
 \end{itemize}
 Từ giá trị $S$ tính được, Alice và Bob sẽ sử dụng hàm băm để có giá trị khóa bí mật $s$ cần thống nhất $s = Hash(S)$.
+
 \subsection*{Hàm Curve25519}
 Trong phần này chúng ta sẽ tìm hiểu cách chọn khóa bí mật $n$ và tính $Curves25519(n, 9)$ ở phần trước đã mô tả.
 \begin{theorem} \label{dl4.1}
@@ -1509,7 +1521,47 @@ dụng ngôn ngữ lập trình C và thư viện lbsodium để tăng tốc tí
 \end{itemize}
 \section{Chứng thư số ẩn}
 \chapter*{Kết luận và hướng phát triển}
-\printindex
+\section*{Kết quả đạt được}
+Trong quá tr ình làm đồ án em đã đạt được những kết quả sau:
+\begin{itemize}
+\item[1. ] Tìm hiểu một số nguyên lý hệ mã công khai, hàm băm, chữ ký điện tử.
+\item[2. ] Hiểu được lý thuyết về đường cong elliptic và một số kiến thức đại số trừu tượng liên quan áp dụng trong ngành mật mã học như nhóm và trường.
+\item[3. ] Hiểu được các bước cơ bản để người ta xây dựng một đường cong ellitptic và ứng dụng của đường cong elliptic trong thuật toán trao đổi khóa và tạo chứng thư số ẩn.
+\item[4. ] Nắm được một số kiểu tấn công vào các hệ mật mã như timing-attack, tấn công xen giữa (Man In The Middle).
+\item[5. ] Xây dựng được ứng dụng chuyển file bí mật có các thao tác xác nhận (dùng hệ chữ kí điện tử ed25519) trao đổi khóa đối xứng bí mật (dùng thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong Curve25519).
+\item[6. ] Xây dựng được ứng dụng chứng thư số ẩn với đường cong Twisted Edwards
+\item[7. ] Có được cái nhìn vừa tổng quan, vừa chi tiết hơn về các hệ mật mã hiện đại.
+\end{itemize}
+\section*{Hạn chế}
+Do hạn chế về thời gian hoặc (và) nhiều yếu tố chủ quan cũng như khách quan khác, đồ án vẫn còn một số hạn chế:
+\begin{itemize}
+\item[1. ] Chưa tìm hiểu được một cách đầy đủ và chi tiết về đường cong elliptic trên trường hữu hạn $\mathbb{F}_{2^m}$ với hai dạng cơ sở normal và polinomial.
+\item[2. ] Vẫn còn rất nhiều phần kiến thức chưa tìm hiểu được như cách để tăng tốc độ tính toán của đường cong Curve25519 trên phần cứng cụ thể, lý do chi tiết giúp công thức cộng và nhân đôi Montgomery có thể chống lại được timing-attack, \ldots.
+\item[3. ] Ứng dụng truyền file và chứng thứ số chưa có giao diện đẹp mắt và mới chỉ được kiểm thử trên một máy.
+\end{itemize}
+\section*{Hướng phát triển}
+Do việc tính toán khóa trên đường cong elliptic là nhanh, việc lưu trữ và trao đổi khóa nhỏ gọn nên rất thích hợp cài đặt bảo mật cho các thiết bị IoT có bộ nhớ nhỏ khả năng tính toán thấp.
+\begin{figure}[h]
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../uno.jpg}
+  %	\caption{1a elliptic trên trường số thực}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../esp.jpg}
+ % \caption{1b elliptic trên trường hưu hạn $\mathbb{F}_{29}$}
+  \label{fig:sfig2}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../ras.jpg}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{arduino, esp-12(esp8266), raspberry pi – các thiết bị dùng trong phát triển sản phẩm IoT} \label{h6.3}
+\end{figure}
+%\printindex
 \begin{thebibliography}{9}
 \bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
 \bibitem{Daninel} Daniel J. Bernstein. Cryptography in nacl, March 28 2012.
