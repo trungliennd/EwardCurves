@@ -1277,21 +1277,13 @@ Trong nhiều bước của ECQV, một chuỗi octet(mỗi một ký tự trong
 \item[2. ] Lấy một số nguyên $e$ từ $h$ như sau:
 \begin{itemize}
 \item[2.1 ] Đặt E bằng $\lfloor log_2{n} \rfloor$ bits trái nhất của h.
-\item[2.2 ] convert xâu bit $E$ thành xâu octect $E'$, sử dụng  Bit-String-to-Octet-String trong [SEC 1].
-\item[2.3 ] convert xâu octect $E'$ thành số nguyên $e$ sử dụng Octet-String-to-Integer trong [SEC 1].
+\item[2.2 ] convert xâu bit $E$ thành xâu octect $E'$, sử dụng  Bit-String-to-Octet-String trong [6].
+\item[2.3 ] convert xâu octect $E'$ thành số nguyên $e$ sử dụng Octet-String-to-Integer trong [6].
 \end{itemize}
 \end{itemize}
 \item[] \textbf{Output} Số nguyên e, nằm trong khoảng $[0,\ldots , n - 1]$.
 \end{itemize}
-Lưu ý rằng nếu miền $H$ bị giới hạn ở kích thước tối đa thì miền $H_n$ bị hạn chế theo cùng một cách.
-%\section{Khởi tạo một số ngẫu nhiên}
-%Với tiêu chuẩn chứng thư số, tất cả các giá trị ngẫu nhiên phải được tạo bằng trình tạo số ngẫu nhiên được chấp thuận có mức độ bảo mật ít nhất là mức độ bảo mật của việc thực hiện ECQV. Trình tạo số ngẫu nhiên phải tuân thủ ANSI X9.82 hoặc NIST Special Publication 800-90A [NIST 800-90A]. Một bộ tạo số ngẫu nhiên phù hợp cũng được mô tả trong [SEC 1, 3.10]
-%\section{Các tham số khởi tạo và hợp lệ}
-%Việc tạo và xác nhận tham sốđường cong elliptic phải tuân theo [SEC 1].
-
-%Việc triển khai sử dụng cả ECQV lẫn các thuật toán ECC khác nên sử dụng điểm cơ sở ngẫu nhiên xác thực G, được xác định trong [SEC 2].
-
-
+Lưu ý rằng nếu miền $H$ bị giới hạn ở kích thước tối đa thì miền $H_n$ bị hạn chế theo cùng một cách. 
 \section{Sơ đồ chứng thư số thực ECQV}
 \subsection{Tổng quan}
 Sơ đồ chứng chỉ số ẩn được sử dụng bởi ba thực thể - Tổ chức phát hành chứng chỉ CA, người yêu cầu chứng chỉ U và bộ xử lý chứng chỉ V. Người yêu cầu U sẽ nhận được chứng chỉ số ẩn từ CA, xác nhận danh tính của U và cho phép V lấy khóa công khai của U. 
@@ -1317,10 +1309,10 @@ Mộ
 \subsection{Điều kiện tiên quyết: Cài đặt ECQV}
 Tất cả các bên (CA nhà phát hành chứng thư, chủ sở hữu chứng thư U và bộ xử lý chứng thư V) sẽ phải thiết lập các điều kiện tiên quyết sau để sử dụng ECQV.
 \begin{itemize}
-\item[1, ] CA đã thiết lập một tập hợp các tham số EC để sử dụng với ECQV bao gồm $q, a, b, G, n$ và $h$. Các tham số phải được tạo bằng phương thức được chấp nhận chúng phải được đảm bảo tính hợp lệ trên EC và cung cấp mức độ bảo mật mong muốn(có thể tham khảo các phương thức tạo tham số hoặc các tham số sẵn có ở [SEC 1, 3.1] và [SEC 2]).
+\item[1, ] CA đã thiết lập một tập hợp các tham số EC để sử dụng với ECQV bao gồm $q, a, b, G, n$ và $h$. Các tham số phải được tạo bằng phương thức được chấp nhận chúng phải được đảm bảo tính hợp lệ trên EC và cung cấp mức độ bảo mật mong muốn(có thể tham khảo các phương thức tạo tham số hoặc các tham số sẵn có ở [6, §3.1] và [7]).
 \item[2, ] CA đã chọn một hàm băm được chấp nhận với mức độ bảo mật mong muốn để sử dụng trong quy trình tạo chứng thư ECQV. Giả sử $H$ là hàm băm đã chọn và hashlen là độ dài của đầu ra hàm $H$. Như trong phần trước đã mô tả convert đâu ra của $H$ là một số nguyên dương n.
 \item[3, ] CA và U chọn và khởi một số ngẫu nhiên đảm bảo được mức độ bảo mật mong muốn. Số ngẫu nhiên này được sử dụng để tạo khóa private trong quá trình yêu cầu chứng thư và quá trình tạo chứng thư.
-\item[4, ] CA tạo được cặp khóa trên EC $(d_{CA}, Q_{CA})$ liên quan với các tham số EC được thiết lập từ ban đầu để sử dụng trong quá trình tạo chứng thư. Cặp khóa sẽ được tạo ra bằng cách sử dụng điểm  sinh và số ngẫu nhiên tạo ở mục 3(xem ở [SEC 1, §3.2.1]). CA sẽ đảm bảo tính hợp lệ của cặp khóa và sự đảm bảo của quyền sở hữu của khóa riêng (xem [SEC 1]).
+\item[4, ] CA tạo được cặp khóa trên EC $(d_{CA}, Q_{CA})$ liên quan với các tham số EC được thiết lập từ ban đầu để sử dụng trong quá trình tạo chứng thư. Cặp khóa sẽ được tạo ra bằng cách sử dụng điểm  sinh và số ngẫu nhiên tạo ở mục 3(xem ở [6, §3.2.1]). CA sẽ đảm bảo tính hợp lệ của cặp khóa và sự đảm bảo của quyền sở hữu của khóa riêng (xem [6]).
 \item[5, ] Chủ sở hữu $U$ của chứng thư cùng với bộ xử lý $V$ sẽ thu được tham số đường cong, hàm băm và khóa công khai của CA là $Q_{CA}$. U và V sẽ có một số đảm bảo sau:
 \begin{itemize}
 \item[5.1, ] Tính hợp lệ các tham số đường cong EC.
@@ -1331,7 +1323,7 @@ Tất cả các bên (CA nhà phát hành chứng thư, chủ sở hữu chứng
 \subsubsection{Mã hóa chứng thư} \label{subsec:3.5.2.1}
 Mã hóa chứng chứng thư mô tả cách thông tin được thêm vào trong chứng thư phải được mã hóa dưới dạng chuỗi octet. Nó cũng chỉ định thông tin nào phải được thêm vào và thông tin nào là tùy chọn và mọi ràng buộc hoặc mối quan hệ giữa các phần của thông tin chứng thư.
 
-Có ba kiểu mã hóa chứng thư(tham khỏa mô tả chi tiết xem ở[?])
+Có ba kiểu mã hóa chứng thư chính(tham khỏa mô tả chi tiết xem ở [8])
 \begin{itemize}
 \item[•] \textbf{Fixed-length Fields}: là một mã hóa đơn giản, tối giản giúp đặt hiệu quả băng thông lên trước tất cả các mối quan tâm khác. Chứng chỉ bao gồm danh sách các trường, mỗi trường có độ dài cố định và định dạng được chia sẻ giữa tất cả các bên. Tiêu chuẩn này chỉ yêu cầu dữ liệu tái tạo khóa công khai PU là một trong các trường, để phần còn lại của định dạng mở cho người triển khai.
 \item[•] \textbf{Minimal ASN.1 Encoding Scheme}: cũng được thiết kế để có hiệu quả băng thông. Đặc tả ASN.1 bao gồm các trường bắt buộc cơ bản và cho phép các phần mở rộng. Các trường cơ bản được đề xuất trong mã hóa này có độ dài cố định và do đó cũng có thể được sử dụng với định dạng độ dài cố định đơn giản hơn.
@@ -1347,8 +1339,8 @@ Người yêu cầu chứng chỉ U, sẽ sử dụng quy trình dưới đây �
 \end{itemize}
 \item[] \textbf{Actions}
 \begin{itemize}
-\item[1. ] Khởi tạo cặp khóa $(k_u, R_u)$  trên EC liên quan tới các tham số được thiết lập với đường cong(tham khảo cách tạo cặp khóa ở [SEC 1, 3.2.1])
-\item[2. ] Convert $R_u$ thành xâu octet $RU$ sử dụng  Elliptic-Curve-Point-to-Octet-String trong [SEC 1, 2.3]
+\item[1. ] Khởi tạo cặp khóa $(k_u, R_u)$  trên EC liên quan tới các tham số được thiết lập với đường cong(tham khảo cách tạo cặp khóa ở [6, §3.2.1])
+\item[2. ] Convert $R_u$ thành xâu octet $RU$ sử dụng  Elliptic-Curve-Point-to-Octet-String trong [6, §2.3]
 \end{itemize}
 \item[] \textbf{Output} khóa $k_U$ và yêu cầu chứng thư $(U, RU)$.
 \end{itemize}
@@ -1368,11 +1360,11 @@ $CA$ sẽ sử dụng quy trình dưới đây để tạo ra một chứng thư
 \end{itemize}
 \item[] \textbf{Actions}
 \begin{itemize}
-\item[1. ] Chuyển đổi chuỗi octet $RU$ thành một điểm trên đường cong elliptic bằng thuật toán chuyển đổi Octet-String-to-Elliptic Curve-Point(xem trong [SEC 1, §2.3.4]).
-\item[2. ] Xác thực $RU$ bằng cách sử dụng kỹ thuật xác thực khóa công khai(xem ở [SEC 1, §3.2.2]). Nếu xác thực kết quả đầu ra là 'không hợp lệ' dừng lại.
+\item[1. ] Chuyển đổi chuỗi octet $RU$ thành một điểm trên đường cong elliptic bằng thuật toán chuyển đổi Octet-String-to-Elliptic Curve-Point(xem trong [6, §2.3.4]).
+\item[2. ] Xác thực $RU$ bằng cách sử dụng kỹ thuật xác thực khóa công khai(xem ở [6, §3.2.2]). Nếu xác thực kết quả đầu ra là 'không hợp lệ' dừng lại.
 \item[3. ] Tạo cặp khóa EC (k, kG) với các tham số đường cong elliptic đã được thiết lập. 
 \item[4. ] Tính toán đường cong elliptic điểm $P_U = R_U + kG$
-\item[5. ] Chuyển đổi $P_U$ sang chuỗi octet PU bằng cách sử dụng chuyển đổi Elliptic-Curve-Point-to-Octet-String [SEC 1]
+\item[5. ] Chuyển đổi $P_U$ sang chuỗi octet PU bằng cách sử dụng chuyển đổi Elliptic-Curve-Point-to-Octet-String [6]
 \item[6. ] Mã hóa chứng thư với các trường nhập cần thiết và chuỗi octet PU như được chỉ ra
 \item[7. ] Sự dụng hàm băm để tính $e = H_n(Cert_U)$ với modulo n.
 \item[8. ] Nếu $eP_U + Q_{CA} = \mathcal{O}$, với $\mathcal{O}$ là điểm cơ sở, quay về bước 3.
@@ -1396,7 +1388,7 @@ Khóa công khai được liên kết với chứng thư được lấy từ ch�
 \item[] \textbf{Actions}
 \begin{itemize}
 \item[1. ] Giải mã chứng thư $Cert_U$ theo các phương thức và các quy tắc giải mã chứng chỉ. Nếu giá trị trả lại là 'không hợp lệ' thì đầu ra 'không hợp lệ' và dừng lại, nếu không một chuỗi octet PU sẽ được trả lại.
-\item[2. ] Chuyển đổi PU thành điểm $P_U$ bằng cách sử dụng chuyển đổi Octet-String-to-Elliptic-Curve-Point (xem [SEC 1, 2.3])
+\item[2. ] Chuyển đổi PU thành điểm $P_U$ bằng cách sử dụng chuyển đổi Octet-String-to-Elliptic-Curve-Point (xem [6, §2.3])
 \item[3. ] Xác thực điểm $P_U$ sử dụng các kĩ thuật xác thực.
 \item[4. ] Sử dụng hàm băm tính $e = H_n(Cert_U)$ với modulo $n$.
 \item[5. ] Tính điểm $Q_U = eP_U + Q_{CA}$.
@@ -1422,10 +1414,35 @@ Quy trình này xác thực nội dung của chứng thư ẩn và dữ liệu �
 \end{itemize}
 \item[] \textbf{Output} 'hợp lệ' và $d_U$ nếu $Q_U = Q_U'$ nếu không 'không hợp lệ'.
 \end{itemize}
-\subsection{Sơ đồ tạo chứng chỉ tự ký ECQV}
+\subsection{Tạo chứng thư ẩn tự ký ECQV}
+Tạo chữ ký với chứng chỉ ẩn, U người dùng tạo yêu cầu chứng thư và thực hiện các hành động của CA, nhưng đặt cặp khóa của CA thành $(0, \mathcal{O})$ (khóa riêng là 0 và khóa công khai là phần tử sinh của nhóm đường cong elliptic). Chứng chỉ phải cho biết rằng đó là chứng chỉ tự ký để cho phép khóa công khai được trích xuất chính xác.
+
+U sẽ thực hiện các bước sau để tạo chứng thư ẩn tự ký.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm $H$.
+\item[3. ] Luật mã hóa chứng thư.
+\item[4. ] Các trường cần thêm vào chứng thư, như tên, public-key,\ldots .
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Tạo cặp khóa $(k_U, P_U)$.
+\item[2. ] Chuyển đổi $P_U$ sang chuỗi octet PU bằng cách sử dụng chuyển đổi Elliptic-Curve-Point-to-Octet-String [6]
+\item[3. ] Mã hóa chứng thư và thêm xâu $PU$ trả về $Cert_U$ và chỉ rõ $Cert_U$ là tự kí.
+\item[4. ] Sử dụng hàm băm để tính $e = H_n{Cert_U}$ vơi modulo n.
+\item[5. ] Tính khóa bí mật $d_U = ek_U (mod \ n)$
+\end{itemize}
+\item[] \textbf{Output} Nếu bất kỳ xác minh nào ở trên không thành công, thì đầu ra 'không hợp lệ' và ngừng; nếu không, đầu ra 'hợp lệ', $Cert_U$ là chứng thư ẩn tự ký của U và $d_U$ là khóa riêng tương ứng.
+\end{itemize}
 \subsection{Trích rút khóa công khai từ chứng thư tự ký ECQV}
+Như với quá trình tạo chứng chỉ tự ký, trích xuất khóa công khai sau quá trình trích xuất nhưng với cặp khóa CA được đặt thành $(0, \mathcal{O})$.
+\begin{itemize}
+\item[] \textbf{}
+\end{itemize}
 \chapter{Cài đặt và thử nghiệm}
-\section{Chuyển file bí mật}
+\section{Truyền file bí mật}
 \subsection*{Mục tiêu cơ bản}
 \begin{itemize}
 \item Truyền file bí mật giữa A và B.
@@ -1455,7 +1472,42 @@ Trao đổi khóa đối xứng bí mật giữa các bên.Việc trao đổi kh
 \item[3. ] A tính $K: K = Curve25519(s_A, p_B)$. Khóa đối xứng bí mật cần thống nhất là $k = SHA256(K)$.
 \item[4. ] B tính $K: K = Curve25519(s_B, p_A)$. Khóa đối xứng bí mật cần thống nhất là $k = SHA256(K)$
 \end{itemize}
-\subsubsection*{Chuyển file}
+\subsubsection*{Truyền file}
+Sau khi đã kí xác nhận và trao đổi khóa, đường truyền đã an toàn, người nhận file trực tiếp từ A thật sự đã là B chứ không phải kẻ tấn công, người gửi file cho B trực tiếp thật sự
+đã là A chứ không phải kẻ tấn công. Ta bắt đầu thao tác truyền file qua socket. 
+
+Các hệ mã khóa đối xứng cho khả năng bảo mật cao hơn các hệ mã khóa công khai với cùng một kích thước khóa như nhau. Nói cách khác, các hệ mã khóa đối xứng cho thời gian tính toán nhanh hơn, hiệu quả hơn so với các hệ mã khóa công khai. Trong trường hợp truyền file bí mật giữa hai người, việc sử dụng các hệ mã khóa đối xứng với khóa đối xứng bí mật đã được thống nhất bởi thuật toán trao đổi khóa là tối ưu.
+
+File được chuyển đi thông qua socket và được mã hóa theo chuẩn AES-256, tất cả hệ mã khóa đối xứng được cung cấp trong thư viên libsodium. Ở đây sử dụng hệ mã hóa khối AES-256-CTR
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../ctr-en.png}
+\caption{Mã hoá AES-CTR}
+\end{figure}
+\end{center}
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../ctr-de.png}
+\caption{Giải mã AES-CTR}
+\end{figure}
+\end{center}
+\subsubsection*{Các kĩ thuật sử dụng}
+\begin{itemize}
+\item[1. ] Ngôn ngữ lập trình: C
+\item[2. ] Thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong elliptic. Hàm add (cộng hai điểm), double(nhân đôi một điểm), inv (tính nghịch đảo), curve25519 được viết lại sử
+dụng ngôn ngữ lập trình C và thư viện lbsodium để tăng tốc tính toán.
+\item[3. ] Hệ chữ kí số Ed25519 do Daniel J. Bernstein đề xuất
+\item[4. ] Hệ mã khóa đối xứng AES-256-CTR trong thư viện lbsodium.
+\item[5. ] Thuật toán băm SHA-256 với sự hỗ trợ của thư viện Openssl
+\item[6. ] Truyền dữ liệu qua socket.
+\end{itemize}
+\subsubsection*{Kết quả đạt được}
+\begin{itemize}
+\item[-] Xác nhận đối tượng tham gia chuyển file bằng chữ kí điện tử với khóa công khai.
+\item[-] Thống nhất khóa đối xứng bí mật thành công nhờ thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong Curve25519.
+\item[-] File được truyền đi bảo mật và nguyên vẹn.
+\end{itemize}
+\section{Chứng thư số ẩn}
 \chapter*{Kết luận và hướng phát triển}
 \printindex
 \begin{thebibliography}{9}
@@ -1469,5 +1521,6 @@ Trao đổi khóa đối xứng bí mật giữa các bên.Việc trao đổi kh
 \bibitem{Standards for Efficient Cryptography} Certicom Research, \textit{SEC 4: Elliptic Curve Qu-Vanstone Implicit Certificate Scheme (ECQV)}. January 24, 2013. Version 1.0. \url{www.secg.org}
 \bibitem{Undergraduate Texts in Mathematics}Jeffrey Hoffstein, Jill Pipher, Joseph H. Silverman, \textit{An Introduction to Mathematical Cryptography  Second Edition},  
 \bibitem{book} Alfred J. Menezes, Scott A. Vanstone, and Paul C. Van Oorschot. \textit{Handbook of Applied Cryptography}. CRC Press, Inc., Boca Raton, FL, USA, 1\textsuperscript{st} edition, 1996.
+\bibitem{article} Daniel J. Bernstein, Peter Birkner, Marc Joye, Tanja Lange and Christiane Peters, \textit{Twisted Edwards Curves}. Department of Mathematics, Statistics, and Computer Science (M/C 249) University of Illinois at Chicago, Chicago, IL 60607–7045, USA
 \end{thebibliography}
 \end{document}
