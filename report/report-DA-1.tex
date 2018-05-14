@@ -6,10 +6,13 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{comment}
+\usepackage[final]{graphicx}
+\usepackage{subcaption}
 %\usepackage{enumitem}
 %\usepackage{enumerate}
 %\usepackage{amssymb}
 \usepackage{graphicx}
+\newcounter{someCounter}
 %\usepackage{cases}
 \usepackage{fancybox}
 \usepackage{multirow}
@@ -534,7 +537,90 @@ Vậy là điều kiện để tồn tại phần tử nghịch đảo của $a$
 \item \textbf{Phần tử sinh}: Cho $g$ là một số trong trường $\mathbb{F}_p$, $g$ là phần tử sinh của $\mathbb{F}_p$ để $\{1, g, g^2, g^3, g^4, \ldots, g^{p-2}\} = Z*$ ở đây Z được gọi là nhóm vòng và $g$ là phần tử sinh của Z. \\ \\
 Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 4, 5\}$. Ta có phần tử sinh là 3. Tuy nhiên không phải mọi phần tử của $Z*$ đều là phần tử sinh.
 \end{itemize}
-\section{Truờng hữu hạn $\mathbb{F}_{2^m}$}
+%\section{Truờng hữu hạn $\mathbb{F}_{2^m}$}
+%Trường hữu hạn $\mathbb{F}_2^m$ gọi là một trường hữu hạn nhị phân, có thể được hiểu như một không gian vector kích thước $m$ qua trường hữu hạn $\mathbb{F}_2$ bao gồm hai phần tử 0 và 1. Nghĩa là với $m$ phần tử $\alpha_0, \alpha_1, \alpha_2, \ldots, \alpha_{m-1} \in \mathbb{F}_2^m$ và mỗi phần tử $\alpha \in \mathbb{F}_2$ $m$ có thể được viết dưới dạng:
+%\begin{displaymath}
+%\alpha = \alpha_0\alpha_0 + \alpha_1\alpha_1 + \ldots + \alpha_{m-1}\alpha_{m-1}	
+%\end{displaymath}
+%với $a_i \in \{0, 1\}$
+
+%Tập $\alpha_0, \alpha_1, \alpha_2, \ldots, \alpha_{m-1}$ được gọi là cơ sở của $\mathbb{F}_2^m$ qua $\mathbb{F}_2$. Theo đó mỗi phần tử $\alpha \in \mathbb{F}_2^m$ đều có thể biểu diễn dưới dạng một véc tơ dạng $(a_0, a_1, a_2, \ldots, a_{m-1})$ hay là dạng chuỗi bit $a_0a_1a_2 \ldots a_{m-1}$.
+
+%Phép toán cộng được thực hiện như là phép toán XOR hai chuỗi bit đại diện cho hai phần tử $\alpha1$ và $\alpha2$ và phép toán nhân phụ thuộc vào dạng cơ sở được chọn. Chẳng hạn như Polynomial Basis hoặc Normal Basis. Mỗi loại cơ sở sẽ hướng tới những mục đích khác nhau như hiệu quả hơn trên phần mềm hoặc phần cứng. Sau đây sẽ nói 1 số lý thuyết về dạng Polynomial Basis.
+%\subsection*{Polynomial Basis}
+%Gọi $f(x) = x^m + f_{m-1}x^{m-1} + \ldots + f_2x^2 + f_1x + f0 : (f_i \in {0, 1} $ với $i = 0, 1, 2, . . . , m - 1)$ là một đa thức bất khả quy bậc $m$ qua trường $\mathbb{F}_2$. Một đa thức gọi là bất khả quy có nghĩa là đa thức đó không thể phân tích thành tích của hai đa thức có bậc thấp hơn và khác không trên trường $\mathbb{F}_2$. Ví dụ như trên trường số thực, đa thức $x^2 + x + 1$ có $\delta = b^2 - 4ac = -3 < 0$ gọi là đa thức bất khả quy do không thể phân tích nó thành tích của hai nhân tử là các đa thức có bậc thấp hơn và khác không.
+%\subsubsection*{Phần tử của trường}
+%Trường hữu hạn $\mathbb{F}_2^m$ bao gồm tất cả các đa thức trên trường $\mathbb{F}_2$ có bậc nhỏ hơn $m$:
+%\begin{displaymath}
+%\mathbb{F}_2^m = a_{m-1}x^{m-1} + \ldots + a_2x^2 + a_1x + a_0 : (a_i \in \{0, 1\})
+%\end{displaymath}
+%Đa thức trên thường được biểu diễn ngắn gọn dưới dạng chuỗi bit độ dài $m$:
+%\begin{displaymath}
+%(a_{m-1}\ldots a_2a_1a_0)
+%\end{displaymath}
+%Hay là
+%\begin{displaymath}
+%\mathbb{F}_2^m = (a_{m-1}\ldots a_2a_1a_0): a_i \in \{0, 1\}
+%\end{displaymath}
+%Như vậy, tất cả các phần tử của $\mathbb{F}_2^m$ đều có thể biểu diễn dưới dạng chuỗi bit độ dài $m$.
+%\subsubsection{Các phép toán}
+%Tương tự như trường $\mathbb{F}_p$ thì trường $\mathbb{F}_2^m$ cũng có ba phép toán cơ bản sau:
+%\begin{itemize}
+%\item \textbf{Phép cộng}:\\
+%Nếu $a = (a_{m-1} \ldots a_1a_0)$ và $b = (b_{m-1} \ldots b_1b_0)$ là các phần tử của $F_2^m$ thì $a + b = c = (c_{m-1} \ldots c_1c_0)$, với $c_i = (a_i + b_i) \ (mod \ 2)$. Đây thực chất là phép $XOR$ hai chuỗi $a$ và $b$.
+%\item \textbf{Phép nhân}: \\
+%Nếu $a = (a_{m-1} \ldots a_1a_0)$ và $b = (b_{m-1} \ldots b_1b_0)$ là các phần tử của $\mathbb{F}_2^m$ thì $a * b = s$ là đa thức
+%\begin{displaymath}
+%s_{m-1}x^{m-1} + \ldots + s_2x^2 + s_1x + s_0: s_i \in \{0, 1\}
+%\end{displaymath}
+%Đa thức này là kết quả của phép nhân đa thức
+%\begin{displaymath}
+%(a_{m-1}x^{m-1} + \ldots + a_2x^2 + a_1x + a_0) * (b_{m-1}x^{m-1} + \ldots + b_2x^2 + b_1x + b_0) \ (mod \ f(x)) (a_i, b_i \in %\{0, 1\})
+%\end{displaymath}
+%\item \textbf{Phép nghịch đảo}:
+%Nếu $a$ là một phần tử khác 0 (phần tử bằng 0 là phần tử có tất cả các bit bằng 0) thì nghịch đảo của $a$, $a-1$ là phần tử $c \in F_2^m$ mà $a * c = 1$ (phần tử 1 là phần tử có dạng $000 \ldots 01$, tất cả các bit trừ bit cuối bằng 0).
+%\end{itemize}
+%\subsubsection*{Ví dụ}
+%Chọn $f(x) = x^4 + x + 1$ là một đa thức tối giản, bất khả quy. Ta có 16 phần tử của trường $\mathbb{F}_2^4$ như sau:
+%\begin{center}
+%\begin{tabular}{rr}
+%$0 (0000)$ & $x^3(1000)$ \\
+%$1 (0001)$ & $x^3 + 1 (1001)$ \\
+%$x (0010)$ & $x^3 + x (1010)$ \\
+%$x + 1 (0011)$ & $x^3 + x + 1 (1011)$ \\
+%$x^2 (0100)$ & $x^3 + x^2 (1100)$ \\
+%$x^2 + 1 (0101)$ & $x^3 + x^2 + 1 (1101)$ \\
+%$x^2 + x (0110)$ & $x^3 + x^2 + x (1110)$ \\
+%$x^2 + x + 1 (0111)$ & $x^3 + x^2 + x + 1 (1111)$ \\
+%\end{tabular}
+%\end{center}
+%Theo đó, một vài phép toán được thực hiện như sau:
+%\begin{itemize}
+%\item[-] Phép cộng: $(1101) + (1001) = (0100)$ ($XOR$ hai chuỗi)
+%\item[-] Phép nhân: $(1101) * (1001) = (1111)$ Cụ thể hơn:
+%\begin{displaymath}
+%\begin{split}
+%(x^3 + x^2 + 1) * (x^3 + 1) & = x^6 + x^3 + x^5 + x^2 + x^3 + 1 \\
+%							& = x^6 + x^5 + 2x^3 + x^2 + 1 \\
+%							& = x^6 + x^5 + x^2 + 1 \ (\ \mathbb{F}_2^m \ )
+%\end{split}
+%\end{displaymath}
+%Lại có: $x^6 + x^5 + 2x^3 + x^2 + 1 mod (x^4 + x + 1) = 3x^3 + x^2 + x + 1(1111)$
+%\item[-]  Phép nghịch đảo: $(1101)^{-1} = (0100)$
+%\end{itemize}
+%Tương tự như trường $\mathbb{F}_p$, trường $\mathbb{F}_2^m$ cũng có phần tử gọi là phần tử sinh. Trong ví dụ trên, phần tử $%\alpha = x = (0010)$ là phần tử sinh của $F_2^4$.
+%\begin{center}
+%\begin{tabular}{lr}
+%$\alpha^1 = (0010)$ & $\alpha^9 = (1010)$ \\
+%$\alpha^2 = (0100)$ & $\alpha^{10} = (0111)$ \\
+%$\alpha^3 = (1000)$ & $\alpha^{11} = (1110)$ \\
+%$\alpha^4 = (0011)$ & $\alpha^{12} = (1111)$ \\ 
+%$\alpha^5 = (0110)$ & $\alpha^{13} = (1101)$ \\
+%$\alpha^6 = (1100)$ & $\alpha^{14} = (1001)$ \\
+%$\alpha^7 = (1011)$ & $\alpha^{15} = (0001)$ \\
+%$\alpha^8 = (0101)$ & 
+%\end{tabular}
+%\end{center}
 \chapter{Mật mã dựa trên đường cong Elliptic}
  giơi thiệu 
 \section{Đường cong Elliptic}
@@ -552,7 +638,7 @@ h được gọi là cofactor và o được gọi là cấp(order) của điể
 Số lượng điểm sinh của trường $GF(n)$ là $\phi (n - 1)$ ở đây $\phi$ là một hàm Ơ-le của Euler. Điều này cũng là yếu tố cho phép nhân trong nhóm vòng[*].
 
 Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve, Montgomery Curve, Edwards Curve, Twisted Edwards Curve, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
- \subsection*{Luật cộng}
+\subsection{Luật cộng}
 Một đường cong elliptic là tập hợp các nghiệm của phương trình:
 \begin{displaymath}
 Y^2 = X^3 + AX + B.
@@ -567,14 +653,14 @@ $E_1: Y^2 = X^3 - 3X + 3$ & và & $E_2: Y^2 = X^3 - 6X + 5$
 \end{center}
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=1]{../im1.png}
+\includegraphics[scale=0.95]{../im1.png} \label{h2.1}  \refstepcounter{someCounter}
 \caption{Hai ví dụ minh họa về đường cong elliptic}
 \end{center}
 \end{figure}
 Một đặc điểm của đường cong elliptic là lấy hai điểm bất kì trên đường cong và cộng chúng lại để tạo ra một điểm thứ ba nằm trên đường cong. Nhưng không giống như luật cộng thông thường chúng ta sẽ mô tả luật cộng thông qua hình học.
-\begin{figure}[h] \label{h2.2}
+\begin{figure}[h]
 \begin{center}
-\includegraphics[scale=1]{../im2.png}
+\includegraphics[scale=1=0.95]{../im2.png} \label{h2.2} \refstepcounter{someCounter}
 \caption{Luật cộng trên đường cong elliptic}
 \end{center}
 \end{figure}
@@ -710,11 +796,11 @@ Phép cộng $P_1 + P_2 = (x_3,y_3)$
 \end{itemize}
 \end{theorem}
 \section{Đường cong Elliptic trên trường hữu hạn}
-Trong phần trước chúng ta đã xem xét lí thuyết về đường cong bằng hình học. Ví dụ tổng của hai điểm phân biệt $P$ và $Q$ trên đường cong $E$ được định nghĩa bởi đường thẳng $L$ đi qua hai điểm $P$ và $Q$ sau đó tìm điểm thứ ba là giao điểm của $L$ và $E$ như minh họa hình[?]. Tuy nhiên để áp dụng lí thuyết elliptic vào mật mã, chúng ta cần nhìn đường cong và các điểm của nó có tọa độ nằm trong trường hữu hạn $F_p$ điều này dễ làm.
+Trong phần trước chúng ta đã xem xét lí thuyết về đường cong bằng hình học. Ví dụ tổng của hai điểm phân biệt $P$ và $Q$ trên đường cong $E$ được định nghĩa bởi đường thẳng $L$ đi qua hai điểm $P$ và $Q$ sau đó tìm điểm thứ ba là giao điểm của $L$ và $E$ như minh hoa ở trên. Tuy nhiên để áp dụng lí thuyết elliptic vào mật mã, chúng ta cần nhìn đường cong và các điểm của nó có tọa độ nằm trong trường hữu hạn $F_p$ điều này dễ làm.
 \begin{definition}
 Cho $p$ $\geq$ 3 là một số nguyên tố. Một đường cong elliptic trên trường $F_p$ có công thức
 \begin{center}
-$E: Y^2 = X^3 + AX + B$ với $A, B \in F_p$ thỏa mãn $4A^3 + 27B^2 \neq  0$.
+$E: Y^2 = X^3 + AX + B$ với $A, B \in F_p$ thỏa mãn $47A^3 + 27B^2 \neq  0$.
 \end{center} 
 Với tập các điểm trên E với tọa độ nằm trong trường $F_p$
 \begin{center}
@@ -723,49 +809,120 @@ $E(F_p) = \{ (x, y): x, y \in F_p$ thỏa mãn $y^2 = x^3 + Ax + B \} \cup \{ O 
 \end{definition}
 Xem xét ví dụ với đường cong elliptic
 \begin{center}
-$E: Y^2 = X^3 + 3X + 8$ trên trường $F_{13}$
+$E: y^2 = x^3 + 3x + 8$ trên trường $F_{29}$
 \end{center}
-Chúng ta có thể tìm thấy các điểm của $E(F_{13})$ bằng các thay lần lượt các giá trị của $X = 0, 1, 2, \ldots, 12$ và kiểm tra với giá trị $X$ kết quả của phương trình $X^3 + 3X + 8$ có phải là một bình phương với modulo 13 không. Ví dụ thay $X = 0$ cho kết quả là 8 và 8 không phải là bình phương với modulo 13. Tiếp theo $X = 1$ cho kết quả 12 và 12 là căn bậc hai của modul 13.
+Với công thức trên $a = 3$ và $b = 8$ thỏa mãn $47A^3 + 27B^2 \neq  0$ (mod 29).
+
+
+Chúng ta có thể tìm thấy các điểm của $E(\mathbb{F}_{29})$ bằng các thay lần lượt các giá trị của $X = 0, 1, 2, \ldots, 28$ và kiểm tra với giá trị $X$ kết quả của phương trình $x^3 + 3x + 8$ có phải là một bình phương với modulo 29 không.
 \begin{center}
-$5^2 \equiv 12 (mod 13)$ và $8^2 \equiv 12 (mod 13)$ trên trường $F_13$
+\begin{figure}[h]
+\includegraphics[width=1\linewidth]{../im16.png}
+\caption{Các điểm trên elliptic với trường $\mathbb{F}_{29}$} \label{h16}
+\end{figure}
 \end{center}
-Điều này sẽ cho hai điểm $(1, 5)$ và $(1, 8)$ trong trường $F_{13}$. Tiếp tục tính với các giá trị $X$ ta thu được danh sách các điểm.
+
+Trong hình \ref{h16} tọa độ của mỗi điểm $(X, Y)$ có dạng $(x, Y, z)$ với $X = x/z$ (mod 29). Điểm $(0, 1, 0)$ chính là điểm $\mathcal{O}$. Ví dụ về cách viết này, điểm $(6, 9, 2)$ sẽ tương đương với điểm $(6 * 2^{-1ư} \ ( mod \ 29 ), 9) = (3, 9)$ \\
+
+Hình \ref{h11}, bên trái là đồ thị đường cong elliptic $E \ y^2 = x^3 + 3x + 8$ trên trường số thực, bên phải là đồ thị các điểm thuộc đường cong elliptic $E$ trên trường hữu hạn $\mathbb{F}_{29}$. Các điểm ngoại trừ điểm $\mathcal{O}$ của $E$ trên trường $\mathbb{F}_{29}(E(\mathbb{F}_{29}))$.
+
+\begin{figure}[h]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../im11.png}
+  \caption{1a elliptic trên trường số thực}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../im12.png}
+  \caption{1b elliptic trên trường hưu hạn $\mathbb{F}_{29}$}
+  \label{fig:sfig2}
+\end{subfigure}
+\caption{Đường cong elliptic dạng $y^2 = x^3 + 3x + 8$} \label{h11}
+\label{fig:fig}
+\end{figure}
+\begin{center}
+\begin{tabular}{lllllll}
+$(2, 14)$&  & $(2, 15)$&  & $(7, 13)$&  & $(7, 16)$ \\
+$(8, 14)$&  & $(8, 15)$&  & $(10, 9)$&  & $(10, 20)$ \\ 
+$(11, 3)$&  & $(11, 26)$&  & $(15, 8)$&  & $(15, 21)$ \\
+$(16, 11)$&  & $(16, 18)$&  & $(17, 10)$&  & $(17, 19)$ \\
+$(18, 6)$&  & $(18, 23)$&  & $(19, 14)$&  & $(19, 15)$ \\
+$(20, 8)$&  & $(20, 21)$&  & $(21, 9)$&  & $(21, 20)$ \\
+$(23, 8)$&  & $(23, 21)$&  & $(24, 10)$&  & $(24, 19)$ \\
+$(26, 1)$&  & $(26, 28)$&  & $(27, 9)$&  & $(27, 20)$ \\
+$(28, 2)$&  & $(28, 27)$ \\
+\end{tabular}
+\end{center}
+Xét ví dụ thuật toán cộng (định lí \ref{dl2.2}) với hai điểm $P = (7, 13)$ và $Q = (8, 14)$ trong $E(\mathbb{F}_{29})$. Bước thứ e của thuật toán sẽ được tính đầu tiên
 \begin{displaymath}
-E(F_{13}) = \{ O, (1, 5), (1, 8), (2, 3), (2, 10), (9, 6), (9, 7), (12, 2), (12, 11)\}
+\lambda = \frac{y_2 - y_1}{x_2 - x_1} = \frac{14 - 13}{8 - 7} = \frac{1}{1} = 1,
 \end{displaymath}
-Giả sử chúng ta có hai điểm $P = (x_1, y_1)$ và $Q = (x_2, y_2)$ là hai điểm nằm trên $e(F_p)$. Chúng ta sẽ định nghĩa phép cộng $P + Q$ là điểm có tọa độ $(x_3, y_3)$ thực hiện phép toán cộng(định lý \ref{dl2.2}). Chú ý rằng thuật toán này chỉ sử dụng các phép toán cộng, trừ , nhân ,chia liên quan đến các hệ số của đường cong $E$ và các điểm $P$ và $Q$. Khi các hệ số và tọa đô nằm trong trường $F_p$, chúng ta sẽ có điểm $(x_3, y_3)$ với tọa độ trong trường $F_p$.
-\begin{theorem}
-Cho $E$ là một đường cong trên trường $F_p$ và hai điểm $P$ và $Q$ nằm trong $E(F_p)$.
-\begin{itemize}
-\item[(a)] Thuật toán cộng đường cong elliptic (định lý \ref{dl2.2}) áp dụng với $P$ và $Q$ tạo điểm trong $E(F_p)$. Chúng ta định nghĩa $P + Q$.
-\item[(b)] Luật cộng trên $E(F_p)$ thỏa mãn tất cả các tính chất của định lí \ref{dl2.1}. Hay nói cách khác luật cộng $E(F_p)$ nằm trong một nhóm hữu hạn phần tử. 
-\end{itemize}
-\end{theorem}
-Xét ví dụ thuật toán cộng (định lí \ref{dl2.2}) với hai điểm $P = (9, 7)$ và $Q = (1, 8)$ trong $E(F_{13})$. Bước thứ e của thuật toán sẽ được tính đầu tiên
+Ở đây các phép tính được thực hiện trên trường $\mathbb{F}_{29}$. Tiếp theo tính 
 \begin{displaymath}
-\lambda = \frac{y_2 - y_1}{x_2 - x_1} = \frac{8 - 7}{1 - 9} = \frac{1}{-8} = \frac{1}{5}	= 8,
-\end{displaymath}
-Ở đây các phép tính được thực hiện trên trường $\mathbb{F}_{13}$ vì vậy -8 = 5 và $\frac{1}{5} = 5^{-1} = 8$. Tiếp theo tính 
-\begin{displaymath}
-\vartheta = y_1 - \lambda x_1 = 7 - 8\cdot 9 = -65 = 0
+\vartheta = y_1 - \lambda x_1 = 13 - 1\cdot 7 = 6
 \end{displaymath}
 Cuối cùng phép cộng sẽ có kết quả
 \begin{center}
 \begin{tabular}{ll}
-$x_3$ & = $\lambda^2 - x_1 - x_2 = 64 - 9 - 1 = 54 = 2$, \\
-$y_3$ & = $-(\lambda x_3 + v) = -8\cdot2 = -16 = 10$
+$x_3$ & = $\lambda^2 - x_1 - x_2 = 1 - 7 - 8 = -14 = 15$, \\
+$y_3$ & = $-(\lambda x_3 + \vartheta) = -(1\cdot15 + 6) = -21 = 8$
 \end{tabular}
 \end{center}
-Hay $P + Q = (1, 8) + (9, 7) = (2, 10)$ in  $E(F_{13})$. Tương tự ta có thể tính thuật toán cộng $P = (9, 7)$ với chính nó. Tính
+Hay $P + Q = (7, 13) + (8, 14) = (15, 8)$ in  $E(\mathbb{F}_{29})$. Hình ảnh minh họa chạy bằng sagemath.
 \begin{center}
-$\displaystyle \lambda = \frac{3x_1^2 + A}{2y_1} = \frac{3\cdot9^2 + 3}{2\cdot7} = \frac{246}{14} = 12$ \ và \ $\vartheta = y_1 - \lambda x_1 = 7 - 12\cdot9 = 3$
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../im17.png}
+\caption{Ví dụ cộng hai điểm $P \neq Q$}
+\end{figure}
+\end{center}
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{../im13.png}
+\caption{Biểu diễn $P + Q$ với ($P \neq Q$)}
+\end{figure}
+\end{center}
+Tương tự ta có thể tính thuật toán cộng $P = (7, 13)$ với chính nó. Tính
+\begin{center}
+$\displaystyle \lambda = \frac{3x_1^2 + A}{2y_1} = \frac{3\cdot7^2 + 3}{2\cdot13} = \frac{147}{26} = 12$ \ và \ $\vartheta = y_1 - \lambda x_1 = 7 - 12\cdot9 = 3$
 \end{center}
 Ta có kết quả là 
 \begin{center}
 $x_3 = \lambda^2 - x_1 - x_2 = (12)^2 - 9 - 9 = 9$ và $y_3 = -(\lambda x_3 + v) = -(12\cdot9 + 3) = 6$,
 \end{center}
-vì vậy $P + P = (9, 7) + (9, 7) = (9,6)$ trong trường $E(\mathbb{F}_{13})$
-\subsection*{Thuật toán Double-and-Add}
+vì vậy $P + P = (7, 13) + (7, 13) = (21,20)$ trong trường $E(\mathbb{F}_{29})$ là một điểm thuộc đường cong E (hình \ref{h18} và \ref{h14})
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../im18.png}
+\caption{Ví dụ $2*P$ với ($P \neq \mathcal{O}$)} \label{h18}
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{../im14.png} \label{h14}
+\caption{Biểu diễn $2*P$ với ($P \neq \mathcal{O}$)}
+\end{figure}
+\end{center}
+
+Chọn điểm $P = (7, 13)$ suy ra điểm $-P = (7, -13 \ (\ mod \ 29 )= (7, 16))$ Ta có $P + (-P) = \mathcal{O}(hay \ \infty)$ (hình \ref{h19} và \ref{h19-1})
+
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.9\linewidth]{../im19.png}
+\caption{Ví dụ $2*P$ với ($P \neq \mathcal{O}$)} \label{h19}
+\end{figure}
+\end{center}
+
+\begin{center}
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{../im15.png}
+\caption{Biểu diễn $2*P$ với ($P \neq \mathcal{O}$)}  \label{h19-1}
+\end{figure}
+\end{center}
+
+\section{Thuật toán Double-and-Add}
 Xuất phát từ việc khó phục hồi lại giá trị của n từ điểm $P$ và $Q = n\cdot P$ trong $E(\mathbb{F}_{p})$ đây là vấn đề khó của ECDLP. Tuy nhiên để sử dụng
 \begin{displaymath}
 \mathbb{Z} \rightarrow E(\mathbb{F}_p), \ \ \ n \mapsto nP,
@@ -907,6 +1064,51 @@ y_{3} &= {\frac {y_{1}y_{1} - ax_{1}x_{1}}{1 - dx_{1}x_{1}y_{1}y_{1}}}={\frac{y_
 \end{displaymath}
 \section{Mật mã dựa trên đường cong Elliptic}
 Chúng ta bắt đầu với ứng dụng đơn giản nhất, trao đổi khóa Diffie – Hellman, ít liên quan đến việc thay thế vấn đề logarit rời rạc cho trường $\mathbb{F}_p$ hữu hạn với bài toán logarit rời rạc cho đường cong elip $E_(\mathbb{F}_p)$. Sau đó chúng ta sẽ mô tả các tương tự elliptic của hệ thống mã khóa công khai Elgamal và thuật toán chữ ký số (DSA).
+\subsection*{Thông số miền (domain parameter)}
+Trong những phần trên ta đã xem xét những lý thuyết về đường cong elliptic. Để xác định một đường cong elliptic, người ta dựa trên những thông số miền, hay nói cách khác thông số miền đại diện cho một đường cong elliptic.
+
+Có hai loại thông số miền được sử dụng đó là thông số miền cho đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ và trên trường hữu hạn $\mathbb{F}_{2^m}$. Nhưng ở đây chúng ta chỉ xem xét với trường $\mathbb{F}_p$.
+
+Các thông số miền của đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ là tập $T$:
+\begin{displaymath}
+T = (p, a, b, G, n, h)
+\end{displaymath}
+
+Trong đó số nguyên $p$ biểu thị trường hữu hạn $\mathbb{F}_p$. $a , b$ biểu thị hai phần tử của trường hữu hạn $\mathbb{F}_p$ thõa mãn công thức:
+\begin{displaymath}
+E: y^2 = x^3 + ax^2 + b \ (\ mod \ p)
+\end{displaymath}
+
+$G$ là điểm cơ sở $(x_G, y_G)$ thuộc $E(\mathbb{F}_p)$ hay còn gọi là phần tử sinh. $n$ là bậc của $G$ và số nguyên $h = \#E(\mathbb{F}_p)/n$.
+
+Tập $T$ chỉ ra một đường cong elliptic với một phần tử sinh $G$.
+\subsubsection{Sinh các thông số miền của đường cong elliptic trên trường $\mathbb{F}_p$}
+Các thông số miền của đường cong elliptic được sinh ra theo các bước như sau:
+\begin{itemize}
+\item[] \textbf{Đầu vào:} Một số nguyên $t \in \{80, 112, 128, 192, 256\}$. Số nguyên $t$ này biểu thị mức độ bảo mật tính bằng bit của hệ các thông số miền được sinh ra. Có thể có thêm một phần tử hạt giống S.
+\item[] \textbf{Đầu ra:} Các thông số miền của đường cong elliptic trên trường $\mathbb{F}_p$.
+\begin{displaymath}
+E: y^2 = x^3 + ax^2 + b \ (\ mod \ p)
+\end{displaymath}
+Như vậy thì việc tính logarithm rời rạc trên đường cong elliptic sẽ cần tới $2^t$ phép toán. Ngược lại, việc tính lũy thừa lại rất đơn giản
+\item[] \textbf{Các bước sinh thông số miền:} Thông số miền được sinh ra theo các bước sau:
+\begin{itemize}
+\item[1. ] Chọn một số nguyên $p$ mà $\lceil log_2p \rceil = 2^t$ nếu $80 < t < 256$, $\lceil log_2p \rceil = 521$ nếu $t = 256$ và $log_2p = 192$ nếu $t = 80$
+\item[2. ] Chọn hai số $a, b$ xác định đường cong elliptic $E(\mathbb{F}_p)$ theo công thức:
+\begin{displaymath}
+E: y^2 = x^3 + ax^2 + b \ (\ mod \ p)
+\end{displaymath}
+Chọn một điểm cơ sở $G = (x_G, y_G)$ trên đường cong elliptic $E(\mathbb{F}_p)$, một số nguyên $n$ là bậc của $G$. Số nguyên $h = \#E(\mathbb{F}_p)/n$. Tất cả thõa mãn các điều kiện sau:
+\begin{itemize}
+\item $47a^3 + 27b^2 \neq 0 (\ mod \ p)$
+\item $\#E(\mathbb{F}_p) \ neq p$ 
+\item $p^B \neq 1$ với tất cả các giá trị $B$ nguyên $1 \leq B < 100$
+\item $h \leq 2^{t/8}$
+\item $n - 1$ và $n + 1$ nên có một phần tử lớn r (khi phân tích mỗi số thành thừa số nguyên tố) thõa mãn $log_n(r) > \frac{19}{20}$
+\end{itemize}
+\item[3. ] Xuất ra $T = (p, a, b, G, n, h)$
+\end{itemize}
+\end{itemize}
 \subsection*{Trao đổi khóa với Elliptic Diffie-Hellman}
 Alice và Bob đồng ý sử dụng một đường cong elliptic đặc biệt $E_(\mathbb{F}_p)$ và một điểm cụ thể $P \in E_(\mathbb{F}_p)$. Alice chọn số nguyên $n_A$ bí mật và Bob chọn số nguyên $n_B$ bí mật. Họ tính toán các bội số liên quan
 \begin{displaymath}
@@ -917,7 +1119,7 @@ và họ trao đổi các giá trị của $Q_A$ và $Q_B$. Sau đó Alice sử 
 n_AQ_B = (n_An_B)P = n_BQ_A,
 \end{displaymath}
 mà họ có thể sử dụng như một chìa khóa để giao tiếp riêng tư thông qua một mật mã đối xứng. Tổng quát trao đổi khóa elliptic Diffie–Hellman
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.9]{../im7.png}
 \caption{Trao đồi khóa Diffe-Hellman sử dụng đường cong elliptic}
@@ -933,7 +1135,7 @@ Anh ấy sẽ gửi hai điểm $(C_1, C_2)$ đến Alice và Alice sẽ tính:
 C_2 - n_AC_1 = (M + kQ_A) - n_A(kP) = M + k(n_AP) - n_A(kP) = M
 \end{displaymath}
 để phục hồi bản rõ. Tổng quát hệ mã khóa công khai Elgamal \\
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.9]{../im5.png}
 \caption{Tạo khóa, mã hóa, giải mã sử dụng Elliptic Elgamal}
@@ -956,7 +1158,7 @@ Với ví dụ Alice và Bob. Thật không may, vì Alice phải tính toán $C
 Theo cách này, Bob chỉ cần gửi các tọa độ x của $C_1$ và $C_2$, cộng thêm hai bit phụ. Ý tưởng này đôi khi được gọi là nén điểm.
 \subsection*{Thuật toán chữ ký số với Elliptic}
 Thuật toán chũ ký số với Elliptic được mô tả sau đây:\\
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.9]{../im6.png}
 \caption{Chữ ký số ECDSA}
