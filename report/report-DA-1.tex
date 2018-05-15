@@ -12,7 +12,7 @@
 %\usepackage{enumerate}
 %\usepackage{amssymb}
 \usepackage{graphicx}
-%\usepackage{imakeidx}
+\usepackage{imakeidx}
 \newcounter{someCounter}
 %\usepackage{cases}
 \usepackage{fancybox}
@@ -127,7 +127,7 @@ Trước khi trình bày nội dung của đồ án này, tôi xin được gử
 %\printnomenclature
 \addcontentsline{toc}{chapter}{Mở đầu}
 \chapter*{Giới thiệu chung}
-Mật mã học là một lĩnh vực liên quan với các kỹ thuật ngôn ngữ và toán học để đảm bảo an toàn thông tin, cụ thể là trong thông tin liên lạc. Về phương diện lịch sử, mật mã học gắn liền với quá trình mã hóa, điều này có nghĩa là nó gắn với các cách thức để chuyển đổi thông tin từ dạng này sang dạng khác nhưng ở đây là từ dạng thông thường có thể nhận thức được thành dạng không thể nhận thức được, làm cho thông tin trở thành dạng không thể đọc được nếu như không có các kiến thức bí mật. Quá trình mã hóa được sử dụng chủ yếu để đảm bảo tính bí mật của các thông tin quan trọng, chẳng hạn trong công tác tình báo, quân sự hay ngoại giao cũng như các bí mật về kinh tế, thương mại.  Trong những năm gần đây, lĩnh vực hoạt động của mật mã hóa đã được mở rộng: mật mã hóa hiện đại cung cấp cơ chế cho nhiều hoạt động hơn là chỉ duy nhất việc giữ bí mật và có một loạt các ứng dụng như: chứng thực khóa công khai, chữ ký số, bầu cử điện tử hay tiền điện tử. Ngoài ra, những người không có nhu cầu thiết yếu đặc biệt về tính bí mật cũng sử dụng các công nghệ mật mã hóa, thông thường được thiết kế và tạo lập sẵn trong các cơ sở hạ tầng của công nghệ tính toán và liên lạc viễn thông. 
+Mật mã học là một lĩnh vực liên quan với toán học để đảm bảo an toàn thông tin, cụ thể là trong thông tin liên lạc. Về phương diện lịch sử, mật mã học gắn liền với quá trình mã hóa, điều này có nghĩa là nó gắn với các cách thức để chuyển đổi thông tin từ dạng này sang dạng khác nhưng ở đây là từ dạng thông thường có thể nhận thức được thành dạng không thể nhận thức được, làm cho thông tin trở thành dạng không thể đọc được nếu như không có các kiến thức bí mật. Quá trình mã hóa được sử dụng chủ yếu để đảm bảo tính bí mật của các thông tin quan trọng, chẳng hạn trong công tác tình báo, quân sự hay ngoại giao cũng như các bí mật về kinh tế, thương mại.  Trong những năm gần đây, lĩnh vực hoạt động của mật mã hóa đã được mở rộng: mật mã hóa hiện đại cung cấp cơ chế cho nhiều hoạt động hơn là chỉ duy nhất việc giữ bí mật và có một loạt các ứng dụng như: chứng thực khóa công khai, chữ ký số, bầu cử điện tử hay tiền điện tử. Ngoài ra, những người không có nhu cầu thiết yếu đặc biệt về tính bí mật cũng sử dụng các công nghệ mật mã hóa, thông thường được thiết kế và tạo lập sẵn trong các cơ sở hạ tầng của công nghệ tính toán và liên lạc viễn thông. 
 
 Mật mã học là một lĩnh vực liên ngành, được tạo ra từ một số lĩnh vực khác. Các dạng cổ nhất của mật mã hóa chủ yếu liên quan với các kiểu mẫu trong ngôn ngữ. Gần đây thì tầm quan trọng đã thay đổi và mật mã hóa sử dụng và gắn liền nhiều hơn với toán học, cụ thể là toán học rời rạc, bao gồm các vấn đề liên quan đến lý thuyết số, lý thuyết thông tin, độ phức tạp tính toán, thống kê và tổ hợp. Mật mã hóa cũng được coi là một nhánh của công nghệ, nhưng nó được coi là không bình thường vì nó liên quan đến các sự chống đối ngầm (xem công nghệ mật mã hóa và công nghệ an ninh). Mật mã hóa là công cụ được sử dụng trong an ninh máy tính và mạng. 
 
@@ -141,9 +141,81 @@ Nội dung chính của đồ án bao gồm 4 chương:
 \item \textbf{Chương 4:} Cài đặt cho thiết bị IoT
 \end{itemize}
 \chapter{Cơ sở lý thuyết}
+\section{Mật mã khóa đối xứng}
+Hệ mã đối xứng(Symmetric Cryptosystems) dựa trên một khóa đơn, đó là một chuỗi ngắn với chiều dài không thay đổi. Do đó, phương pháp mã hóa này được xem như là single-key encryption. Khoá thường là khóa riêng (hoặc bảo mật) và được dùng để mã hóa cũng như giải mã.
+
+Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ dùng chung cho cả 2 bên. Người gửi sẽ mã hóa thông tin bằng khóa riêng và gửi thông tin đến người. Trong quá trình nhận thông tin, người nhận sủ dụng cùng một khóa để giải mã thông điệp.
+
+\begin{center}
+\begin{figure}[H]
+\centering 
+\includegraphics[scale=0.8]{../2.jpg}
+\caption{Hệ mã hóa đối xứng} \label{sign1}
+\end{figure}
+\end{center}
+
+Phụ thuộc vào chiều dài của khóa, có rất nhiều thuật giải mã hóa đối xứng đã được phát triển cho đến nay. Sau đây là một số thuật giải thường được sử dụng:
+\begin{itemize}
+\item[1. ] \textbf{Tiêu chuẩn mã hóa dữ liệu (Data Encryption Standard (DES))}. Nguyên bản DES đề ra giải pháp cho một khóa có chiều dài lên đến 128 bit. Tuy nhiên, kích thước của khóa đã giảm xuống còn 56 bit bởi chính phủ Hoa Kỳ trong việc nổ lực tìm ra thuật giải nhanh hơn. Việc giảm chiều dài khóa xuống, phụ thuộc vào tốc độ xử lý của bộ vi xử lý. Trong phương pháp tấn công Brute Force, các khóa sẽ phát sinh ngẩu nhiên và được gửi đến đoạn văn bản nguyên mẩu cho tới khi xác định được từ khóa chính xác. Với những khóa có kích thước nhỏ, sẽ dễ dàng để tìm ra chính xác khóa và phá vỡ hệ thống mật mã.
+\item[2. ] \textbf{Bội ba tiêu chuẩn mã hóa dữ liệu (Triple Data Encryption Standard (3DES))}. Cũng giống như DES, 3DES cũng sử dụng khóa 56 bit. Tuy nhiên, nó an toàn hơn nhiều do dùng 3 khóa khác nhau để mã hóa dử liệu. Bộ xử lý thực hiện các bước sau : khóa đầu tiên dùng để mã hóa dữ liệu. Sau đó, khóa thứ hai sẽ dùng để giải mã dữ liệu vừa được mã hóa. Cuối cùng, khóa thứ ba sẽ mã hóa lần thứ hai. Toàn bộ quá trình xử lý của 3DES tạo thành một thuật giải có độ an toàn cao. Nhưng bởi vì đây là một thuật giải phức tạp nên thời gian thực hiện sẽ lâu hơn, gấp 3 lần so với phương pháp DES.
+\item[3. ] \textbf{Ron's Code 4 (RC4)}. Được phát triển bởi Ron Rivest, thuật giải này sử dụng những khóa với chiều dài có thể biến đổi lên đến 256 bytes. Bởi vì chiều dài của khóa, RC4 được phân loại là một cơ chế mã hóa mạnh. Nó cũng tương đối khá nhanh. RC4 tạo một dòng bytes ngẩu nhiên và XORs chúng với văn bản nguyên mẩu. Bởi vì các bytes được phát sinh ngẩu nhiên, RC4 đòi hỏi một khóa mới cho miỗ lần gửi thông tin ra ngoài.
+\end{itemize}
+
+Do hệ mã khóa đối xứng sử dụng một khóa cho cả quá trình mã hóa và giải mã nên có các vấn đề:
+\begin{itemize}
+\item Khi bị lộ khóa thì tất cả các thông tin sử dụng khóa này sẽ bị huỷ. Vì thế, khóa nên thường xuyên thay đổi theo định kỳ.
+\item Khi hệ thống mã hóa đồng bộ xử lý một lượng thông tin lớn, việc quả lý các khóa sẽ trở thành một công việc vô cùng khó khăn. Kết hợp với việc thiết lặp các cặp khóa, phân phối, và thay đổi theo định kỳ đều đòi hỏi thời gian và tiền bạc.
+\end{itemize}
+
+Để giải quyết các vấn đề trên hệ mã khóa công khai đã được đưa ra.
 \section{Mật mã khóa công khai}
-\subsection*{Hệ thống khóa công khai}
-\subsubsection{Thuật toán RSA}
+Khác với các hệ mã khóa đối xứng (symmetric-key cryptography), khóa dùng giải mã và mã hóa có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia, cả hai khóa có thể trùng nhau và đều bí mật), hệ mã khóa công khai (public-key cryptography) có hai loại khóa là khóa bí mật và khóa công khai. Hai loại khóa này tạo thành một cặp và một loại dùng để mã hóa, loại còn lại dùng để giải mã. Đúng như cái tên người ta đặt cho hai loại khóa, khóa bí mật được giữ bí mật còn khóa công khai được công khai cho tất cả mọi người. Điểm mấu chốt trong hệ mã khóa công khai là khi biết được khóa công khai người ta không thể tìm được khóa bí mật.
+
+Hệ mã khóa công khai cũng có thể dùng để truyền dữ liệu mà không cần phải có thao tác thống nhất khóa bí mật giữa các bên.
+
+\begin{center}
+\begin{figure}
+\centering
+\includegraphics[width=0.6\linewidth]{../3.jpg}
+\caption{Hệ mã khóa công khai}
+\end{figure}
+\end{center}
+
+\subsection*{Cơ sở toán học của thuật toán khóa công khai}
+Các hệ mã khóa công khai dựa trên các hàm cửa sập (trapdoor function) có đặc tính đặc biệt. Hàm $y = f(x)$ là một hàm cửa sập thì ta có thể dễ dàng tính được $y$ khi biết $x$ nhưng khi biết $y$, việc tính $x = f^{-1}(y)$ là rất khó khăn nếu không có một thông tin đặc biệt $t$. Với thông tin đặc biệt $t$ thì việc tính $x = f^{-1}(y)$ lại trở nên đơn giản. Nếu không tồn tại thông tin đặc biệt $t$, hàm này gọi là hàm cửa sập một chiều (Trapdoor one-way function). Hình \ref{trap1} mô tả cơ chế hoạt động của một hàm cửa sập.
+
+Ví dụ: 767971435180333 là tích của hai số nguyên tố. Việc tính được số này từ tích của hai số nguyên tố là rất đơn giản nhưng để phân tích số này thành tích của hai thừa số nguyên tố ta sẽ phải thử chia nó cho tất cả các số nguyên từ hai đến $\sqrt{767971435180333}$. Đây là một bài toán khó. Tuy nhiên nếu biết được một trong hai nhân tử của nó là $p1 = 26449211$ thì việc tính nhân tử còn lại lại hết sức đơn giản. Ta chỉ việc tính $p2 = 767971435180333 \div 26449211$.
+
+\begin{center}
+\begin{figure}[H]
+\centering 
+\includegraphics[width=0.6\linewidth]{../trap.png}
+\caption{Trapdoor one-way function} \label{sign1}
+\end{figure}
+\end{center}
+\subsection*{Tính an toàn}
+Các hệ mã khóa công khai đòi hỏi khối lượng tính toán lớn hơn nhưng cũng không an toàn hơn so với các hệ mã khóa đối xứng. Bởi vậy người ta thường chỉ ứng dụng các hệ mã khóa công khai trong việc thống nhất khóa hoặc chuyển khóa bí mật, sau đó sẽ sử dụng các hệ mã khóa đối xứng với khóa bí mật đã thống nhất để truyền dữ liệu.
+\section{Thuật toán trao đổi khóa Diffie-Hellman (DHE)}
+Tương tự như các hệ mã khóa công khai, các thuật toán trao đổi khóa cũng có cơ sở toán học dựa trên một hàm cửa sập. Thuật toán trao đổi khóa khóa Diffie-Hellman được hai nhà khoa học Whitfield Diffie và Martin Hellman đưa ra năm 1976 và ngày nay được ứng dụng trong các giao thức truyền thông.
+
+Trên trường đại số $\mathbb{Z}_p$ người ta có thể dễ dàng thực hiện phép toán $y = f(x) = g^x \ (mod \ p)$ nhưng khi biết $y$ thì việc giải ngược lại để tìm $x = log_g(y) \ (mod \ p)$ lại là một bài toán rất khó, gọi là bài toán logarithm rời rạc. Bài toán logarithm rời rạc được sử dụng như là cơ sở toán học cho thuật toán Diffie-Hellman. \\ \\
+\textbf{Thuật toán Diffie-Hellman ở dạng đơn giản}
+
+Người ta sử dụng số nguyên tố $p$ và số $g$ là phần tử sinh của trường đại số $\mathbb{Z}_p$.
+\begin{itemize}
+\item[1. ] Alice và Bob cùng thống nhất với nhau chọn một số nguyên tố $p = 29$ và $g = 8$ để thực hiện việc chuyển khóa.
+\item[2. ] Alice chọn một số bí mật $a = 6$ và tính g$^a \ (mod \ p)$ để gửi cho Bob: A = $8^6 \ (mod \ 23) = 13$.
+\item[3. ] Bob chọn một số bí mật $b = 15$ và tính $g^b \ (mod \ p)$ để gửi cho Bob: $B = 8^15 \ (mod \ 29) = 21$
+\item[4. ] Alice tính $s = B^a \ (mod \ 29) = 21^6 \ (mod \ 29) = 13$.
+\item[5. ] Bob tính $s = A^b \ (mod \ 29) = 13^15 \ (mod \ 29) = 13$.
+\end{itemize}
+Từ $s = 13$ ta tìm được khóa chia sẻ mà cả hai cùng thống nhất.
+\subsection*{Tính an toàn}
+Thuật toán Diffie-Hellman dựa trên bài toán logarithm rời rạc, giải quyết được bài toán logarithm rời rạc đồng nghĩa với việc phá vỡ được thuật toán trao đổi khóa Diffie-Hellman.
+
+Sau hơn 40 năm kể từ khi thuật toán trao đổi khóa Diffie-Hellman được giới thiệu, người ta đã đưa ra nhiều thuật toán để giải quyết vấn đề logarithm rời rạc. Một trong những thuật toán hiệu quả nhất phải kể đến đó là thuật toán Number Field Sieve (NFS). Để chống lại thuật toán NFS thì số nguyên tố p sử dụng trong thuật toán trao đổi khóa Diffie-Hellman phải có độ dài tối thiểu 2048 bit, tương đương với key $s$ có độ dài 2048 bit. Một số $p$ lớn như vậy đòi hỏi một khối lượng tính toán không hề nhỏ.
+\section{Một số thuật toán mã khóa công khai}
+\subsection*{Thuật toán RSA}
 \textbf{\underline{Xây dựng}}: Chọn các tham số
 \begin{itemize}
 \item[1. ] \textit{Chọn hai số nguyên tố lớn p và q. Tính $n = p \times q$ và $m = \phi(n) = (p - 1) \times (q - 1)$.}
@@ -167,7 +239,7 @@ Y = E_{Z_A}(X) = X^e \pm n
 \begin{displaymath}
 D_{z_A}(Y) = Y^d \pm n
 \end{displaymath}
-\subsubsection{Hệ Rabin}
+\subsection*{Hệ Rabin}
 Hệ Rabin cũng xây dựng trên việc lấy $n=p\times q$ làm bí mật. N được coi là khoá công khai (PK) còn (p,q) là khoá bí mật (SK).
 
 Mã hoá là việc thực hiện:
@@ -193,7 +265,7 @@ tương đương nhau.
 
 Nhược điểm: Vì phương trình giải mã cho 4 nghiệm nên làm khó dễ việc giải mã. Thông thường, bản rõ trước khi được mã hoá cần được nối thêm vào đuôi một chuỗi số xác định để làm dấu vết nhận dạng (chẳng hạn nối thêm 20 số 0 – như vậy trong số 4 nghiệm giải ra, chuỗi nào tận cùng bằng 20 con 0 thì đúng là bản rõ cần nhận). Vì lý do này nên Rabin thường được dùng chủ yếu cho chứng thực (chữ ký điện tử).
 
-\subsubsection{Hệ El-Gamal}
+\subsection*{Hệ El-Gamal}
 \textbf{\textit{Tạo khóa}}:
 
 Alice chọn một số nguyên tố p và hai số nguyên ngẫu nhiên g và u, cả hai đều nhỏ hơn p. Sau đó tính 
@@ -228,6 +300,7 @@ Trong thực tế, thông điệp m có thể là một văn bản hay một cu�
 \subsection*{Sơ đồ chữ ký cơ bản}
 \begin{center}
 \begin{figure}[H] 
+\centering
 \includegraphics[width=0.8\linewidth]{../im20.png}
 \caption{Quy trình thực hiện kí và xác nhận} \label{sign1}
 \end{figure}
@@ -238,7 +311,8 @@ Trong thuật toán trao đổi khóa bí mật Diffie-Hellman dựa trên đư�
 Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là Evil (Hình \ref{sign2}):
 \begin{center}
 \begin{figure}[H] 
-\includegraphics[width=0.8\linewidth]{../im21.png}
+\centering
+\includegraphics[width=0.65\linewidth]{../im21.png}
 \caption{Tấn công Man In The Middle (nguồn: owasp)} \label{sign2}
 \end{figure}
 \end{center}
@@ -246,10 +320,12 @@ Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là
 Một hàm băm H sẽ lấy ở đầu vào là một thông tin X có kích thước bất kỳ và sinh kết quả ra là một chuỗi $h_X=h(X)$ có độ dài cố định, thường là nhỏ hơn nhiều so với kích thước của $X$. Chuỗi này thường được gọi là cốt yếu, hay cốt (digest) của thông tin X.
 \begin{center}
 \begin{figure}[H]
-\includegraphics[width=0.8\linewidth]{../hash.png}
+\centering
+\includegraphics[width=0.65\linewidth]{../hash.png}
 \caption{Hình ảnh minh họa hàm băm}
 \end{figure}
 \end{center}
+
 Ví dụ: Thông tin X có thể là một tệp độ dài hàng trăm Kb trong khi cốt của nó chỉ là một khối có độ dài 128bit. Tất nhiên, điều đó dẫn đến khả năng có thể có 2 thông tin $X \neq X'$ mà cho cùng một cốt giống nhau với một hàm băm, tức là $H(X) = H(X')$. Trường hợp này gọi là đụng độ (collision).
 
 Tuy nhiên với hàm băm thiết kế tốt, đụng độ là gần như không thể xảy ra được trên thực tế. Nói cách khác nếu cố đi tìm, khối lượng tính toán phải thực hiện là rất lớn, không khả thi với công cụ tính toán hiện thời.
@@ -607,7 +683,6 @@ Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 
 %\end{tabular}
 %\end{center}
 \chapter{Mật mã dựa trên đường cong Elliptic}
- giơi thiệu 
 \section{Đường cong Elliptic}
 Một đường cong elliptic curve được xác định bởi phương trình đường cong và một số trường tọa độ cơ bản.
 
@@ -1183,7 +1258,8 @@ Chữ kí được chấp nhận là hợp lệ.
 
 \begin{center}
 \begin{figure}[H]
-\includegraphics[width=0.9\linewidth]{../mo.png}
+\centering
+\includegraphics[width=0.7\linewidth]{../mo.png}
 \caption{ Đường cong Montgomery (nguồn: wikipedia.org)}
 \end{figure}
 \end{center}
@@ -1221,7 +1297,13 @@ y^2 = x^3 + 486662x^2 + x
 \item[4. ] Bob tính $S: S = Curve25519(b, A)$.
 \end{itemize}
 Từ giá trị $S$ tính được, Alice và Bob sẽ sử dụng hàm băm để có giá trị khóa bí mật $s$ cần thống nhất $s = Hash(S)$.
-
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\linewidth]{../im23.png}
+\caption{Sơ đồ trao đổi khóa Diffe-Hellman Elliptic Curve}
+\end{figure}
+\end{center}
 \subsection*{Hàm Curve25519}
 Trong phần này chúng ta sẽ tìm hiểu cách chọn khóa bí mật $n$ và tính $Curves25519(n, 9)$ ở phần trước đã mô tả.
 \begin{theorem} \label{dl4.1}
@@ -1263,7 +1345,7 @@ Theo như định lý trên, ta có thể tính được tọa độ của đi�
 
 Tọa độ điểm $P+Q$ có thể tính được dựa vào tọa độ $P, Q$ và tọa độ của điểm $P-Q$ (tức tọa độ của điểm $((x_P, y_P) + (x_Q, -y_Q)))$ điều này có vẻ như mâu thuẫn với định lý \ref{dl4.1}, tuy nhiên trong định lý \ref{dl4.1} không có nhắc đến việc cộng hai điểm $P$ và $Q$ có tọa độ bất kì nên việc công thức cộng Montgomery có liên quan đến tọa độ $y$ là không vô lý.
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
-Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone (ECQV). Sơ đồ chứng thư số ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
+Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone (\index{ECQV}). Sơ đồ chứng thư số ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
 
 Mục đích của chương này là để xem xét việc triển khai sơ đồ chứng thư số ẩn 
 \section{Hàm băm}
@@ -1275,7 +1357,7 @@ Hàm băm được sử dụng bởi sơ đồ ECQV sẽ được chấp nhận 
 
 Hàm băm được sử dụng để tính toán chứng thư ẩn sẽ là hàm băm có mức bảo mật ít nhất là mức bảo mật của việc triển khai ECQV. Hàm băm được sử dụng cho các xác định tham số  elliptic sẽ là hàm băm có mức bảo mật là mức độ bảo mật của việc triển khai sơ đồ ECQV (ngoại trừ các xác định tham số elliptic ngẫu nhiên trong [SEC 2] được tạo bằng cách sử dụng SHA-1).
 \section{Hàm băm một số nguyên modul n}
-Trong nhiều bước của ECQV, một chuỗi octet(mỗi một ký tự trong xâu được biểu diễn bởi 8 bits) chiều dài tùy ý được băm bằng hàm băm mật mã H, và sau đó được chuyển đổi thành một số nguyên modulo n. Phần này chỉ định hàm kết quả, ký hiệu $H_n: \{0, 1,\ldots , 255\}^{*} \rightarrow [0,\ldots , n - 1]$, ánh xạ các chuỗi octet có độ dài tùy ý đến các số nguyên modulo n.
+Trong nhiều bước của \index{ECQV}, một chuỗi octet(mỗi một ký tự trong xâu được biểu diễn bởi 8 bits) chiều dài tùy ý được băm bằng hàm băm mật mã H, và sau đó được chuyển đổi thành một số nguyên modulo n. Phần này chỉ định hàm kết quả, ký hiệu $H_n: \{0, 1,\ldots , 255\}^{*} \rightarrow [0,\ldots , n - 1]$, ánh xạ các chuỗi octet có độ dài tùy ý đến các số nguyên modulo n.
 \begin{itemize}
 \item[] \textbf{Input}
 \begin{itemize}
@@ -1484,6 +1566,13 @@ Trao đổi khóa đối xứng bí mật giữa các bên.Việc trao đổi kh
 \item[3. ] A tính $K: K = Curve25519(s_A, p_B)$. Khóa đối xứng bí mật cần thống nhất là $k = SHA256(K)$.
 \item[4. ] B tính $K: K = Curve25519(s_B, p_A)$. Khóa đối xứng bí mật cần thống nhất là $k = SHA256(K)$
 \end{itemize}
+\begin{center}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\linewidth]{../im22.png}
+\caption{Trao đổi khóa}
+\end{figure}
+\end{center}
 \subsubsection*{Truyền file}
 Sau khi đã kí xác nhận và trao đổi khóa, đường truyền đã an toàn, người nhận file trực tiếp từ A thật sự đã là B chứ không phải kẻ tấn công, người gửi file cho B trực tiếp thật sự
 đã là A chứ không phải kẻ tấn công. Ta bắt đầu thao tác truyền file qua socket. 
@@ -1561,7 +1650,7 @@ Do việc tính toán khóa trên đường cong elliptic là nhanh, việc lưu
 \end{subfigure}
 \caption{arduino, esp-12(esp8266), raspberry pi – các thiết bị dùng trong phát triển sản phẩm IoT} \label{h6.3}
 \end{figure}
-%\printindex
+\printindex
 \begin{thebibliography}{9}
 \bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
 \bibitem{Daninel} Daniel J. Bernstein. Cryptography in nacl, March 28 2012.
