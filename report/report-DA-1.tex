@@ -129,20 +129,22 @@ Trước khi trình bày nội dung của đồ án này, tôi xin được gử
 \chapter*{Giới thiệu chung}
 Mật mã học là một lĩnh vực liên quan với toán học để đảm bảo an toàn thông tin, cụ thể là trong thông tin liên lạc. Về phương diện lịch sử, mật mã học gắn liền với quá trình mã hóa, điều này có nghĩa là nó gắn với các cách thức để chuyển đổi thông tin từ dạng này sang dạng khác nhưng ở đây là từ dạng thông thường có thể nhận thức được thành dạng không thể nhận thức được, làm cho thông tin trở thành dạng không thể đọc được nếu như không có các kiến thức bí mật. Quá trình mã hóa được sử dụng chủ yếu để đảm bảo tính bí mật của các thông tin quan trọng, chẳng hạn trong công tác tình báo, quân sự hay ngoại giao cũng như các bí mật về kinh tế, thương mại.  Trong những năm gần đây, lĩnh vực hoạt động của mật mã hóa đã được mở rộng: mật mã hóa hiện đại cung cấp cơ chế cho nhiều hoạt động hơn là chỉ duy nhất việc giữ bí mật và có một loạt các ứng dụng như: chứng thực khóa công khai, chữ ký số, bầu cử điện tử hay tiền điện tử. Ngoài ra, những người không có nhu cầu thiết yếu đặc biệt về tính bí mật cũng sử dụng các công nghệ mật mã hóa, thông thường được thiết kế và tạo lập sẵn trong các cơ sở hạ tầng của công nghệ tính toán và liên lạc viễn thông. 
 
-Mật mã học là một lĩnh vực liên ngành, được tạo ra từ một số lĩnh vực khác. Các dạng cổ nhất của mật mã hóa chủ yếu liên quan với các kiểu mẫu trong ngôn ngữ. Gần đây thì tầm quan trọng đã thay đổi và mật mã hóa sử dụng và gắn liền nhiều hơn với toán học, cụ thể là toán học rời rạc, bao gồm các vấn đề liên quan đến lý thuyết số, lý thuyết thông tin, độ phức tạp tính toán, thống kê và tổ hợp. Mật mã hóa cũng được coi là một nhánh của công nghệ, nhưng nó được coi là không bình thường vì nó liên quan đến các sự chống đối ngầm (xem công nghệ mật mã hóa và công nghệ an ninh). Mật mã hóa là công cụ được sử dụng trong an ninh máy tính và mạng. 
+Mật mã học là một lĩnh vực liên ngành, được tạo ra từ một số lĩnh vực khác. Gần đây thì tầm quan trọng đã thay đổi và mật mã hóa sử dụng và gắn liền nhiều hơn với toán học, cụ thể là toán học rời rạc, bao gồm các vấn đề liên quan đến lý thuyết số, lý thuyết thông tin, độ phức tạp tính toán, thống kê và tổ hợp. Mật mã hóa cũng được coi là một nhánh của công nghệ, nhưng nó được coi là không bình thường vì nó liên quan đến các sự chống đối ngầm (xem công nghệ mật mã hóa và công nghệ an ninh). Mật mã hóa là công cụ được sử dụng trong an ninh máy tính và mạng. 
 
-Hiện nay, cùng với sự phát triển của tính toán khắp nơi, các hệ thống vạn vật kết nối (internet of things - IoT) ngày càng thu hút được sự quan tâm của các chuyên gia cũng như các nhà ứng dụng. Vấn đề an toàn thông tin trong hệ thống IoT với các thiết bị nhỏ gọn, năng lực tính toán thấp, trở thành một chủ đề nóng hiện nay. Với khả năng tính nhanh, an toàn chi phí thấp, mật mã tính toán trên đường công Elliptic tiêu biểu cho hệ mã trao đổi khóa của các tehiết bị IoT.
+Hiện nay, cùng với sự phát triển của tính toán khắp nơi, các hệ thống vạn vật kết nối (internet of things - IoT) ngày càng thu hút được sự quan tâm của các chuyên gia cũng như các nhà ứng dụng. Vấn đề an toàn thông tin trong hệ thống IoT với các thiết bị nhỏ gọn, năng lực tính toán thấp, trở thành một chủ đề nóng hiện nay. Với khả năng tính nhanh, an toàn chi phí thấp, mật mã tính toán trên đường cong Elliptic \index{Elliptic} tiêu biểu cho hệ mã trao đổi khóa của các thiết bị IoT \index{IoT}.
 
-Nội dung chính của đồ án bao gồm 4 chương:
+Nội dung chính của đồ án bao gồm 6 chương:
 \begin{itemize}
 \item \textbf{Chương 1:} Cơ sở lý thuyết
-\item \textbf{Chương 2:} Mật mã dựa trên đường cong Elliptic
-\item \textbf{Chương 3:} Chứng thư số ẩn dựa trên đường cong Elliptic
-\item \textbf{Chương 4:} Cài đặt cho thiết bị IoT
+\item \textbf{Chương 2:} Lý thuyết số
+\item \textbf{Chương 3:} Mật mã dựa trên đường cong Elliptic
+\item \textbf{Chương 4:} Đường cong curve25519
+\item \textbf{Chương 5:} Chứng thư số ẩn dựa trên đường cong Elliptic
+\item \textbf{Chương 6:} Cài đặt và thử nghiệm
 \end{itemize}
 \chapter{Cơ sở lý thuyết}
 \section{Mật mã khóa đối xứng}
-Hệ mã đối xứng(Symmetric Cryptosystems) dựa trên một khóa đơn, đó là một chuỗi ngắn với chiều dài không thay đổi. Do đó, phương pháp mã hóa này được xem như là single-key encryption. Khoá thường là khóa riêng (hoặc bảo mật) và được dùng để mã hóa cũng như giải mã.
+Hệ mã khóa đối xứng \index{Mã khóa đối xứng} (Symmetric Cryptosystems) dựa trên một khóa đơn, đó là một chuỗi ngắn với chiều dài không thay đổi. Do đó, phương pháp mã hóa này được xem như là single-key \index{single-key} encryption. Khoá thường là khóa riêng (hoặc bảo mật) và được dùng để mã hóa cũng như giải mã.
 
 Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ dùng chung cho cả 2 bên. Người gửi sẽ mã hóa thông tin bằng khóa riêng và gửi thông tin đến người. Trong quá trình nhận thông tin, người nhận sủ dụng cùng một khóa để giải mã thông điệp.
 
@@ -156,7 +158,7 @@ Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ d
 
 Phụ thuộc vào chiều dài của khóa, có rất nhiều thuật giải mã hóa đối xứng đã được phát triển cho đến nay. Sau đây là một số thuật giải thường được sử dụng:
 \begin{itemize}
-\item[1. ] \textbf{Tiêu chuẩn mã hóa dữ liệu (Data Encryption Standard (DES))}. Nguyên bản DES đề ra giải pháp cho một khóa có chiều dài lên đến 128 bit. Tuy nhiên, kích thước của khóa đã giảm xuống còn 56 bit bởi chính phủ Hoa Kỳ trong việc nổ lực tìm ra thuật giải nhanh hơn. Việc giảm chiều dài khóa xuống, phụ thuộc vào tốc độ xử lý của bộ vi xử lý. Trong phương pháp tấn công Brute Force, các khóa sẽ phát sinh ngẩu nhiên và được gửi đến đoạn văn bản nguyên mẩu cho tới khi xác định được từ khóa chính xác. Với những khóa có kích thước nhỏ, sẽ dễ dàng để tìm ra chính xác khóa và phá vỡ hệ thống mật mã.
+\item[1. ] \textbf{Tiêu chuẩn mã hóa dữ liệu (Data Encryption Standard (DES))}. Nguyên bản DES \index{DES} đề ra giải pháp cho một khóa có chiều dài lên đến 128 bit. Tuy nhiên, kích thước của khóa đã giảm xuống còn 56 bit bởi chính phủ Hoa Kỳ trong việc nổ lực tìm ra thuật giải nhanh hơn. Việc giảm chiều dài khóa xuống, phụ thuộc vào tốc độ xử lý của bộ vi xử lý. Trong phương pháp tấn công Brute Force, các khóa sẽ phát sinh ngẩu nhiên và được gửi đến đoạn văn bản nguyên mẩu cho tới khi xác định được từ khóa chính xác. Với những khóa có kích thước nhỏ, sẽ dễ dàng để tìm ra chính xác khóa và phá vỡ hệ thống mật mã.
 \item[2. ] \textbf{Bội ba tiêu chuẩn mã hóa dữ liệu (Triple Data Encryption Standard (3DES))}. Cũng giống như DES, 3DES cũng sử dụng khóa 56 bit. Tuy nhiên, nó an toàn hơn nhiều do dùng 3 khóa khác nhau để mã hóa dử liệu. Bộ xử lý thực hiện các bước sau : khóa đầu tiên dùng để mã hóa dữ liệu. Sau đó, khóa thứ hai sẽ dùng để giải mã dữ liệu vừa được mã hóa. Cuối cùng, khóa thứ ba sẽ mã hóa lần thứ hai. Toàn bộ quá trình xử lý của 3DES tạo thành một thuật giải có độ an toàn cao. Nhưng bởi vì đây là một thuật giải phức tạp nên thời gian thực hiện sẽ lâu hơn, gấp 3 lần so với phương pháp DES.
 \item[3. ] \textbf{Ron's Code 4 (RC4)}. Được phát triển bởi Ron Rivest, thuật giải này sử dụng những khóa với chiều dài có thể biến đổi lên đến 256 bytes. Bởi vì chiều dài của khóa, RC4 được phân loại là một cơ chế mã hóa mạnh. Nó cũng tương đối khá nhanh. RC4 tạo một dòng bytes ngẩu nhiên và XORs chúng với văn bản nguyên mẩu. Bởi vì các bytes được phát sinh ngẩu nhiên, RC4 đòi hỏi một khóa mới cho miỗ lần gửi thông tin ra ngoài.
 \end{itemize}
@@ -169,7 +171,7 @@ Do hệ mã khóa đối xứng sử dụng một khóa cho cả quá trình mã
 
 Để giải quyết các vấn đề trên hệ mã khóa công khai đã được đưa ra.
 \section{Mật mã khóa công khai}
-Khác với các hệ mã khóa đối xứng (symmetric-key cryptography), khóa dùng giải mã và mã hóa có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia, cả hai khóa có thể trùng nhau và đều bí mật), hệ mã khóa công khai (public-key cryptography) có hai loại khóa là khóa bí mật và khóa công khai. Hai loại khóa này tạo thành một cặp và một loại dùng để mã hóa, loại còn lại dùng để giải mã. Đúng như cái tên người ta đặt cho hai loại khóa, khóa bí mật được giữ bí mật còn khóa công khai được công khai cho tất cả mọi người. Điểm mấu chốt trong hệ mã khóa công khai là khi biết được khóa công khai người ta không thể tìm được khóa bí mật.
+Khác với các hệ mã khóa đối xứng \index{Mã khóa đối xứng} (symmetric-key cryptography), khóa dùng giải mã và mã hóa có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia, cả hai khóa có thể trùng nhau và đều bí mật), hệ mã khóa công khai \\index{Mã khóa công khai} (public-key cryptography) có hai loại khóa là khóa bí mật và khóa công khai. Hai loại khóa này tạo thành một cặp và một loại dùng để mã hóa, loại còn lại dùng để giải mã. Đúng như cái tên người ta đặt cho hai loại khóa, khóa bí mật được giữ bí mật còn khóa công khai được công khai cho tất cả mọi người. Điểm mấu chốt trong hệ mã khóa công khai là khi biết được khóa công khai người ta không thể tìm được khóa bí mật.
 
 Hệ mã khóa công khai cũng có thể dùng để truyền dữ liệu mà không cần phải có thao tác thống nhất khóa bí mật giữa các bên.
 
@@ -182,7 +184,7 @@ Hệ mã khóa công khai cũng có thể dùng để truyền dữ liệu mà k
 \end{center}
 
 \subsection*{Cơ sở toán học của thuật toán khóa công khai}
-Các hệ mã khóa công khai dựa trên các hàm cửa sập (trapdoor function) có đặc tính đặc biệt. Hàm $y = f(x)$ là một hàm cửa sập thì ta có thể dễ dàng tính được $y$ khi biết $x$ nhưng khi biết $y$, việc tính $x = f^{-1}(y)$ là rất khó khăn nếu không có một thông tin đặc biệt $t$. Với thông tin đặc biệt $t$ thì việc tính $x = f^{-1}(y)$ lại trở nên đơn giản. Nếu không tồn tại thông tin đặc biệt $t$, hàm này gọi là hàm cửa sập một chiều (Trapdoor one-way function). Hình \ref{trap1} mô tả cơ chế hoạt động của một hàm cửa sập.
+Các hệ mã khóa công khai dựa trên các hàm cửa sập (trapdoor function \index{Trapdoor function}) có đặc tính đặc biệt. Hàm $y = f(x)$ là một hàm cửa sập thì ta có thể dễ dàng tính được $y$ khi biết $x$ nhưng khi biết $y$, việc tính $x = f^{-1}(y)$ là rất khó khăn nếu không có một thông tin đặc biệt $t$. Với thông tin đặc biệt $t$ thì việc tính $x = f^{-1}(y)$ lại trở nên đơn giản. Nếu không tồn tại thông tin đặc biệt $t$, hàm này gọi là hàm cửa sập một chiều (Trapdoor one-way function). Hình \ref{trap1} mô tả cơ chế hoạt động của một hàm cửa sập.
 
 Ví dụ: 767971435180333 là tích của hai số nguyên tố. Việc tính được số này từ tích của hai số nguyên tố là rất đơn giản nhưng để phân tích số này thành tích của hai thừa số nguyên tố ta sẽ phải thử chia nó cho tất cả các số nguyên từ hai đến $\sqrt{767971435180333}$. Đây là một bài toán khó. Tuy nhiên nếu biết được một trong hai nhân tử của nó là $p1 = 26449211$ thì việc tính nhân tử còn lại lại hết sức đơn giản. Ta chỉ việc tính $p2 = 767971435180333 \div 26449211$.
 
@@ -196,9 +198,9 @@ Ví dụ: 767971435180333 là tích của hai số nguyên tố. Việc tính đ
 \subsection*{Tính an toàn}
 Các hệ mã khóa công khai đòi hỏi khối lượng tính toán lớn hơn nhưng cũng không an toàn hơn so với các hệ mã khóa đối xứng. Bởi vậy người ta thường chỉ ứng dụng các hệ mã khóa công khai trong việc thống nhất khóa hoặc chuyển khóa bí mật, sau đó sẽ sử dụng các hệ mã khóa đối xứng với khóa bí mật đã thống nhất để truyền dữ liệu.
 \section{Thuật toán trao đổi khóa Diffie-Hellman (DHE)}
-Tương tự như các hệ mã khóa công khai, các thuật toán trao đổi khóa cũng có cơ sở toán học dựa trên một hàm cửa sập. Thuật toán trao đổi khóa khóa Diffie-Hellman được hai nhà khoa học Whitfield Diffie và Martin Hellman đưa ra năm 1976 và ngày nay được ứng dụng trong các giao thức truyền thông.
+Tương tự như các hệ mã khóa công khai, các thuật toán trao đổi khóa cũng có cơ sở toán học dựa trên một hàm cửa sập. Thuật toán trao đổi khóa khóa Diffie-Hellman  \index{Diffie-Hellman} được hai nhà khoa học Whitfield Diffie và Martin Hellman đưa ra năm 1976 và ngày nay được ứng dụng trong các giao thức truyền thông.
 
-Trên trường đại số $\mathbb{Z}_p$ người ta có thể dễ dàng thực hiện phép toán $y = f(x) = g^x \ (mod \ p)$ nhưng khi biết $y$ thì việc giải ngược lại để tìm $x = log_g(y) \ (mod \ p)$ lại là một bài toán rất khó, gọi là bài toán logarithm rời rạc. Bài toán logarithm rời rạc được sử dụng như là cơ sở toán học cho thuật toán Diffie-Hellman. \\ \\
+Trên trường đại số \index{Trường đại số} $\mathbb{Z}_p$ người ta có thể dễ dàng thực hiện phép toán $y = f(x) = g^x \ (mod \ p)$ nhưng khi biết $y$ thì việc giải ngược lại để tìm $x = log_g(y) \ (mod \ p)$ lại là một bài toán rất khó, gọi là bài toán logarithm rời rạc. Bài toán logarithm rời rạc được sử dụng như là cơ sở toán học cho thuật toán Diffie-Hellman. \\ \\
 \textbf{Thuật toán Diffie-Hellman ở dạng đơn giản}
 
 Người ta sử dụng số nguyên tố $p$ và số $g$ là phần tử sinh của trường đại số $\mathbb{Z}_p$.
@@ -215,6 +217,7 @@ Thuật toán Diffie-Hellman dựa trên bài toán logarithm rời rạc, giả
 
 Sau hơn 40 năm kể từ khi thuật toán trao đổi khóa Diffie-Hellman được giới thiệu, người ta đã đưa ra nhiều thuật toán để giải quyết vấn đề logarithm rời rạc. Một trong những thuật toán hiệu quả nhất phải kể đến đó là thuật toán Number Field Sieve (NFS). Để chống lại thuật toán NFS thì số nguyên tố p sử dụng trong thuật toán trao đổi khóa Diffie-Hellman phải có độ dài tối thiểu 2048 bit, tương đương với key $s$ có độ dài 2048 bit. Một số $p$ lớn như vậy đòi hỏi một khối lượng tính toán không hề nhỏ.
 \section{Một số thuật toán mã khóa công khai}
+\index{RSA}
 \subsection*{Thuật toán RSA}
 \textbf{\underline{Xây dựng}}: Chọn các tham số
 \begin{itemize}
@@ -239,6 +242,7 @@ Y = E_{Z_A}(X) = X^e \pm n
 \begin{displaymath}
 D_{z_A}(Y) = Y^d \pm n
 \end{displaymath}
+\index{Rabin}
 \subsection*{Hệ Rabin}
 Hệ Rabin cũng xây dựng trên việc lấy $n=p\times q$ làm bí mật. N được coi là khoá công khai (PK) còn (p,q) là khoá bí mật (SK).
 
@@ -264,7 +268,7 @@ tương đương nhau.
 \end{itemize}
 
 Nhược điểm: Vì phương trình giải mã cho 4 nghiệm nên làm khó dễ việc giải mã. Thông thường, bản rõ trước khi được mã hoá cần được nối thêm vào đuôi một chuỗi số xác định để làm dấu vết nhận dạng (chẳng hạn nối thêm 20 số 0 – như vậy trong số 4 nghiệm giải ra, chuỗi nào tận cùng bằng 20 con 0 thì đúng là bản rõ cần nhận). Vì lý do này nên Rabin thường được dùng chủ yếu cho chứng thực (chữ ký điện tử).
-
+\index{El-Gamal}
 \subsection*{Hệ El-Gamal}
 \textbf{\textit{Tạo khóa}}:
 
@@ -292,11 +296,12 @@ Mã là $Y = (a,b)$ và có độ dài gấp đôi bản rõ.
 X = \frac{b}{a^u} (mod \ p)
 \end{displaymath}
 \section{Chữ ký điện tử}
+\index{Chữ ký điện tử}
 Chữ kí điện tử là một hệ mã khóa công khai với cặp khóa $A(s_A, p_A)$ trong đó $A$ là người giữ chữ kí, $s_A$ là khóa bí mật còn $p_A$ là khóa công khai. Với một thông điệp $m$ thì người cùng $A$ sẽ kí lên thông điệp $m$ bằng cách mã hóa $m$ bởi khóa bí mật được bản mã $c_m$. Mọi người có thể kiểm tra chữ kí này có hợp lệ hay không bằng cách dùng khóa công khai để giải mã $c_m$, nếu được đúng thông điệp $m$ thì chữ kí là hợp lệ còn không, chữ kí đó không hợp lệ hay nói cách khác, người kí lên thông điệp $m$ đó không phải là A.
 
 Chỉ có người dùng $A$ mới nắm giữ khóa bí mật $s_A$ bởi vậy chỉ có $A$ mới có khả năng kí còn tất cả mọi người đều có khóa công khai $p_A$ nên tất cả mọi người đều có khả năng kiểm tra xem một chữ kí có phải do $A$ kí hay không.
 
-Trong thực tế, thông điệp m có thể là một văn bản hay một cuốn sách, để mã hóa một khối lượng lớn dữ liệu như vậy bằng hệ mã hóa công khai sẽ rất tốn thời gian và tài nguyên hệ thống. Bởi vậy, người ta sẽ băm dữ liệu cần kí $m$ thành một chuỗi mã băm. Sau đó sẽ kí lên chuỗi mã băm đó. Thao tác xác nhận chữ kí cũng tương tự như vậy (Hình \ref{sign1}):
+Trong thực tế, thông điệp $m$ có thể là một văn bản hay một cuốn sách, để mã hóa một khối lượng lớn dữ liệu như vậy bằng hệ mã hóa công khai sẽ rất tốn thời gian và tài nguyên hệ thống. Bởi vậy, người ta sẽ băm dữ liệu cần kí $m$ thành một chuỗi mã băm. Sau đó sẽ kí lên chuỗi mã băm đó. Thao tác xác nhận chữ kí cũng tương tự như vậy (Hình \ref{sign1}):
 \subsection*{Sơ đồ chữ ký cơ bản}
 \begin{center}
 \begin{figure}[H] 
@@ -306,18 +311,18 @@ Trong thực tế, thông điệp m có thể là một văn bản hay một cu�
 \end{figure}
 \end{center}
 
-Trong thuật toán trao đổi khóa bí mật Diffie-Hellman dựa trên đường cong elliptic, kẻ tấn công xen giữa Evil có thể giả mạo là Bob khi truyền thông với Alice và giả mạo làm Bob khi truyền thông với Alice. Khi đó thuật toán sẽ được thực hiện song song giữa Evil-Alice và EvilBob. Dữ liệu truyền thông giữa Alice và Bob sẽ được chuyển thông qua Evil và có thể dễ dàng bị Evil giải mã. Bởi thế, người ta dùng chữ kí điện tử để xác định xem đối tượng gửi nhận dữ liệu có đúng là đối tượng mà mình mong muốn gửi nhận dữ liệu hay không.
+Trong thuật toán trao đổi khóa bí mật Diffie-Hellman \index{Diffie-Hellman} dựa trên đường cong elliptic \index{Elliptic}, kẻ tấn công xen giữa Evil có thể giả mạo là Bob khi truyền thông với Alice và giả mạo làm Bob khi truyền thông với Alice. Khi đó thuật toán sẽ được thực hiện song song giữa Evil-Alice và EvilBob. Dữ liệu truyền thông giữa Alice và Bob sẽ được chuyển thông qua Evil và có thể dễ dàng bị Evil giải mã. Bởi thế, người ta dùng chữ kí điện tử để xác định xem đối tượng gửi nhận dữ liệu có đúng là đối tượng mà mình mong muốn gửi nhận dữ liệu hay không.
 
 Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là Evil (Hình \ref{sign2}):
 \begin{center}
 \begin{figure}[H] 
 \centering
 \includegraphics[width=0.65\linewidth]{../im21.png}
-\caption{Tấn công Man In The Middle (nguồn: owasp)} \label{sign2}
+\caption{Tấn công Man In The Middle (nguồn: owasp) \index{Man In The Middle}} \label{sign2}
 \end{figure}
 \end{center}
 \section{Hàm băm và ứng dụng chữ ký điện tử}
-Một hàm băm H sẽ lấy ở đầu vào là một thông tin X có kích thước bất kỳ và sinh kết quả ra là một chuỗi $h_X=h(X)$ có độ dài cố định, thường là nhỏ hơn nhiều so với kích thước của $X$. Chuỗi này thường được gọi là cốt yếu, hay cốt (digest) của thông tin X.
+Một hàm băm \index{Hàm băm} H sẽ lấy ở đầu vào là một thông tin X có kích thước bất kỳ và sinh kết quả ra là một chuỗi $h_X=h(X)$ có độ dài cố định, thường là nhỏ hơn nhiều so với kích thước của $X$. Chuỗi này thường được gọi là cốt yếu, hay cốt (digest) của thông tin X.
 \begin{center}
 \begin{figure}[H]
 \centering
@@ -326,7 +331,7 @@ Một hàm băm H sẽ lấy ở đầu vào là một thông tin X có kích th
 \end{figure}
 \end{center}
 
-Ví dụ: Thông tin X có thể là một tệp độ dài hàng trăm Kb trong khi cốt của nó chỉ là một khối có độ dài 128bit. Tất nhiên, điều đó dẫn đến khả năng có thể có 2 thông tin $X \neq X'$ mà cho cùng một cốt giống nhau với một hàm băm, tức là $H(X) = H(X')$. Trường hợp này gọi là đụng độ (collision).
+Ví dụ: Thông tin X có thể là một tệp độ dài hàng trăm Kb trong khi cốt của nó chỉ là một khối có độ dài 128bit. Tất nhiên, điều đó dẫn đến khả năng có thể có 2 thông tin $X \neq X'$ mà cho cùng một cốt giống nhau với một hàm băm, tức là $H(X) = H(X')$. Trường hợp này gọi là đụng độ (collision \index{Collision}).
 
 Tuy nhiên với hàm băm thiết kế tốt, đụng độ là gần như không thể xảy ra được trên thực tế. Nói cách khác nếu cố đi tìm, khối lượng tính toán phải thực hiện là rất lớn, không khả thi với công cụ tính toán hiện thời.
 
@@ -410,14 +415,14 @@ Hệ này bị chứng minh là không đảm bảo tính một chiều (Girault
 
 \subsection*{Các hàm băm được chế tạo đặc biệt}
 Ngoài các kỹ thuật thông thường nói trên người ta đã tìm nhiều cách rất riêng biệt khác nhau để chế tạo ra những hàm băm có độ tin cậy cao. Thông thường những sơ đồ này rất phức tạp và có những cấu trúc đặc biệt, nên không trình bày đầy đủ ở đây. Sau đây là một số các hàm băm nổi tiếng.
-\subsubsection{MD5 (Rivest 1992)}
+\subsubsection{MD5 \index{MD5} (Rivest 1992)}
 Đây là một trong các hàm băm có tiếng nhất và được sử dụng thông dụng:
 \begin{itemize}
 \item[+] Nó lấy vào các khối đầu vào 512 bit và sinh ra các giá trị băm 128 bit.
 \item[+] Được tin là phi đụng độ và một chiều (one - way)
 \item[+] Thuật toán MD5 được thiết kế cho phép chạy tốt nhất trên các máy tính 32 bit. Nó sử dụng các phép toán đơn giản như phép cộng modulo 32, do đó thích hợp với việc mã hoá cho các bộ xử lý 32 bit.
 \end{itemize}
-\subsubsection{SHA (Secure Hash Function)}
+\subsubsection{SHA \index{SHA}(Secure Hash Function)}
 Đây là một thuật toán được đề xuất và bảo trợ bởi cơ quan NIST để sử dụng đối với hệ chữ ký DSA (cũng là một dự chuẩn cho chữ ký điện tử). Nó cho giá trị băm là 160 bit và được thiết kế với cùng một tiếp cận như MD5.
 \subsubsection{HAVAL}
 Một hệ băm của Australia cho phép thay đổi kích thước giá trị băm. Cấu trúc rất giống như MD5.
@@ -428,6 +433,8 @@ Một hệ băm của Australia cho phép thay đổi kích thước giá trị 
 \item[+] Eli Biham đã chỉ ra một đụng độ cho trường hợp 128 bit.
 \end{itemize}
 \section{Hệ thống chứng thực và Chứng thư số}
+\index{Hệ thống chứng thực}
+\index{Chứng thư số}
 \subsection*{Hệ thống chứng thực}
 Hệ thống chứng thực là một hạ tầng an ninh mạng được xây dựng trên một hạ tầng cơ sở khóa công khai (PKI) cung cấp các giải pháp đảm bảo an toàn cho các hoạt động (gọi chung là giao dịch) thông qua mạng.
 \subsubsection{Tại sao lại phải sử dụng hệ thống chứng thực?}
@@ -447,8 +454,10 @@ Hệ thống chứng thực là một hạ tầng an ninh mạng được xây d
 \item Thành phần thực hiện chức năng xác định xem một chứng thư số có hợp lệ hay không
 \end{itemize}
 \end{itemize}
+\index{Cơ quan chứng thực}
 \subsubsection{Cơ quan chứng thực (CA) là gì?}
 Cơ quan chứng thực (Certification Authority - CA) có thẩm quyền cấp phát, thu hồi, quản lý chứng thư số cho các thực thể thực hiện các giao dịch an toàn. Cơ quan chứng thực là một thành phần chính của hệ thống chứng thực.
+\index{Cơ quan đăng ký}
 \subsubsection{Cơ quan đăng ký (RA) là gì?}
 Cơ quan đăng ký (Registration Authority) là một thành phần trong hệ thống chứng thực có nhiệm vụ tiếp nhận và xác minh các yêu cầu về chứng thư số của người sử dụng đồng thời gửi các yêu cầu đã xác minh cho cơ quan chứng thực (CA) thực hiện yêu cầu đó.
 \subsubsection{Hệ thống chứng thực có những ứng dụng gì?}
@@ -478,6 +487,7 @@ Cơ quan đăng ký (Registration Authority) là một thành phần trong hệ 
 \item Bảo mật email
 \end{itemize}
 \end{itemize}
+\index{Chứng thư số}
 \subsection*{Chứng thư số}
 Để thực hiện được các giao dịch an toàn qua mạng, các bên tham gia cần phải có "chứng thư số". Chứng thư số là một cấu trúc dữ liệu chứa các thông tin cần thiết để thực hiện các giao dịch an toàn qua mạng. Chứng thư số được lưu giữ trên máy tính dưới dạng một tập tin (file).
 
@@ -502,19 +512,24 @@ Mục đích của chứng thư số dùng để nhận diện một đối tư�
 \end{itemize}
 \end{itemize}
 \chapter{Lý thuyết số}
+\index{logarithm}
+\index{Lý thuyết số}
+\index{Cấu trúc đại số}
+\index{Trường hữu hạn}
 Mỗi hàm cửa sập được định nghĩa trên một cấu trúc đại số. Bài toán logarithm rời rạc dựa trên đường cong elliptic cũng được định nghĩa trên một cấu trúc đại số là đường cong elliptic trên
 trường hữu hạn.
 \section{Nhóm}
-Trong toán học, nhóm là một cấu trúc đại số bao gồm một tập hợp các phần tử cùng với phép toán hai ngôi kết hợp hai phần tử bất kỳ của tập hợp thành một phần tử thứ ba thỏa mãn bốn điều kiện gọi là tiên đề nhóm, lần lượt là tính đóng, kết hợp, phần tử đơn vị và tính khả nghịch.
+\index{Nhóm}
+Trong toán học, nhóm là một cấu trúc đại số bao gồm một tập hợp các phần tử cùng với phép toán hai ngôi kết hợp hai phần tử bất kỳ của tập hợp thành một phần tử thứ ba thỏa mãn bốn điều kiện gọi là tiên đề nhóm, lần lượt là tính đóng, kết hợp, phần tử đơn vị \index{Phần tử đơn vị} và tính khả nghịch.
 
-Cụ thể hơn, một nhóm $(G, *)$ là tập hợp các phần tử $G$ cùng với phép toán hai ngôi $*$(hay còn gọi là luật nhóm) kết hợp thành phần tử thứ ba thỏa mãn bốn tiên đề của nhóm (với $ a, b , c, e \in G$):
+Cụ thể hơn, một nhóm $(G, *)$ là tập hợp các phần tử $G$ cùng với phép toán hai ngôi $*$ (hay còn gọi là luật nhóm) kết hợp thành phần tử thứ ba thỏa mãn bốn tiên đề của nhóm (với $ a, b , c, e \in G$):
 \begin{itemize}
 \item Tính đóng: $\forall a, b: (a * b) \in G$
 \item Tính kết hợp: $\forall a, b, c: (a * b) * c = a * (b * c)$
 \item Phần tử đơn vị: $\exists e \ \forall a: a * e = e * a = a$
 \item Tính khả nghịch: $\forall a \ \exists b: a * b = b * a = e$
 \end{itemize}
-$e$ được gọi là phần tử đơn vị(ví dụ nhóm số nguyên phần tử đơn vị là 0). Một nhóm được gọi là abelian khi thỏa mãn điều kiện:
+$e$ được gọi là phần tử đơn vị(ví dụ nhóm số nguyên phần tử đơn vị là 0). Một nhóm được gọi là abelian \index{Abelian} khi thỏa mãn điều kiện:
 \begin{itemize}
 \item Tính giao hoán: $\forall a,b: a * b = b * a$
 \end{itemize}
@@ -528,11 +543,13 @@ x^{n + 1} & = x^n\cdot x \ \ with \ \ n \in \mathbb{N}
 \end{displaymath}
 $\infty$ là phép nhân phân tử đơn vị. Cấp(order) r của một phần tử x được định nghĩa như một số nguyên nhỏ r > 0 sao cho $x^r = \infty$. Nếu một nhóm có phần tử g sao cho \{$g^n | n \in Z$\} là tất cả phần tử trong nhóm, g được gọi là phần tử sinh của nhóm vòng.
 \section{Vành}
-Một vành được gọi là nhóm abelian với phép toán hai ngôi thỏa mãn luật kết hợp và phân phối trên nhóm abelian:
+\index{Vành}
+Một vành được gọi là nhóm abelian \index{Abelian} với phép toán hai ngôi thỏa mãn luật kết hợp và phân phối trên nhóm abelian:
 \begin{displaymath}
 \forall a, b, c \in G: a\cdot (b + c) = a \cdot b + a \cdot c
 \end{displaymath}
 \section{Trường}
+\index{Trường}
 Một trường là một vành giao hoán khác 0, chứa một nghịch đảo nhân cho mọi phần tử khác không. Như một vành, các phần tử khác không tạo thành một nhóm abelian dưới phép nhân.
 
 Cụ thể, cho tập $F$ và hai phép toán cộng và nhân trên $F$ thõa mãn các điều kiện:
@@ -554,8 +571,8 @@ Thỏa mãn các điều kiện sau:
 \item \textbf{Tồn tại phần tử đối}: $\forall a \in F, \exists (-a) \in F, a + (-a) = (-a) + a = 0$
 \item \textbf{Phép nhân có tính kết hợp}: $\forall a, b, c \in F, (a \cdot b) \cdot c = a \cdot (b \cdot c)$
 \item \textbf{Phép nhân có tính giao hoán}: $\forall a, b \in F, a \cdot b = b \cdot a$
-\item \textbf{Tồn tại phần tử đơn vị}: $\exists 1 \in F, 1 , 0, \forall a \in F, a \cdot 1 = 1 \cdot a = a$
-\item \textbf{Tồn tại phần tử nghịch đảo}: $\forall a \in F, a , 0, \exists a^{-1} \in F, a^{-1} \cdot a = a \cdot a^{-1} = 1$
+\item \textbf{Tồn tại phần tử đơn vị \index{Phần tử đơn vị}}: $\exists 1 \in F, 1 , 0, \forall a \in F, a \cdot 1 = 1 \cdot a = a$
+\item \textbf{Tồn tại phần tử nghịch đảo \index{Phần tử nghịch đảo}}: $\forall a \in F, a , 0, \exists a^{-1} \in F, a^{-1} \cdot a = a \cdot a^{-1} = 1$
 \item \textbf{Phép nhân phân phối với phép cộng}: $\forall a, b, c \in F, a \cdot (b + c) = a \cdot b + a \cdot c$
 \end{itemize}
 Ví dụ về trường:
@@ -565,6 +582,7 @@ Ví dụ về trường:
 \item Trường số hữ tỉ $(\mathbb{Q})$
 \end{itemize}
 \section{Trường hữu hạn $\mathbb{F}_p$}
+\index{Trường hữu hạn}
 Chọn $p$ là một số nguyên tố. Trường hữu hạn $\mathbb{F}_q$ gọi là trường nguyên tố bao gồm một tập số nguyên $\{0, 1, 2, 3, \ldots , p - 1\}$ và những phép tính sau:
 \begin{itemize}
 \item Phép cộng: Với $a, b \in \mathbb{F}_p$ thì $a + b = r, r$ là số dư của phép chia tổng $a + b$ cho $p$. Đây gọi là phép cộng modulo, ngắn gọn hơn có thể viết $a + b = r \ (mod \ p)$.
@@ -591,12 +609,12 @@ Cho trường đại số hữu hạn $\mathbb{F}_p$ bao gồm tập $\mathbb{F}
 \end{itemize}
 \subsection*{Một số vấn đề khác}
 \begin{itemize}
-\item \textbf{Phần tử nghịch đảo và số} $p$: Việc tìm phần tử nghịch đảo chính là tìm số $b = a^{-1}$ sao cho $a \cdot b = 1 \ (mod \ p)$. Tìm phần tử nghịch đảo của 2 theo ví dụ trên ta có: $\displaystyle b = \frac{p+1}{2} = 6$ (điều kiện là $p$ là số nguyên tố). \\ \\
+\item \textbf{Phần tử nghịch đảo \index{Phần tử nghịch đảo} và số} $p$: Việc tìm phần tử nghịch đảo chính là tìm số $b = a^{-1}$ sao cho $a \cdot b = 1 \ (mod \ p)$. Tìm phần tử nghịch đảo của 2 theo ví dụ trên ta có: $\displaystyle b = \frac{p+1}{2} = 6$ (điều kiện là $p$ là số nguyên tố). \\ \\
 Khi ước chung nhỏ nhất của $p$ và $a$ là $gcd(p, a) = 1$ thì luôn có $b, x$ để: $a \cdot b + x \cdot p = 1 \ (mod \ p)$. Khi đó $a \cdot b = 1 \ (mod \ p)$. Nghĩa là ta luôn tìm được nghịch đảo của số $a$ khi $gcd(p, a) = 1$ \\ \\
 Với $gcd(p, a) > 1$ suy ra $gcd(a \cdot b, p) > 1$ với mọi $b$ suy ra $a \cdot b , 1 \ (mod \ p)$. \\ \\
 Vậy là điều kiện để tồn tại phần tử nghịch đảo của $a$ là với mọi số nguyên $a \in {0, 1, 2, \ldots , p-1}$ thì $gcd(a, p) = 1$. Điều này đồng nghĩa với việc $p$ phải là một số nguyên tố. Hay nói cách khác $\mathbb{F}_p$ là một trường đại số nếu và chỉ nếu $p$ là một số nguyên tố.
-\item \textbf{Phần tử sinh}: Cho $g$ là một số trong trường $\mathbb{F}_p$, $g$ là phần tử sinh của $\mathbb{F}_p$ để $\{1, g, g^2, g^3, g^4, \ldots, g^{p-2}\} = Z*$ ở đây Z được gọi là nhóm vòng và $g$ là phần tử sinh của Z. \\ \\
-Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 4, 5\}$. Ta có phần tử sinh là 3. Tuy nhiên không phải mọi phần tử của $Z*$ đều là phần tử sinh.
+\item \textbf{Phần tử sinh \index{Phần tử sinh}}: Cho $g$ là một số trong trường $\mathbb{F}_p$, $g$ là phần tử sinh của $\mathbb{F}_p$ để $\{1, g, g^2, g^3, g^4, \ldots, g^{p-2}\} = Z^*$ ở đây Z được gọi là nhóm vòng \index{Nhóm vòng} và $g$ là phần tử sinh của Z. \\ \\
+Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 4, 5\}$. Ta có phần tử sinh là 3. Tuy nhiên không phải mọi phần tử của $Z^*$ đều là phần tử sinh.
 \end{itemize}
 %\section{Truờng hữu hạn $\mathbb{F}_{2^m}$}
 %Trường hữu hạn $\mathbb{F}_2^m$ gọi là một trường hữu hạn nhị phân, có thể được hiểu như một không gian vector kích thước $m$ qua trường hữu hạn $\mathbb{F}_2$ bao gồm hai phần tử 0 và 1. Nghĩa là với $m$ phần tử $\alpha_0, \alpha_1, \alpha_2, \ldots, \alpha_{m-1} \in \mathbb{F}_2^m$ và mỗi phần tử $\alpha \in \mathbb{F}_2$ $m$ có thể được viết dưới dạng:
@@ -684,6 +702,7 @@ Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 
 %\end{center}
 \chapter{Mật mã dựa trên đường cong Elliptic}
 \section{Đường cong Elliptic}
+\index{Đường cong Elliptic}
 Một đường cong elliptic curve được xác định bởi phương trình đường cong và một số trường tọa độ cơ bản.
 
 Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong E. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với 2. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
@@ -697,8 +716,9 @@ h được gọi là cofactor và o được gọi là cấp(order) của điể
 
 Số lượng điểm sinh của trường $GF(n)$ là $\phi (n - 1)$ ở đây $\phi$ là một hàm Ơ-le của Euler. Điều này cũng là yếu tố cho phép nhân trong nhóm vòng[*].
 
-Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve, Montgomery Curve, Edwards Curve, Twisted Edwards Curve, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
+Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve \index{Weierstrass Curve}, Montgomery Curve \index{Montgomery Curve}, Edwards Curve \index{Edwards Curve}, Twisted Edwards Curve \index{Twisted Edwards Curve}, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
 \subsection*{Luật cộng}
+\index{Luật cộng}
 Một đường cong elliptic là tập hợp các nghiệm của phương trình:
 \begin{displaymath}
 Y^2 = X^3 + AX + B.
@@ -820,7 +840,7 @@ Hơn nữa, nếu $P = (a, b)$ chúng ta định nghĩa điểm đối $-P = (a,
 nP = \underbrace{P + P + P + \ldots + P}_{n}.
 \end{displaymath}
 \begin{theorem} \label{dl2.1}
-Cho đường cong $E$. Luật cộng trên đường cong $E$ thỏa mãn tính chất:
+Cho đường cong $E$. Luật cộng \index{Luật cộng} trên đường cong $E$ thỏa mãn tính chất:
 \begin{itemize}
 \item[(a)] $P + \mathcal{O} = \mathcal{O} + P = P \ \forall P \in E$ (phần tử đơn vị)
 \item[(b)] $P + (-P) = \mathcal{O} \ \forall P \in E$ (phần tử nghịch)
@@ -856,6 +876,7 @@ Phép cộng $P_1 + P_2 = (x_3,y_3)$
 \end{itemize}
 \end{theorem}
 \section{Đường cong Elliptic trên trường hữu hạn}
+\index{Đường cong Elliptic trên trường hữu hạn}
 Trong phần trước chúng ta đã xem xét lí thuyết về đường cong bằng hình học. Ví dụ tổng của hai điểm phân biệt $P$ và $Q$ trên đường cong $E$ được định nghĩa bởi đường thẳng $L$ đi qua hai điểm $P$ và $Q$ sau đó tìm điểm thứ ba là giao điểm của $L$ và $E$ như minh hoa ở trên. Tuy nhiên để áp dụng lí thuyết elliptic vào mật mã, chúng ta cần nhìn đường cong và các điểm của nó có tọa độ nằm trong trường hữu hạn $\mathbb{F}_p$ điều này dễ làm.
 \begin{definition}
 Cho $p$ $\geq$ 3 là một số nguyên tố. Một đường cong elliptic trên trường $\mathbb{F}_p$ có công thức
@@ -981,7 +1002,7 @@ Chọn điểm $P = (7, 13)$ suy ra điểm $-P = (7, -13 \ (\ mod \ 29 )= (7, 1
 \caption{Biểu diễn $2*P$ với ($P \neq \mathcal{O}$)}  \label{h19-1}
 \end{figure}
 \end{center}
-Trong vị dụ trên ta thấy điểm $P = (19, 15)$ là phần tử sinh của đường cong trên trường $\mathbb{F}_{29}$
+Trong vị dụ trên ta thấy điểm $P = (19, 15)$ là phần tử sinh \index{Phần tử sinh} của đường cong trên trường $\mathbb{F}_{29}$
 \begin{center}
 \begin{tabular}{lllllllll}
 $P = (19, 15)$ & & $2P = (15, 8)$ & & $3P = (18, 23)$ & & $4P = (27, 20)$ \\
@@ -996,6 +1017,7 @@ $33P = (15, 21)$ & & $34P = (19, 14)$  \\
 \end{tabular}
 \end{center}
 \section{Thuật toán Double-and-Add}
+\index{Thuật toán Double-and-Add}
 Xuất phát từ việc khó phục hồi lại giá trị của n từ điểm $P$ và $Q = n\cdot P$ trong $E(\mathbb{F}_{p})$ đây là vấn đề khó của ECDLP. Tuy nhiên để sử dụng
 \begin{displaymath}
 \mathbb{Z} \rightarrow E(\mathbb{F}_p), \ \ \ n \mapsto nP,
@@ -1031,6 +1053,7 @@ Do đó tổng thời gian tính toán $nP$ tối đa là 2r phép toán trong $
 \end{algorithmic}
 \end{algorithm}
 \section{Montgomery curve}
+\index{Montgomery Curve}
 Trong toán học những đường cong Montgomery là một dạng của đường cong elliptic , khác với Weierstrass , được giới thiệu bởi Peter L. Montgomery vào năm 1987. Nó được sử dụng cho một số tính toán nhất định, và đặc biệt trong mật mã ứng dụng khác nhau.
 
 Một đường cong Montgomery trên trường $\mathbb{K}$ được định nghĩa bởi phương trình 
@@ -1039,6 +1062,7 @@ M_{A,B}: By^2 = x^3 + Ax^2 + x
 \end{displaymath}
 với điều kiện $A, B \in \mathbb{K}$ và với $B(A^2 - 4) \neq 0$. Đường cong này được xem xét trên một trường hữu hạn $\mathbb{K}$($\mathbb{K} = \mathbb{F}_q$) với hai đặc điểm khác như $A \in \mathbb{K} \setminus \{-2, 2\}, B \in \mathbb{K} \setminus\{0\}$
 \subsection*{Luật cộng}
+\index{Luật cộng}
 Cho hai điểm $P_{1} = (x_{1}, y_{1}), P_{2}=(x_{2},y_{2})$ trên đường cong Montgomery $M_{A, B}$ trong hệ tọa độ affine, điểm $P_{3} = P_{1} + P_{2}$ biểu diễn hình học, điểm thứ ba là giao điểm giữa $M_{A, B}$ và đường thẳng đi qua $P_{1}$ và $P_{2}$. Có thể tìm tọa độ $(x_3, y_3)$ của $P_{3}$, theo cách sau:
 \begin{itemize}
 \item[1, ] Xem xét một đường thẳng $y = lx + m$ trong mặt phẳng affine và để nó đi qua $P_{1}$ và $P_{2}$ (áp đặt điều kiện), theo cách này, người ta có được $\displaystyle{l = \frac {y_{2} - y_{1}}{x_{2} - x_{1}}}$ và $\displaystyle{m = y_ {1} - \left({\frac {y_ {2} -y_ {1}} {x_ {2} -x_ {1}}} \right)x_{1}}$
@@ -1068,6 +1092,7 @@ y_3 = \frac{(2x_1+x_2+A)(y_2-y_1)}{x_2-x_1}-\frac{B(y_2-y_1)^3}{(x_2-x_1)^3}-y_1
 \end{displaymath}
 \end{itemize}
 \subsection*{Doubling}
+\index{Doubling}
 Cho một điểm $P_{1}$ trên đường cong Montgomery $M_{A, B}$, điểm $[2]P_1$ đại diện cho điểm hình học của điểm giao nhau thứ ba giữa đường cong và đường tiếp tuyến tại $P_{1}$; vì vậy, để tìm tọa độ của điểm $P_3 = 2P_1$, trong trường hợp này, đường thẳng $y  =  lx  +  m$ phải tiếp xúc với đường cong tại $P_{1}$, do đó, nếu $M_{A, B}: f(x, y) = 0$ với
 \begin{displaymath}
 f(x, y) = x^3 + Ax^2 + x - By^2
@@ -1081,6 +1106,7 @@ Vì vậy $\displaystyle l = \frac{3x_1^2 + 2Ax_1 + 1}{2By_1}$ và tọa độ �
 {\displaystyle {\begin{aligned}x_{3}&=Bl^{2}-A-x_{1}-x_{1}={\frac {B(3x_{1}^{2}+2Ax_{1}+1)^{2}}{(2By_{1})^{2}}}-A-x_{1}-x_{1}\\&={\frac {(x_{1}^{2}-1)^{2}}{4By_{1}^{2}}}={\frac {(x_{1}^{2}-1)^{2}}{4x_{1}(x_{1}^{2}+Ax_{1}+1)}}\\[8pt]y_{3}&=(2x_{1}+x_{1}+A)l-Bl^{3}-y_{1}\\&={\frac {(2x_{1}+x_{1}+A)(3{x_{1}}^{2}+2Ax_{1}+1)}{2By_{1}}}-{\frac {B(3{x_{1}}^{2}+2Ax_{1}+1)^{3}}{(2By_{1})^{3}}}-y_{1}.\end{aligned}}}
 \end{displaymath}
 \section{Edwards curve}
+\index{Edwards Curve}
 Trong toán học , các đường cong Edwards là một họ các đường cong elip được Harold Edwards nghiên cứu năm 2007. Khái niệm về các đường cong elliptic trên các trường hữu hạn được sử dụng rộng rãi trong mã hóa đường cong elip. Các ứng dụng của các đường cong Edwards tới mật mã được Bernstein và Lange phát triển : chúng đã chỉ ra một số ưu điểm của dạng Edwards so với dạng Weierstrass.
 
 Phương trình của một đường cong Edwards trên một trường K mà không có đặc tính 2 là:
@@ -1094,6 +1120,7 @@ x^2 + y^2 = c^2(1 + dx^2y^2)
 trong đó $c, d \in K$ với $cd(1 - c^4\cdot d) \neq 0$ \\
 Mỗi đường cong Edwards tương đương với đường cong elip ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu K là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $K$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có $c = 1$, không mất tính tổng quát. Trong các phần sau, giả sử rằng $c = 1$.
 \subsection*{Luật cộng}
+\index{Luật cộng}
 Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phần tử đơn vị. Đối với đường cong Edwards, lấy phần tử trung tính là điểm (0, 1), tổng các điểm $(x_1,  y_1)$ và $(x_2 ,y_2)$ được đưa ra bởi công thức:
 \begin{displaymath}
 (x_1, y_1) + (x_2, y_2) = \left( \frac{x_1y_2 + x_2y_1}{1 + dx_1x_2y_1y_2}, \frac{y_1y_2 - x_1x_2}{1 - dx_1x_2y_1y_2} \right).
@@ -1103,21 +1130,24 @@ Nếu d không phải là một bình phương trong $K$ và $\displaystyle (x_{
 Nếu $d$ là một bình phương $K$ , thì phép toán tương tự có thể có các điểm đặc biệt, tức là có thể có cặp $(x_1, y_1)$ và $(x_2, y_2)$ trong đó 1$ +  dx_1x_2y_1y_2 = 0$ hoặc $1 -  dx_1x_2y_1y_2 = 0$.
 Một trong những tính năng hấp dẫn của luật cộng của Edwards là nó được thống nhất mạnh mẽ, tức là nó cũng có thể được sử dụng để gấp đôi một điểm, đơn giản hóa việc bảo vệ chống lại tấn công bên kênh. Công thức cộng ở trên nhanh hơn các công thức thống nhất khác và có tính chất hoàn chỉnh mạnh.
 \subsection*{Doubling}
+\index{Doubling}
 Doubling có thể được thực hiện với chính xác công thức tương tự như cộng. Doubling đề cập đến trường hợp trong đó các đầu vào $(x_1, y_1)$ và $(x_2, y_2)$ được biết là bằng nhau. Vì $(x_1, y_1)$ nằm trên đường cong Edwards, ta có thể thay thế hệ số bằng $(x_1^2 + y_1^2  - 1)/x_1^2y_1^2$ như sau:
 \begin{displaymath}
 {\begin{aligned}2(x_{1},y_{1})&=(x_{1},y_{1})+(x_{1},y_{1})\\[6pt]2(x_{1},y_{1})&=\left({\frac  {2x_{1}y_{1}}{1+dx_{1}^{2}y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{1-dx_{1}^{2}y_{1}^{2}}}\right)\\[6pt]&=\left({\frac  {2x_{1}y_{1}}{x_{1}^{2}+y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{2-x_{1}^{2}-y_{1}^{2}}}\right)\end{aligned}}
 \end{displaymath}
 Điều này làm giảm mức độ mẫu số từ 4 đến 2, được phản ánh trong doubling. Luật cộng chung trong các tọa độ Edwards mất $10M + 1S + 1C + 1D + 7a$ và chi phí phép doubling là $3M + 4S + 3C + 6a$. Trong đó M là phép nhân trường, S là các phép bình phương trong trường , D là chi phí nhân với một tham số đường cong có thể lựa chọn và một trường bổ sung.
 \section{Twisted Edwards curve}
-Trong hình học đại số , các đường cong Twisted Edwards là mô hình mặt phẳng của các đường cong elip , một sự tổng quát của các đường cong Edwards được giới thiệu bởi Bernstein , Birkner, Joye, Lange và Peters trong năm 2008. Bộ đường cong được đặt tên theo nhà toán học Harold M. Edwards . Đường cong Elliptic rất quan trọng trong mật mã khóa công khai và các đường cong Twist Edwards nằm ở trung tâm của một lược đồ chữ ký điện tử gọi là EdDSA mang lại hiệu năng cao trong khi tránh các vấn đề bảo mật xuất hiện trong các chương trình chữ ký số khác.
+\index{Twisted Edwards Curve}
+Trong hình học đại số , các đường cong Twisted Edwards là mô hình mặt phẳng của các đường cong elip , một sự tổng quát của các đường cong Edwards được giới thiệu bởi Bernstein , Birkner, Joye, Lange và Peters trong năm 2008. Bộ đường cong được đặt tên theo nhà toán học Harold M. Edwards . Đường cong Elliptic rất quan trọng trong mật mã khóa công khai và các đường cong Twist Edwards nằm ở trung tâm của một lược đồ chữ ký điện tử \index{Chữ ký điện tử} gọi là EdDSA mang lại hiệu năng cao trong khi tránh các vấn đề bảo mật xuất hiện trong các chương trình chữ ký số khác.
 
 Như tên cho thấy, mỗi đường cong Twist Edwards là một xoắn của một đường cong Edwards. Đường cong Twist Edwards $E_{a, d}$ trên một trường $\displaystyle \mathbb{K}$ trong đó có $\displaystyle \mathrm{char}(\mathbb{K}) \neq 2$ là một đường cong mặt phẳng affine được xác định bởi phương trình:
 \begin{displaymath}
 E_{E_{a,d}}: ax^2 + y^2 = 1 + dx^2y^2
 \end{displaymath}
 Ở đâu $a, d$ là các phần tử khác 0 của $\displaystyle \mathbb{K}$. Đường cong Edwards là đường cong Twist Edwards với a = 1.
-Mỗi đường cong Twist Edwards đều tương đương với đường cong elip ở dạng Montgomery và ngược lại.
+Mỗi đường cong Twist Edwards đều tương đương với đường cong elip ở dạng Montgomery và ngược lại.(xem [?])
 \subsection*{Luật cộng}
+\index{Luật cộng}
 Cho $\displaystyle \mathbb{K}$ là một trường có đặc điểm là khác 2. Để $\displaystyle (x_{1}, y_{1})$ và $\displaystyle (x_{2}, y_{2})$ là điểm trên đường cong Twist Edwards. Phương trình của đường cong Twist Edwards được viết như:
 \begin{displaymath}
 E_{E,a,d}: ax^2 + y^2 = 1 + dx^2y^2.
@@ -1128,6 +1158,7 @@ Tổng của $(x_1, y_1)$ và $(x_2, y_2)$ trên $E_{E,a,d}$ là:
 \end{displaymath}
 Phần tử đơn vị là $(0,1)$ và âm của điểm $(x_1, y_1)$ là $(-x_1, y_1)$. Công thức này cũng làm việc với doubling. Nếu a là một bình phương trong $\mathbb{K}$ và d không phải bình phương trong $\mathbb{K}$, công thức trên là hoàn tất. Điều này có nghĩa là chúng ta có thể công thức cho tất cả các cặp điểm mà không xảy ra ngoai lệ.
 \subsection*{Doubling}
+\index{Doubling}
 Doubling có thể được thực hiện với chính xác công thức tương tự như phép cộng. Doubling một điểm $(x_1 , y_1)$ trên đường cong $E_{E,a,d}$ là: $[2](x_1, y_1) = (x_3, y_3)$ ở đây
 \begin{displaymath}
 \begin{aligned}
@@ -1138,9 +1169,10 @@ y_{3} &= {\frac {y_{1}y_{1} - ax_{1}x_{1}}{1 - dx_{1}x_{1}y_{1}y_{1}}}={\frac{y_
 \section{Mật mã dựa trên đường cong Elliptic}
 Chúng ta bắt đầu với ứng dụng đơn giản nhất, trao đổi khóa Diffie – Hellman, ít liên quan đến việc thay thế vấn đề logarit rời rạc cho trường $\mathbb{F}_p$ hữu hạn với bài toán logarit rời rạc cho đường cong elip $E_(\mathbb{F}_p)$. Sau đó chúng ta sẽ mô tả các tương tự elliptic của hệ thống mã khóa công khai Elgamal và thuật toán chữ ký số (DSA).
 \subsection*{Thông số miền (domain parameter)}
+\index{Thông số miền}
 Trong những phần trên ta đã xem xét những lý thuyết về đường cong elliptic. Để xác định một đường cong elliptic, người ta dựa trên những thông số miền, hay nói cách khác thông số miền đại diện cho một đường cong elliptic.
 
-Có hai loại thông số miền được sử dụng đó là thông số miền cho đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ và trên trường hữu hạn $\mathbb{F}_{2^m}$. Nhưng ở đây chúng ta chỉ xem xét với trường $\mathbb{F}_p$.
+Có hai loại thông số miền được sử dụng đó là thông số miền cho đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ và trên trường hữu hạn $\mathbb{F}_{2^m}$. Nhưng ở đây chúng ta chỉ xem xét với trường $\mathbb{F}_p$ (tham khảo các thông số có sẵn ở ?).
 
 Các thông số miền của đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ là tập $T$:
 \begin{displaymath}
@@ -1183,6 +1215,7 @@ Chọn một điểm cơ sở $G = (x_G, y_G)$ trên đường cong elliptic $E(
 \end{itemize}
 \end{itemize}
 \subsection*{Trao đổi khóa với Elliptic Diffie-Hellman}
+\index{Trao đổi khóa với Elliptic Diffie-Hellman}
 Alice và Bob đồng ý sử dụng một đường cong elliptic đặc biệt $E_(\mathbb{F}_p)$ và một điểm cụ thể $P \in E_(\mathbb{F}_p)$. Alice chọn số nguyên $n_A$ bí mật và Bob chọn số nguyên $n_B$ bí mật. Họ tính toán các bội số liên quan
 \begin{displaymath}
 \overbrace{Q_A = n_AP}^{Alice} \ \ \ and \ \ \ \overbrace{Q_B = n_BP}^{Bob}
@@ -1199,6 +1232,7 @@ mà họ có thể sử dụng như một chìa khóa để giao tiếp riêng t
 \end{center}
 \end{figure}
 \subsection*{Hệ thống mã khóa công khai Elgamal}
+\index{El-Gamal}
 Alice và Bob đồng ý sử dụng một số nguyên tố $p$ cụ thể, đường cong elliptic $E$ và điểm $P \in E(\mathbb{F}_p)$. Alice chọn một số nhân $n_A$ bí mật và điểm $Q_A = n_AP$ làm khóa công khai của cô ấy. Nội dung của Bob là một điểm $M \in E(\mathbb{F}_p)$. Anh ta chọn một số nguyên k là yếu tố ngẫu nhiên của anh ấy và các tính toán
 \begin{displaymath}
 \ \ \ \ C_1 = kP \ \ \ \ and \ \ \ \ C_2 = M + kQ_A.
@@ -1230,6 +1264,7 @@ Với ví dụ Alice và Bob. Thật không may, vì Alice phải tính toán $C
 \end{displaymath}
 Theo cách này, Bob chỉ cần gửi các tọa độ x của $C_1$ và $C_2$, cộng thêm hai bit phụ. Ý tưởng này đôi khi được gọi là nén điểm.
 \subsection*{Thuật toán chữ ký số với Elliptic}
+\index{Thuật toán chữ ký số với Elliptic}
 Thuật toán chũ ký số với Elliptic được mô tả sau đây:\\
 \begin{figure}[H]
 \begin{center}
@@ -1254,6 +1289,7 @@ x(v_1G + v_2V) \mod \ q = x(eG)
 \end{displaymath}
 Chữ kí được chấp nhận là hợp lệ.
 \chapter{Đường cong curve25519}
+\index{Đường cong curve25519}
 \section{Định nghĩa}
 
 \begin{center}
@@ -1270,7 +1306,7 @@ khả năng bảo mật cao. Công thức của đường cong Curve25519:
 By^2 = x^3 + Ax^2 + x
 \end{displaymath}
 Công thức này đã được đề cập ở phần trước. Nhờ sử dụng công thức của Montgomery, đường cong Curve25519 có được nhiều ưu điểm nổi bật mà các đường cong khác không sử dụng công thức của Montgomery không có được. Cụ
-thể hơn, nhờ sử dụng công thức cộng và nhân đôi của Montgomery, curve25519 có thể chống lại timing-attack.
+thể hơn, nhờ sử dụng công thức cộng và nhân đôi của Montgomery, curve25519 có thể chống lại timing-attack \index{Timing-attack}.
 \begin{itemize}
 \item[] \textbf{Ưu điểm đường cong Curve25519}
 \begin{itemize}
@@ -1305,6 +1341,7 @@ Từ giá trị $S$ tính được, Alice và Bob sẽ sử dụng hàm băm đ�
 \end{figure}
 \end{center}
 \subsection*{Hàm Curve25519}
+\index{Hàm Curve25519}
 Trong phần này chúng ta sẽ tìm hiểu cách chọn khóa bí mật $n$ và tính $Curves25519(n, 9)$ ở phần trước đã mô tả.
 \begin{theorem} \label{dl4.1}
 Chọn p là một số nguyên tố, $p \geq 5$. Chọn A là một số nguyên thõa mãn $A^2 - 4$ không phải là bình phương của một số nào đó theo modulo $p$. E là đường cong elliptic $y^2 = x^3 + Ax^2 + x$ trên trường hữu hạn $\mathbb{F}_p$. Định nghĩa hàm $X_0 : E(\mathbb{F}_{p^2} ) \rightarrow  \mathbb{F}_{p^2}$ như sau: $X_0(\infty) = 0$; $X_0(x, y) = x$. Với $n$ là một số nguyên, $q$ là một phần tử của $\mathbb{F}_p$. Thì sẽ tồn tại một phần tử $s$ đặc biệt $s \in \mathbb{F}_p$ sao cho $X_0(nQ) = s$ với tất cả các điểm $Q \in E(\mathbb{F}_{p^2} )$ thõa mãn $X_0(Q) = q$ (theo [?])
@@ -1345,10 +1382,11 @@ Theo như định lý trên, ta có thể tính được tọa độ của đi�
 
 Tọa độ điểm $P+Q$ có thể tính được dựa vào tọa độ $P, Q$ và tọa độ của điểm $P-Q$ (tức tọa độ của điểm $((x_P, y_P) + (x_Q, -y_Q)))$ điều này có vẻ như mâu thuẫn với định lý \ref{dl4.1}, tuy nhiên trong định lý \ref{dl4.1} không có nhắc đến việc cộng hai điểm $P$ và $Q$ có tọa độ bất kì nên việc công thức cộng Montgomery có liên quan đến tọa độ $y$ là không vô lý.
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
-Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone (\index{ECQV}). Sơ đồ chứng thư số ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
+Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone \index{Elliptic Curve Qu-Vanstone}(ECQV \index{ECQV}). Sơ đồ chứng thư số \index{Chứng thư số}ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
 
 Mục đích của chương này là để xem xét việc triển khai sơ đồ chứng thư số ẩn 
 \section{Hàm băm}
+\index{Hàm băm}
 Hàm băm được sử dụng trong lược đồ ECQV để tính toán thông điệp của chứng chỉ được tạo hoặc xác minh. Hàm băm cũng được sử dụng trong việc tạo và xác thực tham số miền elliptic ngẫu nhiên một cách chính xác, và cũng có thể được sử dụng trong các quá trình tạo số ngẫu nhiên.
 
 Mức độ bảo mật kết hợp với hàm băm phụ thuộc vào ứng dụng của nó. Trường hợp tránh xung đột là cần thiết, mức độ bảo mật tối đa bằng một nửa độ dài đầu ra (tính theo bit) của hàm băm. Trường hợp tránh xung đột là không cần thiết, mức độ bảo mật tối đa là độ dài đầu ra (tính theo bit) của hàm băm. Khả năng tránh xung đột nói chung là cần thiết để tính toán thông điệp cho chữ ký số.
@@ -1357,6 +1395,7 @@ Hàm băm được sử dụng bởi sơ đồ ECQV sẽ được chấp nhận 
 
 Hàm băm được sử dụng để tính toán chứng thư ẩn sẽ là hàm băm có mức bảo mật ít nhất là mức bảo mật của việc triển khai ECQV. Hàm băm được sử dụng cho các xác định tham số  elliptic sẽ là hàm băm có mức bảo mật là mức độ bảo mật của việc triển khai sơ đồ ECQV (ngoại trừ các xác định tham số elliptic ngẫu nhiên trong [SEC 2] được tạo bằng cách sử dụng SHA-1).
 \section{Hàm băm một số nguyên modul n}
+\index{Hàm băm một số nguyên modul n}
 Trong nhiều bước của \index{ECQV}, một chuỗi octet(mỗi một ký tự trong xâu được biểu diễn bởi 8 bits) chiều dài tùy ý được băm bằng hàm băm mật mã H, và sau đó được chuyển đổi thành một số nguyên modulo n. Phần này chỉ định hàm kết quả, ký hiệu $H_n: \{0, 1,\ldots , 255\}^{*} \rightarrow [0,\ldots , n - 1]$, ánh xạ các chuỗi octet có độ dài tùy ý đến các số nguyên modulo n.
 \begin{itemize}
 \item[] \textbf{Input}
@@ -1574,12 +1613,11 @@ Trao đổi khóa đối xứng bí mật giữa các bên.Việc trao đổi kh
 \end{figure}
 \end{center}
 \subsubsection*{Truyền file}
-Sau khi đã kí xác nhận và trao đổi khóa, đường truyền đã an toàn, người nhận file trực tiếp từ A thật sự đã là B chứ không phải kẻ tấn công, người gửi file cho B trực tiếp thật sự
-đã là A chứ không phải kẻ tấn công. Ta bắt đầu thao tác truyền file qua socket. 
+Sau khi đã kí xác nhận và trao đổi khóa, đường truyền đã an toàn, người nhận file trực tiếp từ A thật sự đã là B chứ không phải kẻ tấn công, người gửi file cho B trực tiếp thật sự đã là A chứ không phải kẻ tấn công. Ta bắt đầu thao tác truyền file qua socket. 
 
 Các hệ mã khóa đối xứng cho khả năng bảo mật cao hơn các hệ mã khóa công khai với cùng một kích thước khóa như nhau. Nói cách khác, các hệ mã khóa đối xứng cho thời gian tính toán nhanh hơn, hiệu quả hơn so với các hệ mã khóa công khai. Trong trường hợp truyền file bí mật giữa hai người, việc sử dụng các hệ mã khóa đối xứng với khóa đối xứng bí mật đã được thống nhất bởi thuật toán trao đổi khóa là tối ưu.
 
-File được chuyển đi thông qua socket và được mã hóa theo chuẩn AES-256, tất cả hệ mã khóa đối xứng được cung cấp trong thư viên libsodium. Ở đây sử dụng hệ mã hóa khối AES-256-CTR
+File được chuyển đi thông qua socket và được mã hóa theo chuẩn AES \index{AES}, tất cả hệ mã khóa đối xứng được cung cấp trong thư viên libsodium. Ở đây sử dụng hệ mã hóa khối AES-256-CTR
 \begin{center}
 \begin{figure}[H]
 \includegraphics[width=0.9\linewidth]{../ctr-en.png}
@@ -1611,12 +1649,12 @@ dụng ngôn ngữ lập trình C và thư viện lbsodium để tăng tốc tí
 \section{Chứng thư số ẩn}
 \chapter*{Kết luận và hướng phát triển}
 \section*{Kết quả đạt được}
-Trong quá tr ình làm đồ án em đã đạt được những kết quả sau:
+Trong quá trình làm đồ án em đã đạt được những kết quả sau:
 \begin{itemize}
 \item[1. ] Tìm hiểu một số nguyên lý hệ mã công khai, hàm băm, chữ ký điện tử.
 \item[2. ] Hiểu được lý thuyết về đường cong elliptic và một số kiến thức đại số trừu tượng liên quan áp dụng trong ngành mật mã học như nhóm và trường.
 \item[3. ] Hiểu được các bước cơ bản để người ta xây dựng một đường cong ellitptic và ứng dụng của đường cong elliptic trong thuật toán trao đổi khóa và tạo chứng thư số ẩn.
-\item[4. ] Nắm được một số kiểu tấn công vào các hệ mật mã như timing-attack, tấn công xen giữa (Man In The Middle).
+\item[4. ] Nắm được một số kiểu tấn công vào các hệ mật mã như timing-attack \index{Timing-attack}, tấn công xen giữa (Man In The Middle).
 \item[5. ] Xây dựng được ứng dụng chuyển file bí mật có các thao tác xác nhận (dùng hệ chữ kí điện tử ed25519) trao đổi khóa đối xứng bí mật (dùng thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong Curve25519).
 \item[6. ] Xây dựng được ứng dụng chứng thư số ẩn với đường cong Twisted Edwards
 \item[7. ] Có được cái nhìn vừa tổng quan, vừa chi tiết hơn về các hệ mật mã hiện đại.
@@ -1625,11 +1663,12 @@ Trong quá tr ình làm đồ án em đã đạt được những kết quả sa
 Do hạn chế về thời gian hoặc (và) nhiều yếu tố chủ quan cũng như khách quan khác, đồ án vẫn còn một số hạn chế:
 \begin{itemize}
 \item[1. ] Chưa tìm hiểu được một cách đầy đủ và chi tiết về đường cong elliptic trên trường hữu hạn $\mathbb{F}_{2^m}$ với hai dạng cơ sở normal và polinomial.
-\item[2. ] Vẫn còn rất nhiều phần kiến thức chưa tìm hiểu được như cách để tăng tốc độ tính toán của đường cong Curve25519 trên phần cứng cụ thể, lý do chi tiết giúp công thức cộng và nhân đôi Montgomery có thể chống lại được timing-attack, \ldots.
+\item[2. ] Vẫn còn rất nhiều phần kiến thức chưa tìm hiểu được như cách để tăng tốc độ tính toán của đường cong Curve25519 trên phần cứng cụ thể, lý do chi tiết giúp công thức cộng và nhân đôi Montgomery có thể chống lại được timing-attack \index{Timing-attack}, \ldots.
 \item[3. ] Ứng dụng truyền file và chứng thứ số chưa có giao diện đẹp mắt và mới chỉ được kiểm thử trên một máy.
 \end{itemize}
 \section*{Hướng phát triển}
-Do việc tính toán khóa trên đường cong elliptic là nhanh, việc lưu trữ và trao đổi khóa nhỏ gọn nên rất thích hợp cài đặt bảo mật cho các thiết bị IoT có bộ nhớ nhỏ khả năng tính toán thấp.
+Do việc tính toán khóa trên đường cong elliptic là nhanh, việc lưu trữ và trao đổi khóa nhỏ gọn nên rất thích hợp cài đặt bảo mật cho các thiết bị IoT\index{IoT}(internet of thing) có bộ nhớ nhỏ khả năng tính toán thấp.
+
 \begin{figure}[h]
 \begin{subfigure}{.3\textwidth}
   \centering
@@ -1650,6 +1689,7 @@ Do việc tính toán khóa trên đường cong elliptic là nhanh, việc lưu
 \end{subfigure}
 \caption{arduino, esp-12(esp8266), raspberry pi – các thiết bị dùng trong phát triển sản phẩm IoT} \label{h6.3}
 \end{figure}
+
 \printindex
 \begin{thebibliography}{9}
 \bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
