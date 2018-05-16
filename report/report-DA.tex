@@ -7,7 +7,7 @@
 \usepackage{amsfonts}
 \usepackage{comment}
 %\usepackage{enumitem}
-\usepackage{enumerate}
+%\usepackage{enumerate}
 %\usepackage{amssymb}
 \usepackage{graphicx}
 %\usepackage{cases}
@@ -19,7 +19,7 @@
 \usepackage{indentfirst}
 \usepackage[english]{babel}
 \usepackage{algpseudocode}
-%\usepackage[refpage]{nomencl}
+\usepackage[refpage]{nomencl}
 %\makenomenclature
 \usepackage{acro}
 \acsetup{
@@ -197,7 +197,6 @@ Vì vây, các điều kiện cần cho mật mã khối an toàn là:
 \item Kích thước khối phải đủ lớn để chống lại các loại tấn công phá hoại bằng phương pháp thống kê. Tuy nhiên cần lưu ý rằng kích thước khối lớn sẽ làm thời gian trễ lớn.
 \item Không gian khóa phải đủ lớn (tức là chiều dài khóa phải đủ lớn) để chống lại tìm kiếm vét cạn.Tuy nhiên mặt khác, khóa cần phải đủ ngắn để việc làm khóa, phân phối và lưu trữ được hiệu quả.	
 \end{itemize}
-
 Về các nguyên lý thiết kế mật mã khối, người ta đã ghi nhận 2 nguyên tắc cơ sở sau để có bảo mật cao, đó là việc tạo ra confusion (tính hỗn loạn, rắc rối) và diffusion (tính khuếch tán).
 
 \textit{Confusion}. (Hỗn loạn, rắc rối) Sự phụ thuộc của bản mã đối với bản rõ phải thực phức tạp để gây rắc rối, cảm giác hỗn loạn đối với kẻ thù có ý định phân tích tìm qui luật để phá mã. Quan hệ hàm số của mã-tin là phi tuyến (non-linear).
@@ -234,8 +233,7 @@ Hệ thống mật mã hóa khóa công khai có thể sử dụng với các m�
 
 Thông thường, các kỹ thuật mật mã hóa khóa công khai đòi hỏi khối lượng tính toán nhiều hơn các kỹ thuật mã hóa khóa đối xứng nhưng những lợi điểm mà chúng mang lại khiến cho chúng được áp dụng trong nhiều ứng dụng.
 \subsection*{Hệ thống khóa công khai}
-RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế,
-phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
+RSA là hệ mật mã khóa công khai phổ biến và cũng đa năng nhất trong thực tế, phát minh bởi Rivest, Shamir \& Adleman (1977). Nó là chuẩn mật mã bất thành văn đối với PKC, cung cấp đảm bảo tính mật, xác thực và chữ ký điện tử.
 
 Cơ sở thuật toán RSA dựa trên tính khó của bài toán phân tích các số lớn ra thừa số nguyên tố: không tồn tại thuật toán thời gian đa thức (theo độ dài của biểu diễn nhị phân của số đó) cho bài toán này. Chẳng hạn, việc phân tích một hợp số là tích của 2 số nguyên tố lớn hàng trăm chữ số sẽ mất hàng ngàn năm tính toán với một máy PC trung bình có CPU khoảng trên 2Ghz.
 \subsubsection{Thuật toán RSA}
@@ -531,35 +529,681 @@ Mục đích của chứng thư số dùng để nhận diện một đối tư�
 \end{itemize}
 \end{itemize}
 \chapter{Mật mã dựa trên đường cong Elliptic}
+ giơi thiệu 
+\section{Lý thuyết số}
+\subsection*{Nhóm}
+Một nhóm $(G, +)$ là tập hợp các phần tử $G$ cùng với phép toán hai ngôi $+$ kết hợp thành phần tử thứ ba thỏa mãn bốn tiên đề của nhóm (với $ a, b , c, e \in G$):
+\begin{itemize}
+\item Tính đóng: $\forall a, b: (a + b) \in G$
+\item Tính kết hợp: $\forall a, b, c: (a + b) + c = a + (b + c)$
+\item Phần tử đơn vị: $\exists e \ \forall a: a + e = e + a = a$
+\item Tính khả nghịch: $\forall a \ \exists b: a + b = b + a = e$
+\end{itemize}
+$e$ được gọi là phần tử đơn vị(ví dụ nhóm số nguyên phần tử đơn vị là 0). Một nhóm được gọi là abelian khi thỏa mãn điều kiện:
+\begin{itemize}
+\item Tính giao hoán: $\forall a,b: a + b = b + a$
+\end{itemize}
+Cho $\cdot$ là phép nhân kết quả của phép cộng lặp đi lặp lại nhiều lần của 1 phần tử. Cho nhóm $(G, \cdot)$ là nhóm và $x^n$ được định nghĩa như sau:
+\begin{displaymath}
+\begin{aligned}
+x^0 & = \infty \\
+x^{n + 1} & = x^n\cdot x \ \ with \ \ n \in \mathbb{N}
+\end{aligned}
+\end{displaymath}
+$\infty$ là phép nhân phân tử đơn vị. Cấp(order) r của một phần tử x được định nghĩa như một số nguyên nhỏ r > 0 sao cho $x^r = \infty$. Nếu một nhóm có phần tử g sao cho \{$g^n | n \in Z$\} là tất cả phần tử trong nhóm, g được gọi là phần tử sinh của nhóm vòng.
+\subsection*{Vành}
+Một vành được gọi là nhóm abelian với phép toàn hai ngôi thỏa mãn luật kết hợp và phân phối trên nhóm abelian:
+\begin{displaymath}
+\forall a, b, c \in G: a\cdot (b + c) = a \cdot b + a \cdot c
+\end{displaymath}
+\subsection*{Trường}
+Một trường là một vành giao hoán khác 0, chứa một nghịch đảo nhân cho mọi phần tử khác không. Như một vành, các phần tử khác không tạo thành một nhóm abelian dưới phép nhân.
+
+Ví dụ về trường:
+\begin{itemize}
+\item Trường số thực $(\mathbb{R})$
+\item Trường số phức $(\mathbb{C})$
+\item Trường số hữ tỉ $(\mathbb{Q})$
+\end{itemize}
 \section{Đường cong Elliptic}
+Một đường cong elliptic curve được xác định bởi phương trình đường cong và một số trường tọa độ cơ bản.
+
+Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong E. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với một số biểu diễn được thành $2^k$. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
+
+$E(GF(p^k))$ là tập hợp các điểm thỏa mãn phươn trình đường cong (và cả điểm $\infty$). Lực lượng $|E(GF(p^k))|$ được định nghĩa là cấp (order) của đường cong. Nếu muốn xác định một số phần tử của 
+$E(GF(p^k))$ như một điểm sinh. Nó tạo ra nhóm con khác theo luật:
+\begin{displaymath}
+h = \frac{|E(GF(p^k))|}{o}
+\end{displaymath}
+h được gọi là cofactor và o được gọi là cấp(order) của điểm sinh.
+
+Số lượng điểm sinh của trường $GF(n)$ là $\phi (n - 1)$ ở đây $\phi$ là một hàm Ơ-le của Euler. Điều này cũng là yếu tố cho phép nhân trong nhóm vòng[*].
+
+Đường cong elliptic có một số phương trình đường như \textit{Weierstrass Curve, Montgomery Curve, Edwards Curve, Twisted Edwards Curve, \ldots } chúng ta sẽ xem xét các luật cộng, doubling, nhân và các tính chất của các luật của các đường cong ở phần tiếp theo.
+ \subsection*{Luật cộng}
+Một đường cong elliptic là tập hợp các nghiệm của phương trình:
+\begin{displaymath}
+Y^2 = X^3 + AX + B.
+\end{displaymath}
+
+Phương trình này được gọi là phương trình Weierstrass. Ta có hai ví dụ về đường cong elliptic
+
+\begin{center}
+\begin{tabular}{ccc}
+$E_1: Y^2 = X^3 - 3X + 3$ & và & $E_2: Y^2 = X^3 - 6X + 5$ 
+\end{tabular}
+\end{center}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=1]{../im1.png}
+\caption{Hai ví dụ minh họa về đường cong elliptic}
+\end{center}
+\end{figure}
+Một đặc điểm của đường cong elliptic là lấy hai điểm bất kì trên đường cong và cộng chúng lại để tạo ra một điểm thứ ba nằm trên đường cong. Nhưng không giống như luật cộng thông thường chúng ta sẽ mô tả luật cộng thông qua hình học.
+\begin{figure}[h] \label{h2.2}
+\begin{center}
+\includegraphics[scale=1]{../im2.png}
+\caption{Luật cộng trên đường cong elliptic}
+\end{center}
+\end{figure}
+
+Cho $P$ và $Q$ là hai điểm trên đường cong elliptic $E$, như hình \ref{h2.2}. Kẻ đường thẳng $L$ đi qua $P$ và $Q$. Đường thẳng $L$ cắt đường cong $E$ tại ba điểm, trong đố có hai điểm $P$ và $Q$ và một điểm khác là $R$. Chúng ta lấy điểm $R$ và chiếu nó theo chục x để lấy được điểm mới $R'$. Điểm $R'$ được gọi là "tổng của $P$ và $Q$", có thể thấy phép cộng này không giống như các phép cộng thông thường. Chúng ta có thể kí hiệu phép cộng bởi $\oplus$.
+\begin{displaymath}
+P \oplus Q = R'
+\end{displaymath}
+
+Một ví dụ về luật cộng. Cho đường cong $E$ có phương trình:
+\begin{equation}
+Y^2 = X^3 - 15X + 18 \label{2.1}
+\end{equation}
+
+Cho hai điểm $P = (7,16)$ và $Q = (1,2)$ nằm trên đường cong $E$. Đường thẳng $L$ đi qua hai điểm có phương trình:
+\begin{equation}
+L: Y = \frac{7}{3} - \frac{1}{3} \label{2.2}
+\end{equation}
+Để tìm được giao điểm của đường thẳng $L$ và đường cong $E$. Chúng ta sẽ thay phương trình \ref{2.2} vào \ref{2.1} Ta có:
+\begin{displaymath}
+\begin{aligned}
+(\frac{7}{3}X - \frac{1}{3})^2 & = X^3 - 15X + 18, \\
+\frac{49}{9}X^2 - \frac{14}{9}X + \frac{1}{9} & = X^3 - 15X + 18, \\
+0 & = X^3 - \frac{49}{9}X^2 - \frac{121}{9}X + \frac{161}{9}
+\end{aligned}
+\end{displaymath}
+Chúng ta cần tìm nghiệm của đa thức. Nhìn chung để tìm nghiệm của đa thức là khó. Tuy nhiên như chúng ta đã biết $L \cap E$ Tại hai điểm P và Q nên ta có hai là $X = 7$ và $X = 1$,vì thế chúng ta có thể dễ dàng tìm được nghiệm thứ ba còn lại:
+\begin{displaymath}
+X^3 - \frac{49}{9}X^2 - \frac{121}{9}X + \frac{161}{9} = (X - 7)\cdot(X - 1)\cdot(X + \frac{23}{9})
+\end{displaymath}
+vì vậy điểm thứ ba là giao điểm của $L$ và $E$ sẽ có tọa $\displaystyle X = -\frac{23}{9}$. Chúng ta sẽ tìm tọa đô Y theo X bằng cách thay X vào phương trình \ref{2.2} kết quả $\displaystyle R = (-\frac{23}{9}, -\frac{170}{27})$. Cuối cùng chúng ta sẽ chiếu $R$ theo chục tọa đô X đạt được 
+\begin{displaymath}
+P \oplus Q = (-\frac{23}{9}, \frac{170}{27}).
+\end{displaymath} 
+
+\begin{figure}[h] 
+\begin{center}
+\includegraphics[scale=1]{../im3.png}
+\caption{Cộng điểm P với chính nó} \label{h2.3}
+\end{center}
+\end{figure}
+
+Có một số vấn đề, đầu tiên ta có thể nhìn thấy trong hình \ref{h2.2} nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình \ref{h2.3}. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
+
+Ví dụ tiếp tục với đường cong E với phương trình \ref{2.1} và điểm P ở ví dụ trên, chúng ta sẽ tính $P \oplus P$ hệ số góc tiếp tuyến của $E$ ở $P$ được tính bởi đạo hàm phương trình \ref{2.1}. Do đó ta có:
+\begin{displaymath}
+2Y\frac{dY}{dX} = 3X^2 - 15 \Rightarrow \frac{dY}{dX} = \frac{3X^2 - 15}{2Y}
+\end{displaymath}
+Thay tọa độ điểm $P = (7,16)$ vào ta được hệ số góc $\lambda = \frac{33}{8}$ và đường thẳng tiếp tuyến với $E$ tại $P$ có phương trình
+\begin{equation}
+L: Y = \frac{33}{8}X - \frac{103}{8} \label{2.3}
+\end{equation}
+Từ \ref{2.3} và \ref{2.1} ta có:
+\begin{displaymath}
+\begin{aligned}
+(\frac{33}{8}X - \frac{103}{8})^2 & = X^3 - 15X + 18, \\
+X^3 - \frac{1089}{64}X^2 + \frac{2919}{32}X - \frac{9457}{64} & = 0, \\
+(X - 7)^2\cdot(X - \frac{193}{64}) & = 0.
+\end{aligned}
+\end{displaymath}
+Tọa độ $X$ của điểm P là nghiệm kép của phương trình ta dễ dàng tìm được nghiệm còn lại $\displaystyle X = \frac{193}{64}$, thay $X$ vào \ref{2.3} tìm được $\displaystyle Y = -\frac{223}{512}$.Từ đó ta thu được kết quả của phép cộng
+\begin{displaymath}
+P \oplus P = (\frac{193}{64}, \frac{223}{512}).
+\end{displaymath}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=1]{../im4.png} \label{h2.4}
+\caption{Đường thẳng đứng $L$ đi qua $P = (a, b)$ và $P' = (a, -b)$}
+\end{center}
+\end{figure}
+
+Vấn đề thứ hai với luật cộng phát sinh là nếu như chúng ta cộng điểm $P = (a, b)$ với điẻm đối của nó  $P' = (a, -b)$ đường thẳng đi qua $P$ và $P'$ là x = a và nó chỉ cắt đường cong tại 2 điểm $P$ và $P'$(hình \ref{h2.4}) không có điểm thứ ba xuất hiện chúng ta sẽ thêm một điểm $O$ nằm ở vô cùng và điểm này không tồn tại trong mặt phẳng XY, chúng ta giả định nó luôn nằm trên đường thẳng dọc và chúng ta sẽ xét phép cộng như sau
+\begin{displaymath}
+P \oplus P' = O.
+\end{displaymath}
+
+Nếu công điểm $O$ với điểm $P$ nằm trên E sẽ như nào? Đường thẳng $L$ đi qua $O$ và $P$ là đường theo chiều dọc đi qua $P$ khi đó $O$ nằm trên đường dọc này và đường thẳng sẽ cắt $E$ tại điểm $P$, $O$ và điểm $P' = (a , -b)$. Nên phép công $P$ với $O$, chúng ta lấy hình chiếu của $P'$ qua trục X sẽ thu được điểm $P$ ban đầu. Nói một các khác $P \oplus O = P$, vì vậy $O$ giống như số không trong phép cộng của đường cong elliptic
+
+Qua đây có một số định nghĩa về đường cong elliptic
+\\[6pt]
+\begin{definition}
+Một đường cong $E$ là tập các nghiệm của phương trình Weierstrass
+\begin{displaymath}
+E: Y^2 = X^3 + AX + B,
+\end{displaymath}
+cùng với điểm $O$, với hằng số A, B thỏa mãn điều kiện
+\begin{displaymath}
+4A^3 + 27B^2 \neq 0,
+\end{displaymath}
+\end{definition}
+
+Luật cộng trên $E$ được định nghĩa như sau. Cho $P$ và $Q$ là hai điểm trên $E$. Cho $L$ là đường thẳng qua $P$ và $Q$, hoặc là tiếp tuyến của $E$ tại $P$ nếu như $P = Q$. Giao điểm của $E$ và $L$ có chứa ba điểm $P, Q, R$ phép cộng sẽ được tính thích hợp với điểm $O$ nằm trên đường dọc vô cùng. Điểm $R = (a, b)$, tổng của $P$ và $Q$ được định nghĩa là $R' = (a, -b)$ hình chiếu của $R$ qua trục X. Tổng này được định nghĩa là $P \oplus Q$ hay đơn gian hơn là $P + Q$.
+
+Hơn nữa, nếu $P = (a, b)$ chúng ta định nghĩa điểm đối $-P = (a, -b)$, chúng ta định nghĩa $P - Q$ trở thành $P + (-Q)$. Tương tự phép cộng lặp nhiều lần được biểu diễn như phép nhân một điểm với một số nguyên,
+\begin{displaymath}
+nP = \underbrace{P + P + P + \ldots + P}_{n}.
+\end{displaymath}
+\begin{theorem} \label{dl2.1}
+Cho đường cong $E$. Luật cộng trên đường cong $E$ thỏa mãn tính chất:
+\begin{itemize}
+\item[(a)] $P + O = O + P = P \ \forall P \in E$ (phần tử đơn vị)
+\item[(b)] $P + (-P) = O \ \forall P \in E$ (phần tử nghịch)
+\item[(c)] $(P + Q) + R = P + (Q + R) \ \forall P, Q, R \in E$ (kết hợp)
+\item[(d)] $P + Q = Q + P \ \forall P, Q \in E$ (giao hoán) 
+\end{itemize}
+Hay nói cách khách tập các điểm thuôc $E$ với luật cộng tạo thành nhóm abelian
+\end{theorem}
+\begin{theorem} \label{dl2.2}
+Thuật toán Cộng trên đường cong elliptic với phương trình đường cong Weierstrass. Cho
+\begin{displaymath}
+E: Y^2 = X^3 + AX + B
+\end{displaymath}
+là một đường cong elliptic và hai điểm $P_1$ và $P_2$ nằm trên đường cong $E$.
+\begin{itemize}
+\item[(a)] Nếu $P_1 = O$ thì $P_1 + P_2 = P_2$.
+\item[(b)] trái lại $P_2 = 0$ thì $P_1 + P_2 = P_1$.
+\item[(c)] trái lại $P_1 = (x_1, y_1)$ và $P_2 = (x_2, y_2)$
+\item[(d)] nếu $x_1 = x_2$ và $y_1 = -y_2$ thì $P_1 + P_2 = O$.
+\item[(e)] trái lại, định nghĩa $\lambda$ bằng
+\begin{displaymath}
+\lambda = \left\{ \begin{array}{ll}
+\displaystyle \frac{y_2 - y_1}{x_2 - x_1} & if \ P_1 \neq P_2  \\
+\\
+\displaystyle \frac{3x_1^2 + A}{2y_1} & if \ P_1 = P_2,
+\end{array} \right.
+\end{displaymath}
+và
+\begin{displaymath}
+x_3 = \lambda^2 - x_1 - x_2 \ \ \& \ \ y_3 = \lambda(x_1 - x_3) - y_1
+\end{displaymath}
+Phép cộng $P_1 + P_2 = (x_3,y_3)$
+\end{itemize}
+\end{theorem}
+\section{Đường cong Elliptic trên trường hữu hạn}
+Trong phần trước chúng ta đã xem xét lí thuyết về đường cong bằng hình học. Ví dụ tổng của hai điểm phân biệt $P$ và $Q$ trên đường cong $E$ được định nghĩa bởi đường thẳng $L$ đi qua hai điểm $P$ và $Q$ sau đó tìm điểm thứ ba là giao điểm của $L$ và $E$ như minh họa hình[?]. Tuy nhiên để áp dụng lí thuyết elliptic vào mật mã, chúng ta cần nhìn đường cong và các điểm của nó có tọa độ nằm trong trường hữu hạn $F_p$ điều này dễ làm.
+\begin{definition}
+Cho $p$ $\geq$ 3 là một số nguyên tố. Một đường cong elliptic trên trường $F_p$ có công thức
+\begin{center}
+$E: Y^2 = X^3 + AX + B$ với $A, B \in F_p$ thỏa mãn $4A^3 + 27B^2 \neq  0$.
+\end{center} 
+Với tập các điểm trên E với tọa độ nằm trong trường $F_p$
+\begin{center}
+$E(F_p) = \{ (x, y): x, y \in F_p$ thỏa mãn $y^2 = x^3 + Ax + B \} \cup \{ O \}$
+\end{center}
+\end{definition}
+Xem xét ví dụ với đường cong elliptic
+\begin{center}
+$E: Y^2 = X^3 + 3X + 8$ trên trường $F_{13}$
+\end{center}
+Chúng ta có thể tìm thấy các điểm của $E(F_{13})$ bằng các thay lần lượt các giá trị của $X = 0, 1, 2, \ldots, 12$ và kiểm tra với giá trị $X$ kết quả của phương trình $X^3 + 3X + 8$ có phải là một bình phương với modulo 13 không. Ví dụ thay $X = 0$ cho kết quả là 8 và 8 không phải là bình phương với modulo 13. Tiếp theo $X = 1$ cho kết quả 12 và 12 là căn bậc hai của modul 13.
+\begin{center}
+$5^2 \equiv 12 (mod 13)$ và $8^2 \equiv 12 (mod 13)$ trên trường $F_13$
+\end{center}
+Điều này sẽ cho hai điểm $(1, 5)$ và $(1, 8)$ trong trường $F_{13}$. Tiếp tục tính với các giá trị $X$ ta thu được danh sách các điểm.
+\begin{displaymath}
+E(F_{13}) = \{ O, (1, 5), (1, 8), (2, 3), (2, 10), (9, 6), (9, 7), (12, 2), (12, 11)\}
+\end{displaymath}
+Giả sử chúng ta có hai điểm $P = (x_1, y_1)$ và $Q = (x_2, y_2)$ là hai điểm nằm trên $e(F_p)$. Chúng ta sẽ định nghĩa phép cộng $P + Q$ là điểm có tọa độ $(x_3, y_3)$ thực hiện phép toán cộng(định lý \ref{dl2.2}). Chú ý rằng thuật toán này chỉ sử dụng các phép toán cộng, trừ , nhân ,chia liên quan đến các hệ số của đường cong $E$ và các điểm $P$ và $Q$. Khi các hệ số và tọa đô nằm trong trường $F_p$, chúng ta sẽ có điểm $(x_3, y_3)$ với tọa độ trong trường $F_p$.
+\begin{theorem}
+Cho $E$ là một đường cong trên trường $F_p$ và hai điểm $P$ và $Q$ nằm trong $E(F_p)$.
+\begin{itemize}
+\item[(a)] Thuật toán cộng đường cong elliptic (định lý \ref{dl2.2}) áp dụng với $P$ và $Q$ tạo điểm trong $E(F_p)$. Chúng ta định nghĩa $P + Q$.
+\item[(b)] Luật cộng trên $E(F_p)$ thỏa mãn tất cả các tính chất của định lí \ref{dl2.1}. Hay nói cách khác luật cộng $E(F_p)$ nằm trong một nhóm hữu hạn phần tử. 
+\end{itemize}
+\end{theorem}
+Xét ví dụ thuật toán cộng (định lí \ref{dl2.2}) với hai điểm $P = (9, 7)$ và $Q = (1, 8)$ trong $E(F_{13})$. Bước thứ e của thuật toán sẽ được tính đầu tiên
+\begin{displaymath}
+\lambda = \frac{y_2 - y_1}{x_2 - x_1} = \frac{8 - 7}{1 - 9} = \frac{1}{-8} = \frac{1}{5}	= 8,
+\end{displaymath}
+Ở đây các phép tính được thực hiện trên trường $\mathbb{F}_{13}$ vì vậy -8 = 5 và $\frac{1}{5} = 5^{-1} = 8$. Tiếp theo tính 
+\begin{displaymath}
+\vartheta = y_1 - \lambda x_1 = 7 - 8\cdot 9 = -65 = 0
+\end{displaymath}
+Cuối cùng phép cộng sẽ có kết quả
+\begin{center}
+\begin{tabular}{ll}
+$x_3$ & = $\lambda^2 - x_1 - x_2 = 64 - 9 - 1 = 54 = 2$, \\
+$y_3$ & = $-(\lambda x_3 + v) = -8\cdot2 = -16 = 10$
+\end{tabular}
+\end{center}
+Hay $P + Q = (1, 8) + (9, 7) = (2, 10)$ in  $E(F_{13})$. Tương tự ta có thể tính thuật toán cộng $P = (9, 7)$ với chính nó. Tính
+\begin{center}
+$\displaystyle \lambda = \frac{3x_1^2 + A}{2y_1} = \frac{3\cdot9^2 + 3}{2\cdot7} = \frac{246}{14} = 12$ \ và \ $\vartheta = y_1 - \lambda x_1 = 7 - 12\cdot9 = 3$
+\end{center}
+Ta có kết quả là 
+\begin{center}
+$x_3 = \lambda^2 - x_1 - x_2 = (12)^2 - 9 - 9 = 9$ và $y_3 = -(\lambda x_3 + v) = -(12\cdot9 + 3) = 6$,
+\end{center}
+vì vậy $P + P = (9, 7) + (9, 7) = (9,6)$ trong trường $E(\mathbb{F}_{13})$
+\subsection*{Thuật toán Double-and-Add}
+Xuất phát từ việc khó phục hồi lại giá trị của n từ điểm $P$ và $Q = n\cdot P$ trong $E(\mathbb{F}_{p})$ đây là vấn đề khó của ECDLP. Tuy nhiên để sử dụng
+\begin{displaymath}
+\mathbb{Z} \rightarrow E(\mathbb{F}_p), \ \ \ n \mapsto nP,
+\end{displaymath}
+cho mật mã, chúng ta cần thực hiện phép tính $nP$ hiệu quả khi biết giá trị của $n$ và $P$. Nếu như $n$ lớn thì chúng ta chẳng muốn tính $nP$ bằng cách $P, 2P, 3P, 4P, \ldots .$
+Các toán tử sử dụng trong tính toán đường cong elliptic được viết như phép cộng vì thế chúng ta sẽ gọi nó là "doubling-and-add". Ý tưởng cơ bản của thuật toán là chúng ta sẽ phân tích số n thành biểu diễn nhị phân
+\begin{center}
+$n = n_0 + n_1\cdot2 + n_2\cdot4 + n_3\cdot8 + \ldots + n_r\cdot2^r$ với $n_0, n_1, \ldots , n_r \in \{0, 1\}$.
+\end{center}
+Nếu chúng ta giả sử $n_r = 1$. Chúng ta có thể tính
+\begin{displaymath}
+Q_0 = P, \ \ Q_1 = 2Q_0, \ \ Q_2 = 2Q_1, \ldots , Q_r = 2Q_{r - 1}.
+\end{displaymath}
+Chú ý rằng $Q_i$, đơn giản chỉ là gấp hai lần $Q_{i-1}$ vì vậy 
+\begin{displaymath}
+Q_i = 2^iP.
+\end{displaymath}
+Các điểm là được biểu diễn như là phép với một số mũ cơ số 2, tính toán các điểm này yêu cầu r phép doubling. Cuối cùng chúng ta tính được $nP$ sử dụng r phép cộng
+\begin{displaymath}
+nP = n_0Q_0 + n_1Q_1 + n_2Q_2 + \ldots + n_rQ_r.
+\end{displaymath}
+Do đó tổng thời gian tính toán $nP$ tối đa là 2r phép toán trong $E(\mathbb{F}_p)$. Chú ý rằng $n \geq 2^r$, vì vậy không lớn hơn $2\log_2(n)$ phép toán để tính $nP$. Điều này tạo nên sự linh hoạt khi tính $nP$ thậm trí cả khi giá trị của n là lớn. Thuật toán tổng quát Double-and-Add.
+\begin{algorithm}[H]
+\caption{The double-and-add algorithm for elliptic curves}
+\textbf{Input:} Điểm P nằm trường elliptic và số nguyên n >= 1
+\begin{algorithmic}[1]
+\State $Set \ Q = P \ and \  R = O$.
+\State Loop while $n > 0$
+\State \ \ \ \ If $n \equiv 1$ (mod 2), set $R = R + Q$.
+\State \ \ \ \ $Q = 2Q$ and $n = \lfloor n/2 \rfloor$.
+\State \ \ \ \ If $n > 0$, continue with loop at Step 2.
+\State Return the point $R$, which equals $nP$.
+\end{algorithmic}
+\end{algorithm}
+%\subsection*{Hệ tọa độ}
+%Trong phương trình đường cong tổng quát xem xét hai tọa độ x và y. Ví dụ: xem xét đường cong Montgomery trên trường F được xác định bởi:
+%\begin{center}
+%$By^2 = x^3 + Ax^2 + x$ \ \ \ \  $A, B \in F$ và $B(A^2 - 4) \neq 0$
+%\end{center}
+%A, B là các hằng số xác định đường cong. Phần tử trên đường cong là cặp tọa độ (x, y). Tuy nhiên có thể biểu diễn mở rộng theo bảng sau:
+%\begin{center}
+%\begin{tabular}{rll}
+%$(x ,y)$ & affine	 \\
+%$(X, Y, Z, ZZ)$ & standard & với $x = X/Z$ và $y = Y/Z$ và %$ZZ = Z^2$ \\
+%$(X, Y, Z)$ & projective & với $x = X/Z$ và $y = Y/Z$ \\
+%$(X, Y, Z)$ & Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
+%$(X, Y, Z)$ & Jacobian & với $x = X/Z^2$ và	$y = Y/Z^3$ \\
+%$(X, Y, Z, Z^2, XZ )$ & Extended Lopez-Dahab & với $x = X/Z$ và $y = Y/Z^2$ \\
+%$(X, Y, Z, Z^2)$ &  Extended Jacobian & với $x = X/Z^2$ và %$y = Y/Z^3$ \\
+%$(X, Y, Z, T)$ & Extended Twisted Edwards & với $x = X/Z and Y = Y/Z$ với $T = X \cdot Y$ 
+%\end{tabular}
+%\end{center}
+%\subsection*{Weierstrass curve}
+\subsection*{Montgomery curve}
+Trong toán học những đường cong Montgomery là một dạng của đường cong elliptic , khác với Weierstrass , được giới thiệu bởi Peter L. Montgomery vào năm 1987. Nó được sử dụng cho một số tính toán nhất định, và đặc biệt trong mật mã ứng dụng khác nhau.
+
+Một đường cong Montgomery trên trường $\mathbb{K}$ được định nghĩa bởi phương trình 
+\begin{displaymath}
+M_{A,B}: By^2 = x^3 + Ax^2 + x
+\end{displaymath}
+với điều kiện $A, B \in \mathbb{K}$ và với $B(A^2 - 4) \neq 0$. Đường cong này được xem xét trên một trường hữu hạn $\mathbb{K}$($\mathbb{K} = \mathbb{F}_q$) với hai đặc điểm khác như $A \in \mathbb{K} \setminus \{-2, 2\}, B \in \mathbb{K} \setminus\{0\}$
+\subsubsection*{Luật cộng}
+Cho hai điểm $P_{1} = (x_{1}, y_{1}), P_{2}=(x_{2},y_{2})$ trên đường cong Montgomery $M_{A, B}$ trong hệ tọa độ affine, điểm $P_{3} = P_{1} + P_{2}$ biểu diễn hình học, điểm thứ ba là giao điểm giữa $M_{A, B}$ và đường thẳng đi qua $P_{1}$ và $P_{2}$. Có thể tìm tọa độ $(x_3, y_3)$ của $P_{3}$, theo cách sau:
+\begin{itemize}
+\item[1, ] Xem xét một đường thẳng $y = lx + m$ trong mặt phẳng affine và để nó đi qua $P_{1}$ và $P_{2}$ (áp đặt điều kiện), theo cách này, người ta có được $\displaystyle{l = \frac {y_{2} - y_{1}}{x_{2} - x_{1}}}$ và $\displaystyle{m = y_ {1} - \left({\frac {y_ {2} -y_ {1}} {x_ {2} -x_ {1}}} \right)x_{1}}$
+\item[2, ] giao của đường thẳng với đường cong $M_{A, B}$, thay thế $y$ biến trong phương trình đường cong với $y = lx + m$ phương trình thu được:
+\begin{displaymath}
+x^3 + (A - Bl^2)x^2 + (1 - 2Blm)x - Bm^2 = 0.
+\end{displaymath}
+Như đã được quan sát trước đây, phương trình này có ba giải pháp tương ứng với tọa độ x của $P_{1}$,$P_{2}$ và $P_{3}$. Đặc biệt phương trình này có thể được viết lại thành:
+\begin{displaymath}
+(x - x_1)(x - x_2)(x - x_3) = 0
+\end{displaymath}
+\item[3, ] So sánh các hệ số của hai phương trình giống hệt nhau đã nêu ở trên, đặc biệt là các hệ số của các số hạng thứ hai, thu được:
+\begin{displaymath}
+-x_1 - x_2 - x_3 = A - Bl^2
+\end{displaymath}
+Vì thế, $x_3$ có thể được viết dưới dạng $x_{1}$, $y_{1}$, $x_{2}$, $y_{2}$, như:
+\begin{displaymath}
+x_3 = B\left(\frac{y_2 - y_1}{x_2 - x_1} \right)^2 - A - x_1 - x_2
+\end{displaymath}
+\item[4, ] Để tìm tọa độ y của điểm $P_{3}$, thay thế giá trị $x_{3}$ vào đường thẳng $y = lx + m$. Lưu ý rằng điều này sẽ không cho điểm $P_{3}$ trực tiếp. Thật vậy, với phương pháp này ta tìm thấy tọa độ của điểm $R$ sao cho $R + P_1 + P_2 = P_\infty$, nhưng  kết quả cần là tổng giữa $P_{1}$ và $P_{2}$, thì cần phải quan sát rằng: $R + P_1 + P_2 = P_\infty$ nếu và chỉ nếu $-R = P_1 + P_2$. Vì vậy, cho điểm $R$, nó là cần tìm $-R$, nhưng điều này có thể được thực hiện dễ dàng bằng cách thay đổi dấu y tọa độ của $R$. Nói cách khác, nó sẽ là cần thay đổi dấu của y bằng cách thay thế giá trị  $x_{3}$ trong phương trình đường thẳng.
+Tóm lại tọa độ của điểm $P_3 = (x_3, y_3), P_3 = P_1 + P_2$ là:
+\begin{displaymath}
+x_3 = \frac{B(y_2-y_1)^2}{(x_2-x_1)^2}-A-x_1-x_2=\frac{B(x_2y_1-x_1y_2)^2}{x_1x_2(x_2-x_1)^2}
+\end{displaymath}
+\begin{displaymath}
+y_3 = \frac{(2x_1+x_2+A)(y_2-y_1)}{x_2-x_1}-\frac{B(y_2-y_1)^3}{(x_2-x_1)^3}-y_1
+\end{displaymath}
+\end{itemize}
+\subsubsection*{Doubling}
+Cho một điểm $P_{1}$ trên đường cong Montgomery $M_{A, B}$, điểm $[2]P_1$ đại diện cho điểm hình học của điểm giao nhau thứ ba giữa đường cong và đường tiếp tuyến tại $P_{1}$; vì vậy, để tìm tọa độ của điểm $P_3 = 2P_1$, trong trường hợp này, đường thẳng $y  =  lx  +  m$ phải tiếp xúc với đường cong tại $P_{1}$, do đó, nếu $M_{A, B}: f(x, y) = 0$ với
+\begin{displaymath}
+f(x, y) = x^3 + Ax^2 + x - By^2
+\end{displaymath}
+giá trị của l biểu diễn hệ số góc của đường thẳng, cho bởi:
+\begin{displaymath}
+ l=-\left.\frac{\partial f}{\partial x}\right/\frac{\partial f}{\partial y}
+\end{displaymath}
+Vì vậy $\displaystyle l = \frac{3x_1^2 + 2Ax_1 + 1}{2By_1}$ và tọa độ điểm $P_3,P_3 = 2P_1$ là:
+\begin{displaymath}
+{\displaystyle {\begin{aligned}x_{3}&=Bl^{2}-A-x_{1}-x_{1}={\frac {B(3x_{1}^{2}+2Ax_{1}+1)^{2}}{(2By_{1})^{2}}}-A-x_{1}-x_{1}\\&={\frac {(x_{1}^{2}-1)^{2}}{4By_{1}^{2}}}={\frac {(x_{1}^{2}-1)^{2}}{4x_{1}(x_{1}^{2}+Ax_{1}+1)}}\\[8pt]y_{3}&=(2x_{1}+x_{1}+A)l-Bl^{3}-y_{1}\\&={\frac {(2x_{1}+x_{1}+A)(3{x_{1}}^{2}+2Ax_{1}+1)}{2By_{1}}}-{\frac {B(3{x_{1}}^{2}+2Ax_{1}+1)^{3}}{(2By_{1})^{3}}}-y_{1}.\end{aligned}}}
+\end{displaymath}
+\subsection*{Edwards curve}
+Trong toán học , các đường cong Edwards là một họ các đường cong elip được Harold Edwards nghiên cứu năm 2007. Khái niệm về các đường cong elliptic trên các trường hữu hạn được sử dụng rộng rãi trong mã hóa đường cong elip. Các ứng dụng của các đường cong Edwards tới mật mã được Bernstein và Lange phát triển : chúng đã chỉ ra một số ưu điểm của dạng Edwards so với dạng Weierstrass.
+
+Phương trình của một đường cong Edwards trên một trường K mà không có đặc tính 2 là:
+\begin{displaymath}
+x^{2}+y^{2}=1+dx^{2}y^{2}
+\end{displaymath}
+cho một số vô hướng  $d \in K \setminus \{0,1\}$. Ngoài ra dạng sau với các tham số c và d được gọi là đường cong Edwards:
+\begin{displaymath}
+x^2 + y^2 = c^2(1 + dx^2y^2)
+\end{displaymath}
+trong đó $c, d \in K$ với $cd(1 - c^4\cdot d) \neq 0$ \\
+Mỗi đường cong Edwards tương đương với đường cong elip ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu K là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $K$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có c = 1, không mất tính tổng quát. Trong các phần sau, giả sử rằng c = 1.
+\subsubsection{Luật cộng}
+Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phần tử đơn vị. Đối với đường cong Edwards, lấy phần tử trung tính là điểm (0, 1), tổng các điểm $(x_1,  y_1)$ và $(x_2 ,y_2)$ được đưa ra bởi công thức:
+\begin{displaymath}
+(x_1, y_1) + (x_2, y_2) = \left( \frac{x_1y_2 + x_2y_1}{1 + dx_1x_2y_1y_2}, \frac{y_1y_2 - x_1x_2}{1 - dx_1x_2y_1y_2} \right).
+\end{displaymath}
+Nghịch đảo của bất kì điểm nào $(x_1, y_1)$ là $(-x_1, y_1)$. Người ta kiểm tra rằng điểm $(0, -1)$ có cấp là 2, và điểm $(\pm 1, 0)$ có cấp là 4, Trong thưc tế, một đường cong Edward luôn luôn có một điểm có cấp là 4 với tọa độ trong trường $K$.
+Nếu d không phải là một bình phương trong $K$ và $\displaystyle (x_{1}, y_{1}), (x_{2}, y_{2}) \in \{(x, y)|x^{2} + y^{2} = 1 + dx^{2}y^{2} \}$, không có điểm đặc biệt có mẫu số $1 +  dx_1x_2y_1y_2 và 1 -  dx_1 x_2y_1y_2$ bằng 0. Do đó, luật cộng Edwards là hoàn tất khi d không phải là một bình phương trong trường $K$. Điều này có nghĩa là các công thức sẽ làm việc tốt và không có lỗi với các phép toán doubling, phần tử đơn vị, phần tử âm. Nói cách khác, nó được định nghĩa cho tất cả các cặp điểm đầu vào trên đường cong Edwards trên $K$ và kết quả cho tổng của các điểm đầu vào.
+Nếu $d$ là một bình phương $K$ , thì phép toán tương tự có thể có các điểm đặc biệt, tức là có thể có cặp $(x_1, y_1)$ và $(x_2, y_2)$ trong đó 1$ +  dx_1x_2y_1y_2 = 0$ hoặc $1 -  dx_1x_2y_1y_2 = 0$.
+Một trong những tính năng hấp dẫn của luật cộng của Edwards là nó được thống nhất mạnh mẽ, tức là nó cũng có thể được sử dụng để gấp đôi một điểm, đơn giản hóa việc bảo vệ chống lại tấn công bên kênh. Công thức cộng ở trên nhanh hơn các công thức thống nhất khác và có tính chất hoàn chỉnh mạnh.
+\subsubsection*{Doubling}
+Doubling có thể được thực hiện với chính xác công thức tương tự như cộng. Doubling đề cập đến trường hợp trong đó các đầu vào $(x_1, y_1)$ và $(x_2, y_2)$ được biết là bằng nhau. Vì $(x_1, y_1)$ nằm trên đường cong Edwards, ta có thể thay thế hệ số bằng $(x_1^2 + y_1^2  - 1)/x_1^2y_1^2$ như sau:
+\begin{displaymath}
+{\begin{aligned}2(x_{1},y_{1})&=(x_{1},y_{1})+(x_{1},y_{1})\\[6pt]2(x_{1},y_{1})&=\left({\frac  {2x_{1}y_{1}}{1+dx_{1}^{2}y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{1-dx_{1}^{2}y_{1}^{2}}}\right)\\[6pt]&=\left({\frac  {2x_{1}y_{1}}{x_{1}^{2}+y_{1}^{2}}},{\frac  {y_{1}^{2}-x_{1}^{2}}{2-x_{1}^{2}-y_{1}^{2}}}\right)\end{aligned}}
+\end{displaymath}
+Điều này làm giảm mức độ mẫu số từ 4 đến 2, được phản ánh trong doubling. Luật cộng chung trong các tọa độ Edwards mất $10M + 1S + 1C + 1D + 7a$ và chi phí phép doubling là $3M + 4S + 3C + 6a$. Trong đó M là phép nhân trường, S là các phép bình phương trong trường , D là chi phí nhân với một tham số đường cong có thể lựa chọn và một trường bổ sung.
+\subsection*{Twisted Edwards curve}
+Trong hình học đại số , các đường cong Twisted Edwards là mô hình mặt phẳng của các đường cong elip , một sự tổng quát của các đường cong Edwards được giới thiệu bởi Bernstein , Birkner, Joye, Lange và Peters trong năm 2008. Bộ đường cong được đặt tên theo nhà toán học Harold M. Edwards . Đường cong Elliptic rất quan trọng trong mật mã khóa công khai và các đường cong Twist Edwards nằm ở trung tâm của một lược đồ chữ ký điện tử gọi là EdDSA mang lại hiệu năng cao trong khi tránh các vấn đề bảo mật xuất hiện trong các chương trình chữ ký số khác.
+
+Như tên cho thấy, mỗi đường cong Twist Edwards là một xoắn của một đường cong Edwards. Đường cong Twist Edwards $E_{a, d}$ trên một trường $\displaystyle \mathbb{K}$ trong đó có $\displaystyle \mathrm{char}(\mathbb{K}) \neq 2$ là một đường cong mặt phẳng affine được xác định bởi phương trình:
+\begin{displaymath}
+E_{E_{a,d}}: ax^2 + y^2 = 1 + dx^2y^2
+\end{displaymath}
+Ở đâu $a, d$ là các phần tử khác 0 của $\displaystyle \mathbb{K}$. Đường cong Edwards là đường cong Twist Edwards với a = 1.
+Mỗi đường cong Twist Edwards đều tương đương với đường cong elip ở dạng Montgomery và ngược lại.
+\subsubsection*{Luật cộng}
+Cho $\displaystyle \mathbb{K}$ là một trường có đặc điểm là khác 2. Để $\displaystyle (x_{1}, y_{1})$ và $\displaystyle (x_{2}, y_{2})$ là điểm trên đường cong Twist Edwards. Phương trình của đường cong Twist Edwards được viết như:
+\begin{displaymath}
+E_{E,a,d}: ax^2 + y^2 = 1 + dx^2y^2.
+\end{displaymath}
+Tổng của $(x_1, y_1)$ và $(x_2, y_2)$ trên $E_{E,a,d}$ là:
+\begin{displaymath}
+(x_{1}, y_{1}) + (x_{2}, y_{2}) = \left({\frac {x_{1}y_{2} + y_{1}x_{2}} { 1 + dx_{1}x_{2}y_{1}y_{2}}}, {\frac{y_{1}y_{2} - ax_{1}x_{2}} {1 - dx_{1}x_{2}y_{1}y_{2}}} \right)
+\end{displaymath}
+Phần tử đơn vị là $(0,1)$ và âm của điểm $(x_1, y_1)$ là $(-x_1, y_1)$. Công thức này cũng làm việc với doubling. Nếu a là một bình phương trong $\mathbb{K}$ và d không phải bình phương trong $\mathbb{K}$, công thức trên là hoàn tất. Điều này có nghĩa là chúng ta có thể công thức cho tất cả các cặp điểm mà không xảy ra ngoai lệ.
+\subsubsection*{Doubling}
+Doubling có thể được thực hiện với chính xác công thức tương tự như phép cộng. Doubling một điểm $(x_1 , y_1)$ trên đường cong $E_{E,a,d}$ là: $[2](x_1, y_1) = (x_3, y_3)$ ở đây
+\begin{displaymath}
+\begin{aligned}
+x_{3} &= {\frac{x_{1}y_{1}+y_{1}x_{1}}{1+dx_{1}x_{1}y_{1}y_{1}}}={\frac {2x_{1}y_{1}}{ax_{1}^{2}+y_{1}^{2}}} \\[6pt]
+y_{3} &= {\frac {y_{1}y_{1} - ax_{1}x_{1}}{1 - dx_{1}x_{1}y_{1}y_{1}}}={\frac{y_{1}^{2} - ax_{1}^{2}}{2 - ax_{1}^{2} - y_{1}^{2}}}.
+\end{aligned}
+\end{displaymath}
 \section{Mật mã dựa trên đường cong Elliptic}
+Chúng ta bắt đầu với ứng dụng đơn giản nhất, trao đổi khóa Diffie – Hellman, ít liên quan đến việc thay thế vấn đề logarit rời rạc cho trường $\mathbb{F}_p$ hữu hạn với bài toán logarit rời rạc cho đường cong elip $E_(\mathbb{F}_p)$. Sau đó chúng ta sẽ mô tả các tương tự elliptic của hệ thống mã khóa công khai Elgamal và thuật toán chữ ký số (DSA).
+\subsection*{Trao đổi khóa với Elliptic Diffie-Hellman}
+Alice và Bob đồng ý sử dụng một đường cong elliptic đặc biệt $E_(\mathbb{F}_p)$ và một điểm cụ thể $P \in E_(\mathbb{F}_p)$. Alice chọn số nguyên $n_A$ bí mật và Bob chọn số nguyên $n_B$ bí mật. Họ tính toán các bội số liên quan
+\begin{displaymath}
+\overbrace{Q_A = n_AP}^{Alice} \ \ \ and \ \ \ \overbrace{Q_B = n_BP}^{Bob}
+\end{displaymath}
+và họ trao đổi các giá trị của $Q_A$ và $Q_B$. Sau đó Alice sử dụng hệ số bí mật của mình để tính toán $n_AQ_B$, và Bob tương tự tính toán $n_BQ_A$. Bây giờ họ có giá trị bí mật được chia sẻ
+\begin{displaymath}
+n_AQ_B = (n_An_B)P = n_BQ_A,
+\end{displaymath}
+mà họ có thể sử dụng như một chìa khóa để giao tiếp riêng tư thông qua một mật mã đối xứng. Tổng quát trao đổi khóa elliptic Diffie–Hellman
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.9]{../im7.png}
+\caption{Trao đồi khóa Diffe-Hellman sử dụng đường cong elliptic}
+\end{center}
+\end{figure}
+\subsection*{Hệ thống mã khóa công khai Elgamal}
+Alice và Bob đồng ý sử dụng một số nguyên tố $p$ cụ thể, đường cong elliptic $E$ và điểm $P \in E(\mathbb{F}_p)$. Alice chọn một số nhân $n_A$ bí mật và điểm $Q_A = n_AP$ làm khóa công khai của cô ấy. Nội dung của Bob là một điểm $M \in E(\mathbb{F}_p)$. Anh ta chọn một số nguyên k là yếu tố ngẫu nhiên của anh ấy và các tính toán
+\begin{displaymath}
+\ \ \ \ C_1 = kP \ \ \ \ and \ \ \ \ C_2 = M + kQ_A.
+\end{displaymath}
+Anh ấy sẽ gửi hai điểm $(C_1, C_2)$ đến Alice và Alice sẽ tính:
+\begin{displaymath} 
+C_2 - n_AC_1 = (M + kQ_A) - n_A(kP) = M + k(n_AP) - n_A(kP) = M
+\end{displaymath}
+để phục hồi bản rõ. Tổng quát hệ mã khóa công khai Elgamal \\
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.9]{../im5.png}
+\caption{Tạo khóa, mã hóa, giải mã sử dụng Elliptic Elgamal}
+\end{center}
+\end{figure}
+Trong thực tế, hệ mã khóa công khai Elgamal elliptic hoạt động tốt, nhưng có một số khó khăn thực tế
+\begin{itemize}
+\item[1, ] Không có cách rõ ràng để đính kèm các tin nhắn văn bản vào các điểm trong $E(\mathbb{F}_p)$
+\item[2, ] Hệ thống mã hóa elgamal elliptic có hệ số mở rộng 4 đến 1, so với tỷ lệ mở rộng 2 đến 1 của Elgamal khi sử dụng $\mathbb{F}_p$.
+\end{itemize}
+Lý do elgamal elip có một mở rộng thông điệp 4 đến 1 nằm trong thực tế là bản rõ M là một điểm duy nhất trong $E(\mathbb{F}_p)$. Bản mã $(C_1, C_2)$ bao gồm bốn số modulo $p$, vì mỗi điểm trong $E(\mathbb{F}_p)$ có hai tọa độ. Các phương pháp khác nhau đã được đề xuất để giải quyết những vấn đề này. Khó khăn trong việc liên kết các bản rõ với các điểm có thể được phá vỡ bằng cách chọn M ngẫu nhiên và sử dụng nó làm mặt nạ cho bản rõ thô thực sự.
+Với ví dụ Alice và Bob. Thật không may, vì Alice phải tính toán $C_2 - n_AC_1$ ,cô ấy cần các giá trị chính xác của cả hai tọa độ x và y của $C_1$ và $C_2$. Tuy nhiên, tọa độ x của một điểm xác định tọa độ y lên để thay đổi dấu, vì vậy Bob có thể gửi thêm một bit, ví dụ
+\begin{displaymath}
+\lambda = \left\{ \begin{array}{ll}
+\displaystyle 0 & if \  0 \leq y \leq \frac{1}{2}p,\\
+\\
+\displaystyle 1 & if \ \frac{1}{2} < y < p
+\end{array} \right.
+\end{displaymath}
+Theo cách này, Bob chỉ cần gửi các tọa độ x của $C_1$ và $C_2$, cộng thêm hai bit phụ. Ý tưởng này đôi khi được gọi là nén điểm.
+\subsection*{Thuật toán chữ ký số với Elliptic}
+Thuật toán chũ ký số với Elliptic được mô tả sau đây:\\
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.9]{../im6.png}
+\caption{Chữ ký số ECDSA}
+\end{center}
+\end{figure}
+tương tự như thuật toán chữ ký số đơn giản của DSA. ECDSA đang được sử dụng rộng rãi, đặc biệt là trong các tình huống mà kích thước chữ ký là quan trọng. \\
+
+Để chứng minh rằng ECDSA hoạt động, tức là bước xác minh thành công trong việc xác minh chữ ký hợp lệ, chúng ta tính toán:
+\begin{displaymath}
+\begin{aligned}
+v_1G + v_2V & = ds_2^{-1}G + s_1s_2^{-1}(sG) \\
+            & = (d + ss_1)s_2^{-1}G \\
+            & = (es_2)s_2^{-1}G \\
+            & = eG \in E(\mathbb{F}_p).
+\end{aligned}
+\end{displaymath}
+Do đó:
+\begin{displaymath}
+x(v_1G + v_2V) \mod \ q = x(eG)
+\end{displaymath}
+Chữ kí được chấp nhận là hợp lệ.
 \chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
+Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone (ECQV). Sơ đồ chứng thư số ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
+
+Mục đích của chương này là để xem xét việc triển khai sơ đồ chứng thư số ẩn %ECQV. Việc triển khai có thể yêu cầu tuân thủ các sơ đồ mã hóa được chỉ định trong tài liệu này miễn là giao diện ngoài (đầu vào và đầu ra) cho các lược đồ tương đương với giao diện được chỉ định tại đây. Các tính toán nội bộ có thể được thực hiện như được chỉ định ở đây, hoặc có thể được thực hiện thông qua một chuỗi hoạt động tương đương.
+\section{Hàm băm}
+Hàm băm được sử dụng trong lược đồ ECQV để tính toán thông điệp của chứng chỉ được tạo hoặc xác minh. Hàm băm cũng được sử dụng trong việc tạo và xác thực tham số miền elliptic ngẫu nhiên một cách chính xác, và cũng có thể được sử dụng trong các quá trình tạo số ngẫu nhiên.
+
+Mức độ bảo mật kết hợp với hàm băm phụ thuộc vào ứng dụng của nó. Trường hợp tránh xung đột là cần thiết, mức độ bảo mật tối đa bằng một nửa độ dài đầu ra (tính theo bit) của hàm băm. Trường hợp tránh xung đột là không cần thiết, mức độ bảo mật tối đa là độ dài đầu ra (tính theo bit) của hàm băm. Khả năng tránh xung đột nói chung là cần thiết để tính toán thông điệp cho chữ ký số.
+
+Hàm băm được sử dụng bởi sơ đồ ECQV sẽ được chấp nhận hàm băm, như được chấp thuận trong mục đăng ký X9 00003, tiêu chuẩn băm an toàn (SHS). Mức độ bảo mật của hàm băm được phê duyệt được coi là tối đa một nửa độ dài đầu ra của nó cho các mục đích của tiêu chuẩn này. Danh sách một số hàm hăm tiêu chuẩn SHA-1, SHA-2, MD5, \ldots.
+
+Hàm băm được sử dụng để tính toán chứng thư ẩn sẽ là hàm băm có mức bảo mật ít nhất là mức bảo mật của việc triển khai ECQV. Hàm băm được sử dụng cho các xác định tham số  elliptic sẽ là hàm băm có mức bảo mật là mức độ bảo mật của việc triển khai sơ đồ ECQV (ngoại trừ các xác định tham số elliptic ngẫu nhiên trong [SEC 2] được tạo bằng cách sử dụng SHA-1).
+\section{Hàm băm một số nguyên modul n}
+Trong nhiều bước của ECQV, một chuỗi octet(mỗi một ký tự trong xâu được biểu diễn bởi 8 bits) chiều dài tùy ý được băm bằng hàm băm mật mã H, và sau đó được chuyển đổi thành một số nguyên modulo n. Phần này chỉ định hàm kết quả, ký hiệu $H_n: \{0, 1,\ldots , 255\}^{*} \rightarrow [0,\ldots , n - 1]$, ánh xạ các chuỗi octet có độ dài tùy ý đến các số nguyên modulo n.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Một chuỗi octet có chiều dài tùy ý $S$.
+\item[2. ] Hàm băm $H$ băm chuỗi octet chiều dài tùy ý thành các chuỗi bit dài của hashlen.
+\item[3. ] Số nguyên $n$.
+\end{itemize}
+\item[] \textbf{Action}
+\begin{itemize}
+\item[1. ] Tính toán $h = H(S)$, một chuỗi bit dài hashlen bits.
+\item[2. ] Lấy một số nguyên $e$ từ $h$ như sau:
+\begin{itemize}
+\item[2.1 ] Đặt E bằng $\lfloor log_2{n} \rfloor$ bits trái nhất của h.
+\item[2.2 ] convert xâu bit $E$ thành xâu octect $E'$, sử dụng  Bit-String-to-Octet-String trong [SEC 1].
+\item[2.3 ] convert xâu octect $E'$ thành số nguyên $e$ sử dụng Octet-String-to-Integer trong [SEC 1].
+\end{itemize}
+\end{itemize}
+\item[] \textbf{Output} Số nguyên e, nằm trong khoảng $[0,\ldots , n - 1]$.
+\end{itemize}
+Lưu ý rằng nếu miền $H$ bị giới hạn ở kích thước tối đa thì miền $H_n$ bị hạn chế theo cùng một cách.
+\section{Khởi tạo một số ngẫu nhiên}
+Với tiêu chuẩn chứng thư số, tất cả các giá trị ngẫu nhiên phải được tạo bằng trình tạo số ngẫu nhiên được chấp thuận có mức độ bảo mật ít nhất là mức độ bảo mật của việc thực hiện ECQV. Trình tạo số ngẫu nhiên phải tuân thủ ANSI X9.82 hoặc NIST Special Publication 800-90A [NIST 800-90A]. Một bộ tạo số ngẫu nhiên phù hợp cũng được mô tả trong [SEC 1, 3.10]
+\section{Các tham số khởi tạo và hợp lệ}
+Việc tạo và xác nhận tham sốđường cong elliptic phải tuân theo [SEC 1].
+
+Việc triển khai sử dụng cả ECQV lẫn các thuật toán ECC khác nên sử dụng điểm cơ sở ngẫu nhiên xác thực G, được xác định trong [SEC 2].
+
+
+\section{Sơ đồ chứng thư số thực ECQV}
+\subsection{Tổng quan}
+Sơ đồ chứng chỉ số ẩn được sử dụng bởi ba thực thể - Tổ chức phát hành chứng chỉ
+CA, người yêu cầu chứng chỉ U và bộ xử lý chứng chỉ V. Người yêu cầu U sẽ nhận được chứng chỉ số ẩn từ CA, xác nhận danh tính của U và cho phép V lấy khóa công khai của U. 
+\begin{figure}[h]\label{h3.1}
+\begin{center}
+\includegraphics[scale=0.9]{../im8.png}
+\caption{}
+\end{center}
+\end{figure}
+
+Sơ đồ chứng thư số ẩn bao gồm sáu phần. Những phần này sẽ được sẽ được mô tả chi tiết.\\
+\textbf{ECQV\_Setup}: Trong bước này, CA thiết lập các tham số đường cong elliptic, hàm băm, định dạng mã hóa chứng chỉ và tất cả các bên đã chọn một trình tạo số ngẫu nhiên. CA tạo ra một cặp khóa. Tất cả các bên phải nhận được bản sao xác thực các thông số và khóa công khai của CA. \\[6pt]
+\textbf{Cert\_Request}: Người yêu cầu U phải tạo một yêu cầu cho một chứng chỉ, được gửi đến CA. Thành phần mật mã của yêu cầu là khóa công khai, được tạo ra bằng cách sử dụng cùng thủ tục như CA sử dụng trong khi thiết lập ECQV. \\ [6pt]
+\textbf{Cert\_Generate}: Khi nhận được yêu cầu chứng chỉ từ U, CA xác nhận danh tính của U và tạo chứng chỉ số ẩn. CA gửi phản hồi cho U. \\ [6pt]
+\textbf{Cert\_PK\_Extraction}: Với chứng chỉ số ẩn cho U người dùng, thông số và khóa công khai của CA, thuật toán trích xuất khóa công khai tính toán khóa công khai của U. \\ [6pt]
+\textbf{Cert\_Reception}: Sau khi nhận được phản hồi cho yêu cầu chứng chỉ của mình, U đảm bảo tính hợp lệ của cặp khóa được chứng nhận ngầm
+
+Cấp chứng thư là quy trình gồm hai bước, trong đó bước đầu tiên nhận được yêu cầu cấp chứng thư từ U và bước thứ hai là tạo phản hồi, chứa chứng thư. Hình \ref{h3.1} đã mô tả giao thức (thông tin).
+
+Một số khác biệt giữa ECQV và chứng chỉ truyền thống liên quan đến việc ràng buộc giữa danh tính của người dùng và khóa công khai
+
+Mộ
+\subsection{Điều kiện tiên quyết: Cài đặt ECQV}
+Tất cả các bên (CA nhà phát hành chứng thư, chủ sở hữu chứng thư U và bộ xử lý chứng thư V) sẽ phải thiết lập các điều kiện tiên quyết sau để sử dụng ECQV.
+\begin{itemize}
+\item[1, ] CA đã thiết lập một tập hợp các tham số EC để sử dụng với ECQV bao gồm $q, a, b, G, n$ và $h$. Các tham số phải được tạo bằng phương thức được chấp nhận chúng phải được đảm bảo tính hợp lệ trên EC và cung cấp mức độ bảo mật mong muốn(có thể tham khảo các phương thức tạo tham số hoặc các tham số sẵn có ở [SEC 1, 3.1] và [SEC 2]).
+\item[2, ] CA đã chọn một hàm băm được chấp nhận với mức độ bảo mật mong muốn để sử dụng trong quy trình tạo chứng thư ECQV. Giả sử $H$ là hàm băm đã chọn và hashlen là độ dài của đầu ra hàm $H$. Như trong phần trước đã mô tả convert đâu ra của $H$ là một số nguyên dương n.
+\item[3, ] CA và U chọn và khởi một số ngẫu nhiên đảm bảo được mức độ bảo mật mong muốn. Số ngẫu nhiên này được sử dụng để tạo khóa private trong quá trình yêu cầu chứng thư và quá trình tạo chứng thư.
+\item[4, ] CA tạo được cặp khóa trên EC $(d_{CA}, Q_{CA})$ liên quan với các tham số EC được thiết lập từ ban đầu để sử dụng trong quá trình tạo chứng thư. Cặp khóa sẽ được tạo ra bằng cách sử dụng điểm  sinh và số ngẫu nhiên tạo ở mục 3(xem ở [SEC 1, §3.2.1]). CA sẽ đảm bảo tính hợp lệ của cặp khóa và sự đảm bảo của quyền sở hữu của khóa riêng (xem [SEC 1]).
+\item[5, ] Chủ sở hữu $U$ của chứng thư cùng với bộ xử lý $V$ sẽ thu được tham số đường cong, hàm băm và khóa công khai của CA là $Q_{CA}$. U và V sẽ có một số đảm bảo sau:
+\begin{itemize}
+\item[5.1, ] Tính hợp lệ các tham số đường cong EC.
+\item[5.2, ] Tính hợp lệ khóa công khai của CA, $Q_{CA}$
+\item[5.3, ] Sở hữu khóa riêng, $d_{CA}$ của CA
+\end{itemize}
+\end{itemize}
+\subsubsection{Mã hóa chứng thư} \label{subsec:3.5.2.1}
+Mã hóa chứng chứng thư mô tả cách thông tin được thêm vào trong chứng thư phải được mã hóa dưới dạng chuỗi octet. Nó cũng chỉ định thông tin nào phải được thêm vào và thông tin nào là tùy chọn và mọi ràng buộc hoặc mối quan hệ giữa các phần của thông tin chứng thư.
+
+Có ba kiểu mã hóa chứng thư(tham khỏa mô tả chi tiết xem ở[?])
+\begin{itemize}
+\item[•] \textbf{Fixed-length Fields}: là một mã hóa đơn giản, tối giản giúp đặt hiệu quả băng thông lên trước tất cả các mối quan tâm khác. Chứng chỉ bao gồm danh sách các trường, mỗi trường có độ dài cố định và định dạng được chia sẻ giữa tất cả các bên. Tiêu chuẩn này chỉ yêu cầu dữ liệu tái tạo khóa công khai PU là một trong các trường, để phần còn lại của định dạng mở cho người triển khai.
+\item[•] \textbf{Minimal ASN.1 Encoding Scheme}: cũng được thiết kế để có hiệu quả băng thông. Đặc tả ASN.1 bao gồm các trường bắt buộc cơ bản và cho phép các phần mở rộng. Các trường cơ bản được đề xuất trong mã hóa này có độ dài cố định và do đó cũng có thể được sử dụng với định dạng độ dài cố định đơn giản hơn.
+\item[•] \textbf{X.509-Compliant ASN.1 Encoding}: được thiết kế để bao gồm thông tin đầy đủ để cho phép chứng chỉ ECQV này được mã hóa lại dưới dạng chứng chỉ X.509 chuẩn.
+\end{itemize}
+\subsection{Yêu cầu chứng thư: Cert\_Request}
+Người yêu cầu chứng chỉ U, sẽ sử dụng quy trình dưới đây để tạo yêu cầu chứng chỉ.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi CA.
+\item[2. ] Xâu biểu diễn định danh của U.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Khởi tạo cặp khóa $(k_u, R_u)$  trên EC liên quan tới các tham số được thiết lập với đường cong(tham khảo cách tạo cặp khóa ở [SEC 1, 3.2.1])
+\item[2. ] Convert $R_u$ thành xâu octet $RU$ sử dụng  Elliptic-Curve-Point-to-Octet-String trong [SEC 1, 2.3]
+\end{itemize}
+\item[] \textbf{Output} khóa $k_U$ và yêu cầu chứng thư $(U, RU)$.
+\end{itemize}
+
+Giá trị $RU$ cùng với danh tính được định nghĩa $U$, tạo thành nội dung của yêu cầu chứng chỉ. Giá trị $k_U$ là bắt buộc trong các bước tương lai (để tính toán khóa riêng) và phải được giữ riêng tư. Yêu cầu chứng chỉ sẽ được gửi tới CA bằng cách sử dụng phương pháp bảo toàn tính toàn vẹn dữ liệu của thông báo.
+\subsection{Xử lý tạo chứng thư: Cert\_Generate}
+$CA$ sẽ sử dụng quy trình dưới đây để tạo ra một chứng thư và dữ liệu đóng góp khóa cá nhân để đáp ứng với một Cert\_Request từ $U$. Giả sử rằng $CA$ đã nhận được $U$, và $RU$ theo cách được xác thực và đã quyết định cấp chứng chỉ.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm được lựa chọn bơi $CA$.
+\item[3. ] Khóa bí của $CA$, $d_{CA}$. 
+\item[4. ] Một cái yêu cầu tạo chứng thư $(U, RU)$
+\item[5. ] Phương thức mã hóa chứng thư (xem phần \ref{subsec:3.5.2.1})
+\item[6. ] Các trường nhập bổ sung cho chứng thư.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Chuyển đổi chuỗi octet $RU$ thành một điểm trên đường cong elliptic bằng thuật toán chuyển đổi Octet-String-to-Elliptic Curve-Point(xem trong [SEC 1, §2.3.4]).
+\item[2. ] Xác thực $RU$ bằng cách sử dụng kỹ thuật xác thực khóa công khai(xem ở [SEC 1, §3.2.2]). Nếu xác thực kết quả đầu ra là 'không hợp lệ' dừng lại.
+\item[3. ] Tạo cặp khóa EC (k, kG) với các tham số đường cong elliptic đã được thiết lập. 
+\item[4. ] Tính toán đường cong elliptic điểm $P_U = R_U + kG$
+\item[5. ] Chuyển đổi $P_U$ sang chuỗi octet PU bằng cách sử dụng chuyển đổi Elliptic-Curve-Point-to-Octet-String [SEC 1]
+\item[6. ] Mã hóa chứng thư với các trường nhập cần thiết và chuỗi octet PU như được chỉ ra
+\item[7. ] Sự dụng hàm băm để tính $e = H_n(Cert_U)$ với modulo n.
+\item[8. ] Nếu $eP_U + Q_{CA} = \mathcal{O}$, với $\mathcal{O}$ là điểm cơ sở, quay về bước 3.
+\item[9. ] Tính số nguyên $r = ek + d_{CA} (mod \ n)$.
+\end{itemize}
+\item[] \textbf{Output} $(r, Cert_U)$, Ở đây $r$ là khóa đóng góp  và $Cert_U$ là chứng thư.
+\end{itemize}
+
+Phản hồi từ $CA$ có thể được công khai. Ngoài ra, nó có thể được truyền thông qua một kênh không an toàn, vì $U$ có thể xác minh rằng thông tin nhận được là hợp lệ. Để bảo mật, giá trị tạm thời $k$ phải được giữ riêng.
+
+\subsection{Trích rút khóa công khai từ chứng thư: Cert\_PK\_Extraction}
+Khóa công khai được liên kết với chứng thư được lấy từ chứng thư bằng khóa công khai của $CA$ và được khôi phục bằng quy trình sau. Bước này không yêu cầu bất kỳ thông tin bí mật nào và có thể được thực hiện bởi bất kỳ người dùng nào biết về $Cert_U$ và các tham số công khai được tạo bởi Thiết lập $ECQV$.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm $H$ được lựa chọn bởi $CA$.
+\item[3. ] Khóa công khai của $Q_{CA}$.
+\item[4. ] Chứng thư $Cert_U$.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Giải mã chứng thư $Cert_U$ theo các phương thức và các quy tắc giải mã chứng chỉ. Nếu giá trị trả lại là 'không hợp lệ' thì đầu ra 'không hợp lệ' và dừng lại, nếu không một chuỗi octet PU sẽ được trả lại.
+\item[2. ] Chuyển đổi PU thành điểm $P_U$ bằng cách sử dụng chuyển đổi Octet-String-to-Elliptic-Curve-Point (xem [SEC 1, 2.3])
+\item[3. ] Xác thực điểm $P_U$ sử dụng các kĩ thuật xác thực.
+\item[4. ] Sử dụng hàm băm tính $e = H_n(Cert_U)$ với modulo $n$.
+\item[5. ] Tính điểm $Q_U = eP_U + Q_{CA}$.
+\end{itemize}
+\item[] \textbf{Output} Hoặc là 'không hợp lệ' hoặc một public key $Q_U$
+\end{itemize}
+\subsection{Xử lý phản hồi cho yêu cầu chứng thư: Cert\_Reception}
+Quy trình này xác thực nội dung của chứng thư ẩn và dữ liệu đóng góp khóa cá nhân do $CA$ cung cấp. Đầu ra của Cert\_PK\_Extraction và khóa riêng được tính ở đây, tạo thành một cặp khóa. Cert\_PK\_Extraction thực hiện kiểm tra tính hợp lệ của khóa công khai, vì vậy nó không được lặp lại ở đây. Người yêu cầu chứng chỉ $U$ sẽ sử dụng quy trình dưới đây, sau khi nhận được phản hồi yêu cầu chứng chỉ của họ, để tính toán khóa riêng cho đầu ra khóa công khai bằng Cert\_PK\_Extraction và xác nhận hợp lệ cặp khóa.
+\begin{itemize}
+\item[] \textbf{Input}
+\begin{itemize}
+\item[1. ] Các tham số đường cong EC được thiết lập bởi $CA$.
+\item[2. ] Hàm băm $H$.
+\item[3. ] Khóa riêng tạo bởi $U$, $k_U$.
+\item[4. ] Đầu ra của Cert\_Generate: chứng thư $Cert_U$ và dữ liệu đóng góp khóa riêng, một số nguyên $r$.
+\end{itemize}
+\item[] \textbf{Actions}
+\begin{itemize}
+\item[1. ] Tính khóa công khai $Q_U$ sử dụng Cert\_PK\_Extraction .
+\item[2. ] Sử dụng hàm băm để tính $e = H_n{Cert_U}$ vơi modulo n.
+\item[3. ] Tính khóa bí mật $d_U = r + ek_U (mod \ n)$
+\item[4. ] Tính $Q_U' = d_UG$.
+\end{itemize}
+\item[] \textbf{Output} 'hợp lệ' và $d_U$ nếu $Q_U = Q_U'$ nếu không 'không hợp lệ'.
+\end{itemize}
+\subsection{Sơ đồ tạo chứng chỉ tự ký ECQV}
+\subsection{Trích rút khóa công khai từ chứng thư tự ký ECQV}
 \chapter{Cài đặt cho thiết bị IoT}
 \chapter*{Kết luận và hướng phát triển}
 \begin{thebibliography}{9}
 \bibitem{csattt} Sách Giáo trình Cơ sở An toàn Thông tin thầy Nguyễn Văn Khanh - Đại học Bách Khoa.
-\bibitem{slidethayquang} Slide Trí tuệ nhân tạo thầy Nguyễn Nhật Quang. Chương 5 : Thỏa mãn ràng buộc
-\bibitem{AIAMAB} Stuart Russell and Peter Norvig 
-\textit{Artificial Intelligence: A Modern Approach} 2\textsuperscript{nd } edition, Prentice Hall, page 137,  2003.
-\bibitem{main} Ha Quang Minh and Deville Yves and Pham Quang Dung and Ha Minh Hoang, \textit{On the min cost traveling salesman problem with drone}, arXiv preprint arXiv:1509.08764, 2015
-\bibitem{bahiwww} S. Banker, Amazon and drones – here is why it will work (dec 2013).
-URL \url{http://www.forbes.com/sites/stevebanker/2013/12/19/amazon-drones-here-is-why-it-will-work/}
-\bibitem{TRR} Nguyễn Đức Nghĩa, Nguyễn Tô Thành 
-\textit{Toán rời rạc} 3\textsuperscript{rd} edition, Nhà xuất bản đại học quốc gia Hà Nội, page 107-108,  2006.
-\bibitem{TUHTT} Slide Tối ưu hóa tổ hợp thầy Nguyễn Đức Nghĩa. Chương mở đầu, Bài toán vận tải.
-\bibitem{CBLS} Slide Tìm kiếm cục bộ dựa trên ràng buộc thầy Phạm Quang Dũng. Chương 5: Contraint-base local search applications.
-\bibitem{DAA} Slide Phân tích và thiết kế thuật toán thầy Nguyễn Đức Nghĩa. Chương 5: Quy hoạch động, Chương 3: Greedy Algorithms.
-\bibitem{HCP} Francesca Rossi, Peter van Beek, Toby Walsh 
-\textit{Handbook of Constraint Programming} 1\textsuperscript{st} edition, Elsevier Science, page 107-108,  2006.
-\bibitem{GA} Bài giảng môn tính toán tiến hóa cô Huỳnh Thị Thanh Bình. Thuật giải di truyền.
-\bibitem{AODTBT}Rupert Howell,Jonathon Wong
-\textit{Apache OFBiz Development: The Beginner's Tutorial}, Paperback , page 53,  2008.
-truyền.
-\bibitem{AOC} Ruth Hoffman
-\textit{Apache OFBiz Cookbook}, Paperback , page 28, 2010.
-\bibitem{AOW} Apache Ofbiz (wikipedia)
-\url{https://en.wikipedia.org/wiki/Apache_OFBiz}
 \end{thebibliography}
-
 
 \end{document}

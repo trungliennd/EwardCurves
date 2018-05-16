@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
         printf("\n-get pair Key");
         if(argv[2] != NULL) {
             struct cert temp;
-            loadCertificate(cert, argv[2]);
+            loadCertificate(temp, argv[2]);
             if(argv[3] == NULL) {
                 printf("\nPlease enter file secretKey");
                 exit(1);
