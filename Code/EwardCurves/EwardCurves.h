@@ -159,7 +159,7 @@ void loadKey(char secretKey[], char publicKey[]) {
         printf("\nCan't calculation shareKey");
         exit(1);
      }
-     printKey(sharesKey25519 ,32);
+   //  printKey(sharesKey25519 ,32);
 }
 
 void createPublicKeyAndSecretKey(char secretKey[],char publicKey[]) {
@@ -204,8 +204,8 @@ void createPublicKeyAndSecretKey(char secretKey[],char publicKey[]) {
     }
     fclose(inp);
 }
-
+/*
 inline bool is_base64(unsigned char c) {
   return (isalnum(c) || (c == '+') || (c == '/'));
 }
-
+*/

@@ -767,7 +767,7 @@ bool checkPublicKey(struct cert &certificate, char *file_key) {
     }else {
         unsigned char key_temp[BASE64_LEN];
         fread(key_temp,1,BASE64_LEN,read);
-        fscanf(readFile,"%c",&key_temp[BASE64_LEN - 1]);
+        fscanf(read,"%c",&key_temp[BASE64_LEN - 1]);
         fread(key_temp,1,BASE64_LEN,read);
         key_temp[BASE64_LEN] = '\0';
         string s((char*)key_temp);
@@ -780,7 +780,7 @@ bool checkPublicKey(struct cert &certificate, char *file_key) {
             check = false;
         }
     }
-    fclose(readFile);
+    fclose(read);
     return check;
 }
 
