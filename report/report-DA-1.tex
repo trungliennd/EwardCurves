@@ -120,7 +120,25 @@ Trước khi trình bày nội dung của đồ án này, tôi xin được gử
 \newpage
 \chapter*{Bảng chữ viết tắt}
 \printacronyms[include-classes=abbrev,heading=none]
-
+\begin{tabular}{llllll}
+DES & - &  & Data Encryption Standard \\
+RC4 & - &  & Ron's Code 4 \\
+DHE & - &  & Diffe-Hellman \\
+NFS & - &  & Number Field Sieve \\
+PK  & - &  & Public Key & - & Khóa công khai \\
+SK  & - &  & Secret Key & - & Khóa bí mật \\
+RSA & - &  & Rivest Shamir Adleman \\
+PTTSNT & - &  & Phân Tích Thừa Số Nguyên Tố \\
+SKC & - &  & Symmetric Key Cryptography \\
+PKI & - &  & Public Key Infrastructure \\
+CA  & - &  & Certificate Authorities \\ 
+RA  & - &  & Registration Authority \\
+ECDLP & - &  & Elliptic Curve Discrete Logarithm Problem \\
+DSA  & - &  & Digital Sign Algorithm \\
+ECDSA & - &  & Elliptic Curve Digital Sign Algorithm \\
+ECQV & - &  & Elliptic Curve Qu-Vanstone \\
+MITM & - &  & Man In The Middle
+\end{tabular}
 %\printacronyms[include-classes=nomencl,name=Danh mục]
 %\listoftables
 \listoffigures
@@ -309,7 +327,7 @@ Trong thực tế, thông điệp $m$ có thể là một văn bản hay một c
 \end{figure}
 \end{center}
 
-Trong thuật toán trao đổi khóa bí mật Diffie-Hellman \index{Diffie-Hellman} dựa trên đường cong elliptic \index{Elliptic}, kẻ tấn công xen giữa Evil có thể giả mạo là Bob khi truyền thông với Alice và giả mạo làm Bob khi truyền thông với Alice. Khi đó thuật toán sẽ được thực hiện song song giữa Evil-Alice và EvilBob. Dữ liệu truyền thông giữa Alice và Bob sẽ được chuyển thông qua Evil và có thể dễ dàng bị Evil giải mã. Bởi thế, người ta dùng chữ kí điện tử để xác định xem đối tượng gửi nhận dữ liệu có đúng là đối tượng mà mình mong muốn gửi nhận dữ liệu hay không.
+Trong thuật toán trao đổi khóa bí mật Diffie-Hellman \index{Diffie-Hellman} dựa trên đường cong elliptic \index{Elliptic}, kẻ tấn công xen giữa Evil có thể giả mạo là Bob khi truyền thông với Alice và giả mạo làm Bob khi truyền thông với Alice. Khi đó thuật toán sẽ được thực hiện song song giữa Evil-Alice và Evil-Bob. Dữ liệu truyền thông giữa Alice và Bob sẽ được chuyển thông qua Evil và có thể dễ dàng bị Evil giải mã. Bởi thế, người ta dùng chữ kí điện tử để xác định xem đối tượng gửi nhận dữ liệu có đúng là đối tượng mà mình mong muốn gửi nhận dữ liệu hay không.
 
 Trong hình dưới đây, Victim là Alice, Web Server là Bob và Attacker là Evil (Hình \ref{sign2}):
 \begin{center}
@@ -1276,7 +1294,7 @@ Chúng ta bắt đầu với ứng dụng đơn giản nhất, trao đổi khóa
 \index{Thông số miền}
 Trong những phần trên ta đã xem xét những lý thuyết về đường cong elliptic. Để xác định một đường cong elliptic, người ta dựa trên những thông số miền, hay nói cách khác thông số miền đại diện cho một đường cong elliptic.
 
-Có hai loại thông số miền được sử dụng đó là thông số miền cho đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ và trên trường hữu hạn $\mathbb{F}_{2^m}$. Nhưng ở đây chúng ta chỉ xem xét với trường $\mathbb{F}_p$ (tham khảo các thông số có sẵn ở ?).
+Có hai loại thông số miền được sử dụng đó là thông số miền cho đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ và trên trường hữu hạn $\mathbb{F}_{2^m}$. Nhưng ở đây chúng ta chỉ xem xét với trường $\mathbb{F}_p$ (tham khảo các thông số có sẵn ở [7]).
 
 Các thông số miền của đường cong elliptic trên trường hữu hạn $\mathbb{F}_p$ là tập $T$:
 \begin{displaymath}
@@ -1310,7 +1328,7 @@ E: y^2 = x^3 + ax^2 + b \ (\ mod \ p)
 Chọn một điểm cơ sở $G = (x_G, y_G)$ trên đường cong elliptic $E(\mathbb{F}_p)$, một số nguyên $n$ là bậc của $G$. Số nguyên $h = \#E(\mathbb{F}_p)/n$. Tất cả thõa mãn các điều kiện sau:
 \begin{itemize}
 \item $47a^3 + 27b^2 \neq 0 (\ mod \ p)$
-\item $\#E(\mathbb{F}_p) \ neq p$ 
+\item $\#E(\mathbb{F}_p) \neq p$ 
 \item $p^B \neq 1$ với tất cả các giá trị $B$ nguyên $1 \leq B < 100$
 \item $h \leq 2^{t/8}$
 \item $n - 1$ và $n + 1$ nên có một phần tử lớn r (khi phân tích mỗi số thành thừa số nguyên tố) thõa mãn $\displaystyle log_n(r) > \frac{19}{20}$
@@ -1498,10 +1516,10 @@ Mức độ bảo mật kết hợp với hàm băm phụ thuộc vào ứng d�
 
 Hàm băm được sử dụng bởi sơ đồ ECQV sẽ được chấp nhận hàm băm, như được chấp thuận trong mục đăng ký X9 00003, tiêu chuẩn băm an toàn (SHS). Mức độ bảo mật của hàm băm được phê duyệt được coi là tối đa một nửa độ dài đầu ra của nó cho các mục đích của tiêu chuẩn này. Danh sách một số hàm hăm tiêu chuẩn SHA-1, SHA-2, MD5, \ldots.
 
-Hàm băm được sử dụng để tính toán chứng thư ẩn sẽ là hàm băm có mức bảo mật ít nhất là mức bảo mật của việc triển khai ECQV. Hàm băm được sử dụng cho các xác định tham số  elliptic sẽ là hàm băm có mức bảo mật là mức độ bảo mật của việc triển khai sơ đồ ECQV (ngoại trừ các xác định tham số elliptic ngẫu nhiên trong [SEC 2] được tạo bằng cách sử dụng SHA-1).
+Hàm băm được sử dụng để tính toán chứng thư ẩn sẽ là hàm băm có mức bảo mật ít nhất là mức bảo mật của việc triển khai ECQV. Hàm băm được sử dụng cho các xác định tham số  elliptic sẽ là hàm băm có mức bảo mật là mức độ bảo mật của việc triển khai sơ đồ ECQV (ngoại trừ các xác định tham số elliptic ngẫu nhiên trong [7] được tạo bằng cách sử dụng SHA-1).
 \subsection*{Hàm băm một số nguyên modul n}
 \index{Hàm băm một số nguyên modul n}
-Trong nhiều bước của \index{ECQV}, một chuỗi octet(mỗi một ký tự trong xâu được biểu diễn bởi 8 bits) chiều dài tùy ý được băm bằng hàm băm mật mã H, và sau đó được chuyển đổi thành một số nguyên modulo n. Phần này chỉ định hàm kết quả, ký hiệu $H_n: \{0, 1,\ldots , 255\}^{*} \rightarrow [0,\ldots , n - 1]$, ánh xạ các chuỗi octet có độ dài tùy ý đến các số nguyên modulo n.
+Trong nhiều bước của \index{ECQV}, một chuỗi octet(mỗi một ký tự trong xâu được biểu diễn bởi 8 bits) chiều dài tùy ý được băm bằng hàm băm mật mã $H$, và sau đó được chuyển đổi thành một số nguyên modulo $n$. Phần này chỉ định hàm kết quả, ký hiệu $H_n: \{0, 1,\ldots , 255\}^{*} \rightarrow [0,\ldots , n - 1]$, ánh xạ các chuỗi octet có độ dài tùy ý đến các số nguyên modulo n.
 \begin{itemize}
 \item[] \textbf{Input}
 \begin{itemize}
