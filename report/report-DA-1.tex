@@ -38,7 +38,8 @@
 \makeindex
 \usepackage{tikz-uml}
 \usetikzlibrary{arrows.meta}
-\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}  
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{hyperref}  
 \usepackage[left=3cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
 %\lstset{
    %keywords={break,case,catch,continue,else,elseif,end,for,function,
@@ -162,7 +163,7 @@ Nội dung chính của đồ án bao gồm 4 chương:
 \section{Mật mã khóa đối xứng}
 Hệ mã khóa đối xứng \index{Mã khóa đối xứng} (Symmetric Cryptosystems) dựa trên một khóa đơn, đó là một chuỗi ngắn với chiều dài không thay đổi. Do đó, phương pháp mã hóa này được xem như là single-key \index{single-key} encryption. Khoá thường là khóa riêng (hoặc bảo mật) và được dùng để mã hóa cũng như giải mã.
 
-Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ dùng chung cho cả 2 bên. Người gửi sẽ mã hóa thông tin bằng khóa riêng và gửi thông tin đến người. Trong quá trình nhận thông tin, người nhận sủ dụng cùng một khóa để giải mã thông điệp.
+Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ dùng chung cho cả 2 bên. Người gửi sẽ mã hóa thông tin bằng khóa riêng và gửi thông tin đến người nhận. Trong quá trình nhận thông tin, người nhận sử dụng cùng một khóa để giải mã thông điệp.
 
 \begin{center}
 \begin{figure}[H]
@@ -187,14 +188,14 @@ Do hệ mã khóa đối xứng sử dụng một khóa cho cả quá trình mã
 
 Để giải quyết các vấn đề trên hệ mã khóa công khai đã được đưa ra.
 \section{Mật mã khóa công khai}
-Khác với các hệ mã khóa đối xứng \index{Mã khóa đối xứng} (symmetric-key cryptography), khóa dùng giải mã và mã hóa có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia, cả hai khóa có thể trùng nhau và đều bí mật), hệ mã khóa công khai \\index{Mã khóa công khai} (public-key cryptography) có hai loại khóa là khóa bí mật và khóa công khai. Hai loại khóa này tạo thành một cặp và một loại dùng để mã hóa, loại còn lại dùng để giải mã. Đúng như cái tên người ta đặt cho hai loại khóa, khóa bí mật được giữ bí mật còn khóa công khai được công khai cho tất cả mọi người. Điểm mấu chốt trong hệ mã khóa công khai là khi biết được khóa công khai người ta không thể tìm được khóa bí mật.
+Khác với các hệ mã khóa đối xứng \index{Mã khóa đối xứng} (symmetric-key cryptography), khóa dùng giải mã và mã hóa có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia, cả hai khóa có thể trùng nhau và đều bí mật), hệ mã khóa công khai \index{Mã khóa công khai} (public-key cryptography) có hai loại khóa là khóa bí mật và khóa công khai. Hai loại khóa này tạo thành một cặp và một loại dùng để mã hóa, loại còn lại dùng để giải mã. Đúng như cái tên người ta đặt cho hai loại khóa, khóa bí mật được giữ bí mật còn khóa công khai được công khai cho tất cả mọi người. Điểm mấu chốt trong hệ mã khóa công khai là khi biết được khóa công khai người ta không thể tìm được khóa bí mật.
 
 Hệ mã khóa công khai cũng có thể dùng để truyền dữ liệu mà không cần phải có thao tác thống nhất khóa bí mật giữa các bên.
 
 \begin{center}
 \begin{figure}
 \centering
-\includegraphics[width=0.6\linewidth]{../3.jpg}
+\includegraphics[width=0.6\linewidth]{../3.jpg} 
 \caption{Hệ mã khóa công khai}
 \end{figure}
 \end{center}
@@ -208,7 +209,7 @@ Ví dụ: 767971435180333 là tích của hai số nguyên tố. Việc tính đ
 \begin{figure}[H]
 \centering 
 \includegraphics[width=0.6\linewidth]{../trap.png}
-\caption{Trapdoor one-way function} \label{sign1}
+\caption{Trapdoor one-way function} \label{trap1}
 \end{figure}
 \end{center}
 \subsection*{Tính an toàn}
@@ -216,16 +217,16 @@ Các hệ mã khóa công khai đòi hỏi khối lượng tính toán lớn hơ
 \section{Thuật toán trao đổi khóa Diffie-Hellman (DHE)}
 Tương tự như các hệ mã khóa công khai, các thuật toán trao đổi khóa cũng có cơ sở toán học dựa trên một hàm cửa sập. Thuật toán trao đổi khóa khóa Diffie-Hellman  \index{Diffie-Hellman} được hai nhà khoa học Whitfield Diffie và Martin Hellman đưa ra năm 1976 và ngày nay được ứng dụng trong các giao thức truyền thông.
 
-Trên trường đại số \index{Trường đại số} $\mathbb{Z}_p$ người ta có thể dễ dàng thực hiện phép toán $y = f(x) = g^x \ (mod \ p)$ nhưng khi biết $y$ thì việc giải ngược lại để tìm $x = log_g(y) \ (mod \ p)$ lại là một bài toán rất khó, gọi là bài toán logarithm rời rạc. Bài toán logarithm rời rạc được sử dụng như là cơ sở toán học cho thuật toán Diffie-Hellman. \\ \\
+Trên trường đại số \index{Trường đại số} $\mathbb{Z}_p$ người ta có thể dễ dàng thực hiện phép toán $y = f(x) = g^x \ (mod \ p)$ nhưng khi biết $y$ thì việc giải ngược lại để tìm $x = log_g(y) \ (mod \ p)$ lại là một bài toán rất khó, gọi là bài toán logarithm \index{Logarithm}rời rạc. Bài toán logarithm rời rạc được sử dụng như là cơ sở toán học cho thuật toán Diffie-Hellman. \\ \\
 \textbf{Thuật toán Diffie-Hellman ở dạng đơn giản}
 
 Người ta sử dụng số nguyên tố $p$ và số $g$ là phần tử sinh của trường đại số $\mathbb{Z}_p$.
 \begin{itemize}
 \item[1. ] Alice và Bob cùng thống nhất với nhau chọn một số nguyên tố $p = 29$ và $g = 8$ để thực hiện việc chuyển khóa.
 \item[2. ] Alice chọn một số bí mật $a = 6$ và tính g$^a \ (mod \ p)$ để gửi cho Bob: A = $8^6 \ (mod \ 23) = 13$.
-\item[3. ] Bob chọn một số bí mật $b = 15$ và tính $g^b \ (mod \ p)$ để gửi cho Bob: $B = 8^15 \ (mod \ 29) = 21$
+\item[3. ] Bob chọn một số bí mật $b = 15$ và tính $g^b \ (mod \ p)$ để gửi cho Bob: $B = 8^{15} \ (mod \ 29) = 21$
 \item[4. ] Alice tính $s = B^a \ (mod \ 29) = 21^6 \ (mod \ 29) = 13$.
-\item[5. ] Bob tính $s = A^b \ (mod \ 29) = 13^15 \ (mod \ 29) = 13$.
+\item[5. ] Bob tính $s = A^b \ (mod \ 29) = 13^{15} \ (mod \ 29) = 13$.
 \end{itemize}
 Từ $s = 13$ ta tìm được khóa chia sẻ mà cả hai cùng thống nhất.
 \subsection*{Tính an toàn}
@@ -245,7 +246,7 @@ Sau hơn 40 năm kể từ khi thuật toán trao đổi khóa Diffie-Hellman đ
 
 \textit{Khóa công khai (Public key) là (e, n)}
 
-\textit{Khoá dùng riêng (Private key) là d, p, q)}
+\textit{Khoá dùng riêng (Private key) (là d, p, q)}
 
 Giả sử $X$ là một khối tin gốc (plaintext), $Y$ là một khối mã tương ứng của $X$, và ($z_A, Z_A$) là các thành phần công khai và riêng của khoá của Alice
 
@@ -721,7 +722,7 @@ Mục đích của chứng thư số dùng để nhận diện một đối tư�
 \index{Lý thuyết số}
 \index{Cấu trúc đại số}
 \index{Trường hữu hạn}
-Mỗi hàm cửa sập được định nghĩa trên một cấu trúc đại số. Bài toán logarithm rời rạc dựa trên đường cong elliptic cũng được định nghĩa trên một cấu trúc đại số là đường cong elliptic trên
+Mỗi hàm cửa sập được định nghĩa trên một cấu trúc đại số. Bài toán logarithm \index{Logarithm}rời rạc dựa trên đường cong elliptic cũng được định nghĩa trên một cấu trúc đại số là đường cong elliptic trên
 trường hữu hạn.
 \subsection*{Nhóm}
 \index{Nhóm}
@@ -817,7 +818,7 @@ Cho trường đại số hữu hạn $\mathbb{F}_p$ bao gồm tập $\mathbb{F}
 \item \textbf{Phần tử nghịch đảo \index{Phần tử nghịch đảo} và số} $p$: Việc tìm phần tử nghịch đảo chính là tìm số $b = a^{-1}$ sao cho $a \cdot b = 1 \ (mod \ p)$. Tìm phần tử nghịch đảo của 2 theo ví dụ trên ta có: $\displaystyle b = \frac{p+1}{2} = 6$ (điều kiện là $p$ là số nguyên tố). \\ \\
 Khi ước chung nhỏ nhất của $p$ và $a$ là $gcd(p, a) = 1$ thì luôn có $b, x$ để: $a \cdot b + x \cdot p = 1 \ (mod \ p)$. Khi đó $a \cdot b = 1 \ (mod \ p)$. Nghĩa là ta luôn tìm được nghịch đảo của số $a$ khi $gcd(p, a) = 1$ \\ \\
 Với $gcd(p, a) > 1$ suy ra $gcd(a \cdot b, p) > 1$ với mọi $b$ suy ra $a \cdot b , 1 \ (mod \ p)$. \\ \\
-Vậy là điều kiện để tồn tại phần tử nghịch đảo của $a$ là với mọi số nguyên $a \in {0, 1, 2, \ldots , p-1}$ thì $gcd(a, p) = 1$. Điều này đồng nghĩa với việc $p$ phải là một số nguyên tố. Hay nói cách khác $\mathbb{F}_p$ là một trường đại số nếu và chỉ nếu $p$ là một số nguyên tố.
+Vậy là điều kiện để tồn tại phần tử nghịch đảo của $a$ là với mọi số nguyên $a \in \{0, 1, 2, \ldots , p-1 \}$ thì $gcd(a, p) = 1$. Điều này đồng nghĩa với việc $p$ phải là một số nguyên tố. Hay nói cách khác $\mathbb{F}_p$ là một trường đại số nếu và chỉ nếu $p$ là một số nguyên tố.
 \item \textbf{Phần tử sinh \index{Phần tử sinh}}: Cho $g$ là một số trong trường $\mathbb{F}_p$, $g$ là phần tử sinh của $\mathbb{F}_p$ để $\{1, g, g^2, g^3, g^4, \ldots, g^{p-2}\} = Z^*$ ở đây Z được gọi là nhóm vòng \index{Nhóm vòng} và $g$ là phần tử sinh của Z. \\ \\
 Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 4, 5\}$. Ta có phần tử sinh là 3. Tuy nhiên không phải mọi phần tử của $Z^*$ đều là phần tử sinh.
 \end{itemize}
@@ -825,7 +826,7 @@ Ví dụ $p = 7$ ta có $g = \{ 3^0, 3^1, 3^2, 3^3, 3^4, 3^5 \} = \{1, 3, 2, 6, 
 \index{Đường cong Elliptic}
 Một đường cong elliptic curve được xác định bởi phương trình đường cong và một số trường tọa độ cơ bản.
 
-Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong E. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với 2. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
+Tất cả tọa độ thỏa mãn phương trình đường cong sẽ tạo thành một đường cong $E$. Tọa độ là cặp các phần tử trong trường hữu hạn. Phương trình đường cong phụ thuộc vào việc lựa chọn hệ tọa độ cực (mặc định thường là hệ tọa độ affine). Đường cong elliptic có một số luât quan trong. Luật cộng (add) cho phép cộng hai điểm trên đường cong. Luật doubling cho phép nhân một điểm trên đường cong với 2. Luật nhân cho phép nhân một điểm trên đường cong với một số (hay cộng nhiều lần điểm đấy với chính nó). Mọi đường cong đều có điểm đơn vị định nghĩa là $\infty$. Nó có xác định luật cộng riêng.
 
 $E(GF(p^k))$ là tập hợp các điểm thỏa mãn phương trình đường cong (và cả điểm $\infty$). Lực lượng $|E(GF(p^k))|$ được định nghĩa là cấp (order) của đường cong. Nếu muốn xác định một số phần tử của 
 $E(GF(p^k))$ như một điểm sinh. Nó tạo ra nhóm con khác theo luật:
@@ -860,12 +861,14 @@ $E_1: Y^2 = X^3 - 3X + 3$ & và & $E_2: Y^2 = X^3 - 6X + 5$
 Một đặc điểm của đường cong elliptic là lấy hai điểm bất kì trên đường cong và cộng chúng lại để tạo ra một điểm thứ ba nằm trên đường cong. Nhưng không giống như luật cộng thông thường chúng ta sẽ mô tả luật cộng thông qua hình học.
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=1=0.95]{../im2.png} \label{h2.2} \refstepcounter{someCounter}
+\includegraphics[scale=1=0.95]{../im2.png}
+\refstepcounter{someCounter}
 \caption{Luật cộng trên đường cong elliptic}
+\label{fig:h2.2}
 \end{center}
 \end{figure}
 
-Cho $P$ và $Q$ là hai điểm trên đường cong elliptic $E$, như hình \ref{h2.2}. Kẻ đường thẳng $L$ đi qua $P$ và $Q$. Đường thẳng $L$ cắt đường cong $E$ tại ba điểm, trong đố có hai điểm $P$ và $Q$ và một điểm khác là $R$. Chúng ta lấy điểm $R$ và chiếu nó theo chục x để lấy được điểm mới $R'$. Điểm $R'$ được gọi là "tổng của $P$ và $Q$", có thể thấy phép cộng này không giống như các phép cộng thông thường. Chúng ta có thể kí hiệu phép cộng bởi $\oplus$.
+Cho $P$ và $Q$ là hai điểm trên đường cong elliptic $E$, như hình \ref{fig:h2.2}. Kẻ đường thẳng $L$ đi qua $P$ và $Q$. Đường thẳng $L$ cắt đường cong $E$ tại ba điểm, trong đố có hai điểm $P$ và $Q$ và một điểm khác là $R$. Chúng ta lấy điểm $R$ và chiếu nó theo chục x để lấy được điểm mới $R'$. Điểm $R'$ được gọi là "tổng của $P$ và $Q$", có thể thấy phép cộng này không giống như các phép cộng thông thường. Chúng ta có thể kí hiệu phép cộng bởi $\oplus$.
 \begin{displaymath}
 P \oplus Q = R'
 \end{displaymath}
@@ -903,7 +906,7 @@ P \oplus Q = (-\frac{23}{9}, \frac{170}{27}).
 \end{center}
 \end{figure}
 
-Có một số vấn đề, đầu tiên ta có thể nhìn thấy trong hình \ref{h2.2} nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình \ref{h2.3}. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
+Có một số vấn đề, đầu tiên ta có thể nhìn thấy trong hình \ref{fig:h2.2} nếu như $Q$ tiệm cận đến $P$ hay nói các khác là ta thực hiện phép cộng điểm $P$ với chính nó. Khi đó đường thẳng $L$ trở thành tiếp tuyến của $E$ tại $P$ thấy hình \ref{h2.3}. Do đó việc thực hiện phép cộng điểm $P$ với chính nó chúng ta chỉ đơn gian là kéo dài tiếp tuyến $L$ tại $P$ cắt $E$ tại $P$ và một điểm còn lại là $R$ và chúng ta vẫn xử lý như trước. Theo một nghĩa nào đó $L$ vẫn cắt $E$ tại 3 điểm nhưng điểm $P$ được tính là hai.
 
 Ví dụ tiếp tục với đường cong E với phương trình \ref{2.1} và điểm P ở ví dụ trên, chúng ta sẽ tính $P \oplus P$ hệ số góc tiếp tuyến của $E$ ở $P$ được tính bởi đạo hàm phương trình \ref{2.1}. Do đó ta có:
 \begin{displaymath}
@@ -928,8 +931,10 @@ P \oplus P = (\frac{193}{64}, \frac{223}{512}).
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[scale=1]{../im4.png} \label{h2.4}
+\includegraphics[scale=1]{../im4.png}
+\refstepcounter{someCounter}
 \caption{Đường thẳng đứng $L$ đi qua $P = (a, b)$ và $P' = (a, -b)$}
+\label{h2.4}
 \end{center}
 \end{figure}
 
@@ -1102,8 +1107,9 @@ vì vậy $P + P = (7, 13) + (7, 13) = (21,20)$ trong trường $E(\mathbb{F}_{2
 
 \begin{center}
 \begin{figure}[H]
-\includegraphics[width=0.8\linewidth]{../im14.png} \label{h14}
+\includegraphics[width=0.8\linewidth]{../im14.png}
 \caption{Biểu diễn $2*P$ với ($P \neq \mathcal{O}$)}
+ \label{h14}
 \end{figure}
 \end{center}
 
@@ -1239,7 +1245,7 @@ cho một số vô hướng  $d \in \mathbb{K} \setminus \{0,1\}$. Ngoài ra d�
 x^2 + y^2 = c^2(1 + dx^2y^2)
 \end{displaymath}
 trong đó $c, d \in \mathbb{K}$ với $cd(1 - c^4\cdot d) \neq 0$ \\
-Mỗi đường cong Edwards tương đương với đường cong elliptic ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu $\mathbb{K}$ là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $\mathbb{K}$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có $c = 1$, không mất tính tổng quát. Trong các phần sau, giả sử rằng $c = 1$(xem thêm [?]).
+Mỗi đường cong Edwards tương đương với đường cong elliptic ở dạng Weierstrass , và do đó thừa nhận luật nhóm đại số một khi ta chọn một điểm để phục vụ như là một phần tử trung lập. Nếu $\mathbb{K}$ là hữu hạn, thì một số lượng đáng kể tất cả các đường cong elliptic trên $\mathbb{K}$ có thể được viết dưới dạng đường cong Edwards. Thông thường các đường cong elip ở dạng Edwards được xác định có $c = 1$, không mất tính tổng quát. Trong các phần sau, giả sử rằng $c = 1$(xem thêm [11]).
 \subsubsection{Luật cộng}
 \index{Luật cộng}
 Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phần tử đơn vị. Đối với đường cong Edwards, lấy phần tử trung tính là điểm $(0, 1)$, tổng các điểm $(x_1,  y_1)$ và $(x_2 ,y_2)$ được đưa ra bởi công thức:
@@ -1248,7 +1254,7 @@ Trên bất kỳ đường cong elliptic nào, có một điểm gọi là phầ
 \end{displaymath}
 Nghịch đảo của bất kì điểm nào $(x_1, y_1)$ là $(-x_1, y_1)$. Người ta kiểm tra rằng điểm $(0, -1)$ có cấp là 2, và điểm $(\pm 1, 0)$ có cấp là 4, Trong thưc tế, một đường cong Edward luôn luôn có một điểm có cấp là 4 với tọa độ trong trường $\mathbb{K}$.
 
-Nếu d không phải là một bình phương trong $\mathbb{K}$ và $\displaystyle (x_{1}, y_{1}), (x_{2}, y_{2}) \in \{(x, y)|x^{2} + y^{2} = 1 + dx^{2}y^{2} \}$, không có điểm đặc biệt có mẫu số $1 +  dx_1x_2y_1y_2 và 1 -  dx_1 x_2y_1y_2$ bằng 0. Do đó, luật cộng Edwards là hoàn tất khi d không phải là một bình phương trong trường $\mathbb{K}$. Điều này có nghĩa là các công thức sẽ làm việc tốt và không có lỗi với các phép toán doubling, phần tử đơn vị, phần tử âm. Nói cách khác, nó được định nghĩa cho tất cả các cặp điểm đầu vào trên đường cong Edwards trên $\mathbb{K}$ và kết quả cho tổng của các điểm đầu vào.
+Nếu d không phải là một bình phương trong $\mathbb{K}$ và $\displaystyle (x_{1}, y_{1}), (x_{2}, y_{2}) \in \{(x, y)|x^{2} + y^{2} = 1 + dx^{2}y^{2} \}$, không có điểm đặc biệt có mẫu số $1 +  dx_1x_2y_1y_2$ và $1 -  dx_1 x_2y_1y_2$ bằng 0. Do đó, luật cộng Edwards là hoàn tất khi $d$ không phải là một bình phương trong trường $\mathbb{K}$. Điều này có nghĩa là các công thức sẽ làm việc tốt và không có lỗi với các phép toán doubling, phần tử đơn vị, phần tử âm. Nói cách khác, nó được định nghĩa cho tất cả các cặp điểm đầu vào trên đường cong Edwards trên $\mathbb{K}$ và kết quả cho tổng của các điểm đầu vào.
 Nếu $d$ là một bình phương $\mathbb{K}$ , thì phép toán tương tự có thể có các điểm đặc biệt, tức là có thể có cặp $(x_1, y_1)$ và $(x_2, y_2)$ trong đó 1$ +  dx_1x_2y_1y_2 = 0$ hoặc $1 -  dx_1x_2y_1y_2 = 0$.
 Một trong những tính năng hấp dẫn của luật cộng của Edwards là nó được thống nhất mạnh mẽ, tức là nó cũng có thể được sử dụng để gấp đôi một điểm, đơn giản hóa việc bảo vệ chống lại tấn công bên kênh. Công thức cộng ở trên nhanh hơn các công thức thống nhất khác và có tính chất hoàn chỉnh mạnh.
 \subsubsection{Doubling}
@@ -1267,7 +1273,7 @@ Như tên cho thấy, mỗi đường cong Twist Edwards là một xoắn của 
 E_{E_{a,d}}: ax^2 + y^2 = 1 + dx^2y^2
 \end{displaymath}
 Ở đâu $a, d$ là các phần tử khác 0 của $\displaystyle \mathbb{K}$. Đường cong Edwards là đường cong Twist Edwards với a = 1.
-Mỗi đường cong Twist Edwards đều tương đương với đường cong elliptic ở dạng Montgomery và ngược lại.(xem [?])
+Mỗi đường cong Twist Edwards đều tương đương với đường cong elliptic ở dạng Montgomery và ngược lại.(xem [11])
 \subsubsection{Luật cộng}
 \index{Luật cộng}
 Cho $\displaystyle \mathbb{K}$ là một trường có đặc điểm là khác 2. Để $\displaystyle (x_{1}, y_{1})$ và $\displaystyle (x_{2}, y_{2})$ là điểm trên đường cong Twist Edwards. Phương trình của đường cong Twist Edwards được viết như:
@@ -1440,7 +1446,7 @@ thể hơn, nhờ sử dụng công thức cộng và nhân đôi của Montgome
 \subsection{Trao đổi khóa với đương cong Curve25519}
 Đường cong Curve25519 sử dụng một khóa bí mật và một khóa công khai, cả hai đều có độ dài 32-byte (256-bit). Với những phương pháp tấn công đã biết thì với độ dài khóa như vậy, Curve25519 có mức độ bảo mật tương đương một hệ mã khóa đối xứng 128-bit. Có nghĩa là để tấn công hệ mã này, người ta sẽ phải vét cạn một không gian khóa có độ lớn $2^{128}$.
 
-Hàm Curve25519(a, b) có a, b là các phần tử của trường hữu hạn $\mathbb{F}_p$ với $p = 2^{255} - 19$ như đã nói ở trên. Hàm này cho kết quả là một số $n \in Fp$. Hay nói cách khác:
+Hàm Curve25519(a, b) có a, b là các phần tử của trường hữu hạn $\mathbb{F}_p$ với $p = 2^{255} - 19$ như đã nói ở trên. Hàm này cho kết quả là một số $n \in \mathbb{F}_p$. Hay nói cách khác:
 \begin{displaymath}
 Curve25519(a, b): \mathbb{F}_{p^2} \rightarrow \mathbb{F}_p
 \end{displaymath}
@@ -1481,7 +1487,7 @@ $(x_Q, y_Q)$ thì $x_Q$ sẽ được viết dưới dạng phân số $x/z$. C�
 \begin{theorem}
 Gọi tọa độ điểm $P$ là $(xP, zP)$, tọa độ điểm $Q$ là $(xQ, zQ)$, tọa độ điểm $P - Q$ là $(x_{P-Q}, z_{P-Q})$, tọa độ điểm $P + Q$ là $(x_{P+Q}, z_{P+Q})$, tọa độ của $2P$ là $(x_{2P}, z_{2P})$, tất cả các tọa độ trên đều khác với tọa độ của điểm $\mathcal{O}$.
 
-Chọn $p$ là một số nguyên tố, $p \geq 54$. Chọn $A$ là một số nguyên thõa mãn $A^2 - 4$ không phải là bình phương của một số nào đó theo modulo $p$. $E$ là đường cong elliptic $y^2 = x^3 + Ax^2 + x$ trên trường hữu hạn $\mathbb{F}_p$. Định nghĩa hàm $X : E(\mathbb{F}_{p^2}) \rightarrow \mathbb{F}_{p^2}$ như sau: $X(\infty) = 0; X(x, y) = x$. Với các tọa độ các điểm được xác định như trên ta có [?]:
+Chọn $p$ là một số nguyên tố, $p \geq 54$. Chọn $A$ là một số nguyên thõa mãn $A^2 - 4$ không phải là bình phương của một số nào đó theo modulo $p$. $E$ là đường cong elliptic $y^2 = x^3 + Ax^2 + x$ trên trường hữu hạn $\mathbb{F}_p$. Định nghĩa hàm $X : E(\mathbb{F}_{p^2}) \rightarrow \mathbb{F}_{p^2}$ như sau: $X(\infty) = 0; X(x, y) = x$. Với các tọa độ các điểm được xác định như trên ta có [4]:
 \end{theorem} 
 \begin{itemize}
 \item[] Phép cộng $P + Q (P \neq Q)$:
@@ -1561,7 +1567,6 @@ Cấp chứng thư là quy trình gồm hai bước, trong đó bước đầu t
 
 Một số khác biệt giữa ECQV và chứng chỉ truyền thống liên quan đến việc ràng buộc giữa danh tính của người dùng và khóa công khai
 
-Mộ
 \subsection{Điều kiện tiên quyết: Cài đặt ECQV}
 Tất cả các bên (CA nhà phát hành chứng thư, chủ sở hữu chứng thư U và bộ xử lý chứng thư V) sẽ phải thiết lập các điều kiện tiên quyết sau để sử dụng ECQV.
 \begin{itemize}
