@@ -1,5 +1,4 @@
 \documentclass[compress]{beamer}
-
 \usepackage[utf8]{vntex}
 \usepackage{longtable,booktabs}
 \usepackage{amsmath}
@@ -68,6 +67,36 @@ TS Trần Vĩnh Đức}
 
 \section{Cở sở lý thuyết}
 \begin{frame}{Tại sao cần có mật mã?}
+\begin{figure}[h]
+\begin{subfigure}{.35\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../bank.jpg}
+  %\caption{elliptic trên trường số thực}
+  \label{fig:sfig1}
+\end{subfigure}%
+\begin{subfigure}{.35\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../email.png}
+  %\caption*{elliptic trên trường hữu hạn $\mathbb{F}_{29}$}
+  \label{fig:sfig2}
+\end{subfigure}
+\end{figure}
+\begin{figure}[h]
+\begin{subfigure}{.35\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../pay.png}
+  %\caption*{elliptic trên trường hữu hạn $\mathbb{F}_{29}$}
+  \label{fig:sfig2}
+\end{subfigure}
+\begin{subfigure}{.35\textwidth}
+  \centering
+  \includegraphics[width=1\linewidth]{../soical.jpeg}
+  %\caption*{elliptic trên trường hữu hạn $\mathbb{F}_{29}$}
+  \label{fig:sfig2}
+\end{subfigure}
+%\caption{Đường cong elliptic dạng $y^2 = x^3 + 3x + 8$}
+\label{fig:fig}
+\end{figure}
 \end{frame}
 \begin{frame}{Ứng dụng}
 \begin{itemize}
@@ -272,7 +301,27 @@ $33G = (15, 21)$ & & $34G = (19, 14)$ & &$35G = \mathcal{O}$ \\
 }
 \end{frame}
 \begin{frame}{Diffe-Hellman trên đường cong Elliptic}
-
+\begin{flushleft}
+\footnotesize{
+\begin{tabular}{lcl}
+      &  Cả Alice và Bob cùng thống nhất thông số &   \\
+Alice &  số nguyên tố p, đường cong E trên trường $\mathbb{F}_p$ & Bob \\
+      &  và điểm sinh G                                          &  \\
+\hline \\
+      &   $p = 29, E: y^2 = x^3 + 3x + 8$ trên $\mathbb{F}_{29}$ &  \\
+      &  và điểm sinh $G = (19, 15)$ & \\
+\hline \\ 
+$n_A = 7$ &  Alice gửi $Q_A$ cho Bob $\overrightarrow{ \ \ \ \ \ \ \ \ \ \  \ \ \ } Q_A$    &$n_B = 8$  \\
+$Q_A = n_A\cdot G$ & $Q_B \overleftarrow{ \ \ \ \ \ \ \ \ \ \  \ \ \ }$ Bob gửi $Q_B$ cho Alice                        &$Q_B = n_B\cdot G$ \\
+$\ \ \ \ \ = (26, 28) $ &                           &$\ \ \ \ \ = (20, 8)$ \\
+\hline \\
+      & Tính khóa chia sẻ giữa Alice và Bob & \\
+\hline \\
+$S = n_A\cdot Q_B$ &  $S = (n_A\cdot n_B)\cdot G = (n_B\cdot n_A)\cdot G$ & $S = n_B\cdot Q_A$ \\
+$\ \ \ = (28, 27)$ &                    &$\ \ \ = (28, 27)$
+\end{tabular}
+}
+\end{flushleft}
 \end{frame}
 \section{Chứng thư số ẩn}
 \begin{frame}{Tại sao cần chứng thư số ẩn?}
@@ -283,7 +332,40 @@ $33G = (15, 21)$ & & $34G = (19, 14)$ & &$35G = \mathcal{O}$ \\
 \end{figure}
 \end{center}
 \end{frame}
+\begin{frame}{Sơ đồ PKI}
+\begin{center}
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{../PKI.png}
+\caption*{Sơ đồ PKI}
+\end{figure}
+\end{center}
+\end{frame}
+\begin{frame}{Chứng thư số ẩn ECQV}
+Sơ đồ chứng thư số ẩn bao gồm các phần:
+\small{
+\begin{itemize}
+\item[1. ] \textbf{ECQV\_Setup}: CA thiết lập các tham số đường cong elliptic, hàm băm, định dạng mã hóa chứng chỉ và tất cả các bên đã chọn một trình tạo số ngẫu nhiên. CA tạo ra một cặp khóa.
+\item[2. ] \textbf{Cert\_Request}: Người yêu cầu U phải tạo một yêu cầu cho một chứng chỉ, được gửi đến CA.
+\item[3. ] \textbf{Cert\_Generate}: Khi nhận được yêu cầu chứng chỉ từ U, CA xác nhận danh tính của U và tạo chứng chỉ số ẩn. CA gửi phản hồi cho U.
+\item[4. ] \textbf{Cert\_PK\_Extraction}: Với chứng chỉ số ẩn cho U người dùng, thông số và khóa công khai của CA.
+\item[5. ] \textbf{Cert\_Reception}: Sau khi nhận được phản hồi cho yêu cầu chứng chỉ của mình, U đảm bảo tính hợp lệ của cặp khóa được chứng nhận ngầm.
+\end{itemize}
+}
+\end{frame}
+\begin{frame}{Sơ đồ ECQV}
+\begin{center}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.85\linewidth]{../im8.png}
+\end{figure}
+\end{center}
+\end{frame}
 \section{Kết quả}
+\section*{Cài đặt}
+\begin{frame}{Cài đặt}
+
+\end{frame}
 \section*{Kết quả thu được}
 \begin{frame}{Kết quả thu được}
 \begin{itemize}
@@ -329,5 +411,13 @@ $33G = (15, 21)$ & & $34G = (19, 14)$ & &$35G = \mathcal{O}$ \\
 \item Lưu trữ và trao đổi khóa nhỏ gọn.
 \item Tính an toàn bảo mật cao.
 \end{itemize}
+\end{frame}
+\begin{frame}
+\begin{center}
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{../thanks.jpg}
+\end{figure}
+\end{center}
 \end{frame}
 \end{document}
