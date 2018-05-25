@@ -97,7 +97,7 @@ VIỆN CÔNG NGHỆ THÔNG TIN VÀ TRUYỀN THÔNG}\\
 \includegraphics[scale=0.13]{hust.jpg}\\[1.3cm]
 {\fontsize{23}{43}\fontfamily{cmr}\selectfont ĐỒ ÁN TỐT NGHIỆP}\\[0.1cm]
 {\fontsize{25}{10}\fontfamily{cmr}\fontseries{b}\selectfont NGÀNH KHOA HỌC MÁY TÍNH}\\[0.9cm]
-{\fontsize{20}{24}\fontfamily{phv}\selectfont Cài đặt thư viện mật mã cho các thiết bị có cấu hình thấp}\\[2cm]
+{\fontsize{20}{24}\fontfamily{phv}\selectfont Cài đặt thư viện mật mã\\ cho các thiết bị có cấu hình thấp}\\[2cm]
 
 \hspace{-5cm}\fontsize{14}{16}\fontfamily{cmr}\selectfont \textbf{Sinh viên thực hiện:}\\[0.1cm] 
 \begin{longtable}{l c c}
@@ -192,18 +192,20 @@ Mật mã học là một lĩnh vực liên ngành, được tạo ra từ một
 
 Hiện nay, cùng với sự phát triển của tính toán khắp nơi, các hệ thống vạn vật kết nối (internet of things - IoT) ngày càng thu hút được sự quan tâm của các chuyên gia cũng như các nhà ứng dụng. Vấn đề an toàn thông tin trong hệ thống IoT với các thiết bị nhỏ gọn, năng lực tính toán thấp, trở thành một chủ đề nóng hiện nay. Với khả năng tính nhanh, an toàn chi phí thấp, mật mã tính toán trên đường cong Elliptic \index{Elliptic} tiêu biểu cho hệ mã trao đổi khóa của các thiết bị IoT \index{IoT}.
 
-Nội dung chính của đồ án bao gồm 4 chương:
-\begin{itemize}
-\item \textbf{Chương 1:} Cơ sở lý thuyết
-\item \textbf{Chương 2:} Mật mã dựa trên đường cong Elliptic
-\item \textbf{Chương 3:} Chứng thư số ẩn dựa trên đường cong Elliptic
-\item \textbf{Chương 4:} Cài đặt và thử nghiệm
-\end{itemize}
-\chapter{Cơ sở lý thuyết}
+Nội dung chính của luận văn bao gồm 4 nội dung chính:
+
+Chương 1 trình bày tổng quan về mật mã. Cụ thể thuật toán trao đổi khóa, mã hóa trong mật mã và ứng dụng của mật mã và các khai niệm cơ về hệ mã khóa đối xứng, hệ mã khóa công khai
+
+Chương 2  cung cấp các lý thuyết cơ bản về mật mã dựa trên đường cong Elliptic và giới thiệu một số đường cong thuộc họ đường cong elliptic đồng thời trình bày cách ứng dụng đường cong elliptic vào trong mật mã. 
+
+Chương 3 giới thiệu về chứng thư số ẩn, ở chương này chúng tôi sẽ nói về quy trình xây dựng chứng thư số ẩn và các chuẩn để xây dựng chứng thư số.
+
+Chương 4 nói về các ứng dụng đã cài đặt và thử nghiệm từ việc áp dụng các lý thuyết về đường cong elliptic giới thiệu các thư viện đã sử dụng để cài đặt chương trình. 
+\chapter{Giới thiệu về mật mã}
 \section{Mật mã khóa đối xứng}
 Hệ mã khóa đối xứng \index{Mã khóa đối xứng} (Symmetric Cryptosystems) dựa trên một khóa đơn, đó là một chuỗi ngắn với chiều dài không thay đổi. Do đó, phương pháp mã hóa này được xem như là single-key \index{single-key} encryption. Khoá thường là khóa riêng (hoặc bảo mật) và được dùng để mã hóa cũng như giải mã.
 
-Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ dùng chung cho cả 2 bên. Người gửi sẽ mã hóa thông tin bằng khóa riêng và gửi thông tin đến người nhận. Trong quá trình nhận thông tin, người nhận sử dụng cùng một khóa để giải mã thông điệp.
+%Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ dùng chung cho cả 2 bên. Người gửi sẽ mã hóa thông tin bằng khóa riêng và gửi thông tin đến người nhận. Trong quá trình nhận thông tin, người nhận sử dụng cùng một khóa để giải mã thông điệp.
 
 \begin{center}
 \begin{figure}[H]
@@ -213,12 +215,18 @@ Trước khi hai bên trao đổi dữ liệu, khóa phải được chia sẽ d
 \end{figure}
 \end{center}
 
-Phụ thuộc vào chiều dài của khóa, có rất nhiều thuật giải mã hóa đối xứng đã được phát triển cho đến nay. Sau đây là một số thuật giải thường được sử dụng:
+Hệ mã hóa đối xứng có 3 thuật toán cơ bản như sau:
 \begin{itemize}
-\item[1. ] \textbf{Tiêu chuẩn mã hóa dữ liệu (Data Encryption Standard (DES))}. Nguyên bản DES \index{DES} đề ra giải pháp cho một khóa có chiều dài lên đến 128 bit. Tuy nhiên, kích thước của khóa đã giảm xuống còn 56 bit bởi chính phủ Hoa Kỳ trong việc nổ lực tìm ra thuật giải nhanh hơn. Việc giảm chiều dài khóa xuống, phụ thuộc vào tốc độ xử lý của bộ vi xử lý. Trong phương pháp tấn công Brute Force, các khóa sẽ phát sinh ngẩu nhiên và được gửi đến đoạn văn bản nguyên mẩu cho tới khi xác định được từ khóa chính xác. Với những khóa có kích thước nhỏ, sẽ dễ dàng để tìm ra chính xác khóa và phá vỡ hệ thống mật mã.
-\item[2. ] \textbf{Bội ba tiêu chuẩn mã hóa dữ liệu (Triple Data Encryption Standard (3DES))}. Cũng giống như DES, 3DES cũng sử dụng khóa 56 bit. Tuy nhiên, nó an toàn hơn nhiều do dùng 3 khóa khác nhau để mã hóa dử liệu. Bộ xử lý thực hiện các bước sau : khóa đầu tiên dùng để mã hóa dữ liệu. Sau đó, khóa thứ hai sẽ dùng để giải mã dữ liệu vừa được mã hóa. Cuối cùng, khóa thứ ba sẽ mã hóa lần thứ hai. Toàn bộ quá trình xử lý của 3DES tạo thành một thuật giải có độ an toàn cao. Nhưng bởi vì đây là một thuật giải phức tạp nên thời gian thực hiện sẽ lâu hơn, gấp 3 lần so với phương pháp DES.
-\item[3. ] \textbf{Ron's Code 4 (RC4)}. Được phát triển bởi Ron Rivest, thuật giải này sử dụng những khóa với chiều dài có thể biến đổi lên đến 256 bytes. Bởi vì chiều dài của khóa, RC4 được phân loại là một cơ chế mã hóa mạnh. Nó cũng tương đối khá nhanh. RC4 tạo một dòng bytes ngẩu nhiên và XORs chúng với văn bản nguyên mẩu. Bởi vì các bytes được phát sinh ngẩu nhiên, RC4 đòi hỏi một khóa mới cho miỗ lần gửi thông tin ra ngoài.
+\item[1. ] Thuật toán sinh khóa $k = Gen()$: sinh ra một khóa bí mật $k$. 
+
+\item[2. ] Thuật toán mã hóa $c = E(k,m)$: thông điệp $m$ sẽ được mã hóa sử dụng khóa $k$ đã sinh bởi thuật toán sinh khóa ở bước trên.
+
+\item[3. ] Thuật toán giải mã $m = D(k,c)$: bản mã $c$ sẽ được giải mã thành thông điệp $m$ bằng khóa $k$.  
 \end{itemize}
+
+Hai người Alice và Bob để truyền tin an toàn với hệ mã hóa đối xứng thì Alice mà Bob sẽ phải sử dụng thuật toán sinh khóa để sinh ra khóa chung giữa hai người. Sau đó Alice sẽ mã hóa thông điệp $m$ với khóa $k$ sử dụng thuật toán mã hóa $c = E(k, m)$ rồi gửi bản mã cho Bob. Sau đó Bob giải mã $c$ bằng cách sử dụng thuật toán giải mã $m = D(k,c)$ với khóa $k$. \\
+
+Tính an toàn của hệ mã khóa công khai này phụ thuộc vào việc người có khóa bí mật có giữ được an toàn không để bị lộ cho kẻ gian hay không và chỉ có người có khóa bí mật mới giải được mã.\\
 
 Do hệ mã khóa đối xứng sử dụng một khóa cho cả quá trình mã hóa và giải mã nên có các vấn đề:
 \begin{itemize}
@@ -230,15 +238,26 @@ Do hệ mã khóa đối xứng sử dụng một khóa cho cả quá trình mã
 \section{Mật mã khóa công khai}
 Khác với các hệ mã khóa đối xứng \index{Mã khóa đối xứng} (symmetric-key cryptography), khóa dùng giải mã và mã hóa có quan hệ rõ ràng với nhau (có thể dễ dàng tìm được một khóa nếu biết khóa kia, cả hai khóa có thể trùng nhau và đều bí mật), hệ mã khóa công khai \index{Mã khóa công khai} (public-key cryptography) có hai loại khóa là khóa bí mật và khóa công khai. Hai loại khóa này tạo thành một cặp và một loại dùng để mã hóa, loại còn lại dùng để giải mã. Đúng như cái tên người ta đặt cho hai loại khóa, khóa bí mật được giữ bí mật còn khóa công khai được công khai cho tất cả mọi người. Điểm mấu chốt trong hệ mã khóa công khai là khi biết được khóa công khai người ta không thể tìm được khóa bí mật.
 
-Hệ mã khóa công khai cũng có thể dùng để truyền dữ liệu mà không cần phải có thao tác thống nhất khóa bí mật giữa các bên.
-
 \begin{center}
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=0.6\linewidth]{../3.jpg} 
 \caption{Hệ mã khóa công khai}
 \end{figure}
 \end{center}
+
+Hệ mã khóa công khai cũng bao gồm 3 thuật toán chính như sau:
+\begin{itemize}
+\item[1. ] Thuật toán sinh khóa $(s_A, p_A)=Gen()$: sinh ra hai cặp khóa gọi là khóa công khai $p_A$ và khóa bí mật $s_A$. Khóa công khai sẽ được mọi người biết còn khóa bí mật chỉ người đấy mới được biết và những người khác không biết về khóa này.
+\item[2. ] Thuật toán mã hóa $c = E_{s_A}(p_B,m)$: sử dụng khóa bí mật $s_A$ (của người A) và khóa công khai $p_B$(của người B) để mã hóa thông điệp $m$.
+\item[3. ] Thuật toán giải mã $m = D_{s_B}(p_A,c)$ : sử dụng khóa bí mật $s_B$ (của người B) và khóa công khai $p_A$ (của người A) để giải mã bản mã $c$. 
+\end{itemize}
+
+Ba thuật toán này phải thỏa mãn $m = D_{s_B}(p_A, E_{s_A}(p_B, m))$ hay văn bản được mã hóa và giải mã phải toàn vẹn thông tin. Tính an toàn ở đây phụ thuộc vào tính chất người có khóa bí mật mới có thể giải mã. \\
+
+Hai người Alice và Bob để truyền tin an toàn với hệ mã hóa công khai thì Alice mà Bob sẽ phải sử dụng thuật toán sinh khóa để sinh ra cho mỗi người một căp khóa Alice sinh ra cặp khóa $(s_A, p_A)$ và Bob sinh ra cặp khóa $(s_B, p_B)$ để trao đổi thông điệp trước hết Alice và Bob phải biết được khóa công khai của nhau (Alice biết khóa $p_B$ còn Bob biết khóa $p_A$). Alice sẽ sử dụng khóa công của Bob $p_B$ và khóa bí mật của mình $s_A$ để mã hóa thông điệp $m$ bằng thuật toán mã hóa $c = E_{s_A}(p_B,m)$ rồi gửi nó cho Bob. Sau đó Bob nhận được bản mã $c$ và sẽ sử dụng khóa công khai của Alice $p_A$ và khóa bí mật của mình là $s_B$ để giải mã bản mã $c$ với thuật toán giải mã $m = D_{s_B}(p_A,c)$ \\
+
+Hệ mã khóa công khai cũng có thể dùng để truyền dữ liệu mà không cần phải có thao tác thống nhất khóa bí mật giữa các bên.
 
 \subsection*{Cơ sở toán học của thuật toán khóa công khai}
 Các hệ mã khóa công khai dựa trên các hàm cửa sập (trapdoor function \index{Trapdoor function}) có đặc tính đặc biệt. Hàm $y = f(x)$ là một hàm cửa sập thì ta có thể dễ dàng tính được $y$ khi biết $x$ nhưng khi biết $y$, việc tính $x = f^{-1}(y)$ là rất khó khăn nếu không có một thông tin đặc biệt $t$. Với thông tin đặc biệt $t$ thì việc tính $x = f^{-1}(y)$ lại trở nên đơn giản. Nếu không tồn tại thông tin đặc biệt $t$, hàm này gọi là hàm cửa sập một chiều (Trapdoor one-way function). Hình \ref{trap1} mô tả cơ chế hoạt động của một hàm cửa sập.
@@ -276,9 +295,9 @@ Sau hơn 40 năm kể từ khi thuật toán trao đổi khóa Diffie-Hellman đ
 \section{Một số thuật toán mã khóa công khai}
 \index{RSA}
 \subsection*{Thuật toán RSA}
-\textbf{\underline{Xây dựng}}: Chọn các tham số
+\textbf{\underline{Sinh khóa}}: Chọn các tham số
 \begin{itemize}
-\item[1. ] \textit{Chọn hai số nguyên tố lớn p và q. Tính $n = p \times q$ và $m = \phi(n) = (p - 1) \times (q - 1)$.}
+\item[1. ] \textit{Chọn hai số nguyên tố lớn p và q. Tính $N	 = p \times q$ và $m = \phi(n) = (p - 1) \times (q - 1)$.}
 \item[2. ] \textit{Chọn e, $1 \leq e \leq m -1$, sao cho $gcd(e, m) = 1$.}
 \item[3. ] \textit{Tìm d sao cho $e * d = 1$ (mod $m$), tức là tính $d = e^{-1}$
 (mod $m$), giải theo thuật toán gcd mở rộng.}
@@ -288,27 +307,27 @@ Sau hơn 40 năm kể từ khi thuật toán trao đổi khóa Diffie-Hellman đ
 
 \textit{Khoá dùng riêng (Private key) (là d, p, q)}
 
-Giả sử $X$ là một khối tin gốc (plaintext), $Y$ là một khối mã tương ứng của $X$, và ($z_A, Z_A$) là các thành phần công khai và riêng của khoá của Alice
+Giả sử $X$ là một khối tin gốc (plaintext), $Y$ là một khối mã tương ứng của $X$, và ($s_A, p_A$) là các thành phần công khai và riêng của khoá của Alice
 
-\textbf{\underline{Sinh Mã}}. Nếu Bob muốn gửi một thông báo mã hoá cho Alice thì anh ta chỉ việc dùng khoá công khai của Alice để thực hiện:
+\textbf{\underline{Mã hóa}}. Nếu Bob muốn gửi một thông báo mã hoá cho Alice thì anh ta chỉ việc dùng khoá công khai của Alice để thực hiện:
 \begin{displaymath}
-Y = E_{Z_A}(X) = X^e \pm n
+Y = E_{p_A}(X) = X^e \pm n
 \end{displaymath}
 
-\textbf{\underline{Giải mã}}. Khi Alice muốn giải mã Y, cô ta chỉ việc dùng khoá riêng $z_A = d$ để thực hiện như sau:
+\textbf{\underline{Giải mã}}. Khi Alice muốn giải mã Y, cô ta chỉ việc dùng khoá riêng $s_A = d$ để thực hiện như sau:
 \begin{displaymath}
-D_{z_A}(Y) = Y^d \pm n
+D_{s_A}(Y) = Y^d \pm n
 \end{displaymath}
 \index{Rabin}
 \subsection*{Hệ Rabin}
-Hệ Rabin cũng xây dựng trên việc lấy $n=p\times q$ làm bí mật. N được coi là khoá công khai (PK) còn (p,q) là khoá bí mật (SK).
+\textbf{\underline{Sinh khóa}}: hệ Rabin cũng xây dựng trên việc lấy $n=p\times q$ làm bí mật. n được coi là khoá công khai (PK) còn (p,q) là khoá bí mật (SK).
 
-Mã hoá là việc thực hiện:
+\textbf{\underline{Mã hoá}}: là việc thực hiện
 \begin{displaymath}
 Y = X^2 (mod \ n)
 \end{displaymath}
 
-còn giải mã là việc tính căn bậc hai:
+\textbf{\underline{Giải mã}}: là việc tính căn bậc hai
 \begin{equation}
 X = \sqrt{Y} (mod \ n)  \label{*} 
 \end{equation}
@@ -327,7 +346,7 @@ tương đương nhau.
 Nhược điểm: Vì phương trình giải mã cho 4 nghiệm nên làm khó dễ việc giải mã. Thông thường, bản rõ trước khi được mã hoá cần được nối thêm vào đuôi một chuỗi số xác định để làm dấu vết nhận dạng (chẳng hạn nối thêm 20 số 0 – như vậy trong số 4 nghiệm giải ra, chuỗi nào tận cùng bằng 20 con 0 thì đúng là bản rõ cần nhận). Vì lý do này nên Rabin thường được dùng chủ yếu cho chứng thực (chữ ký điện tử).
 \index{El-Gamal}
 \subsection*{Hệ El-Gamal}
-\textbf{\textit{Tạo khóa}}:
+\textbf{\textit{Sinh khóa}}:
 
 Alice chọn một số nguyên tố p và hai số nguyên ngẫu nhiên g và u, cả hai đều nhỏ hơn p. Sau đó tính 
 \begin{displaymath}
@@ -336,7 +355,7 @@ y = g^u (mod \ p)
 
 Bây giờ khóa công khai của Alice được lấy là (p,g,y), khoá mật là u.
 
-\textbf{\textit{Sinh mã}}:
+\textbf{\textit{Mã hóa}}:
 \begin{itemize}
 \item[1. ] Nếu Bob muốn mã hoá một tin $X$ để truyền cho Alice thì trước hết anh ta chọn một số ngẫu nhiên k sao cho $(k,p-1) = 1$
 \item[2. ] Tính 
@@ -354,7 +373,14 @@ X = \frac{b}{a^u} (mod \ p)
 \end{displaymath}
 \section{Chữ ký điện tử}
 \index{Chữ ký điện tử}
-Chữ kí điện tử là một hệ mã khóa công khai với cặp khóa $A(s_A, p_A)$ trong đó $A$ là người giữ chữ kí, $s_A$ là khóa bí mật còn $p_A$ là khóa công khai. Với một thông điệp $m$ thì người cùng $A$ sẽ kí lên thông điệp $m$ bằng cách mã hóa $m$ bởi khóa bí mật được bản mã $c_m$. Mọi người có thể kiểm tra chữ kí này có hợp lệ hay không bằng cách dùng khóa công khai để giải mã $c_m$, nếu được đúng thông điệp $m$ thì chữ kí là hợp lệ còn không, chữ kí đó không hợp lệ hay nói cách khác, người kí lên thông điệp $m$ đó không phải là A.
+Chữ kí điện tử là một hệ mã khóa công khai với cặp khóa $A(s_A, p_A)$ trong đó $A$ là người giữ chữ kí, $s_A$ là khóa bí mật còn $p_A$ là khóa công khai. Chữ kí điện tử bao gồm ba thuật toán cở bản:
+\begin{itemize}
+\item[1. ] Thuật toán sinh khóa $(s_A, p_A) = Gen()$: sinh ra hai cặp khóa là khóa công khai $pk$ và khóa bí mật $sk$. Khóa công khai sẽ được mọi người biết còn khóa bí mật chỉ người tạo chữ kí được biết.
+\item[2. ] Thuật toán sinh chữ ký $c_m = E_{s_A}(m)$: sẽ sử dụng khóa bí mật $s_A$ để mã hóa thông điệp thành chữ kí và đính kèm nó với với thông điệp đã mã hóa.
+\item[3. ] Thuật toán xác nhận chữ ký $m = D_{p_A}(c_m)$: sẽ sử dụng khóa công khai $p_A$ để giải mã chữ ký.   
+\end{itemize}
+
+Để kí lên một thông điệp $m$ thì người cùng $A$ thự hiện bằng cách mã hóa $m$ bởi khóa bí mật $s_A$ được bản mã $c_m$. Mọi người có thể kiểm tra chữ kí này có hợp lệ hay không bằng cách dùng khóa công khai $p_A$ để giải mã $c_m$, nếu được đúng thông điệp $m$ thì chữ kí là hợp lệ còn không, chữ kí đó không hợp lệ hay nói cách khác, người kí lên thông điệp $m$ đó không phải là $A$.
 
 Chỉ có người dùng $A$ mới nắm giữ khóa bí mật $s_A$ bởi vậy chỉ có $A$ mới có khả năng kí còn tất cả mọi người đều có khóa công khai $p_A$ nên tất cả mọi người đều có khả năng kiểm tra xem một chữ kí có phải do $A$ kí hay không.
 
@@ -1549,7 +1575,7 @@ z_{2P} & = 4x_Pz_P(x^2_P + Ax_Pz_P + z^2_P) \\ & = ((x_P + z_P)^2 - (x_P - z_P)^
 Theo như định lý trên, ta có thể tính được tọa độ của điểm $P + Q$ dựa trên tọa độ của ba điểm $P, Q$ và $P-Q$, tính được tọa độ của điểm $2P$ dựa trên tọa độ điểm $P$.
 
 Tọa độ điểm $P+Q$ có thể tính được dựa vào tọa độ $P, Q$ và tọa độ của điểm $P-Q$ (tức tọa độ của điểm $((x_P, y_P) + (x_Q, -y_Q)))$ điều này có vẻ như mâu thuẫn với định lý \ref{dl4.1}, tuy nhiên trong định lý \ref{dl4.1} không có nhắc đến việc cộng hai điểm $P$ và $Q$ có tọa độ bất kì nên việc công thức cộng Montgomery có liên quan đến tọa độ $y$ là không vô lý.
-\chapter{Chứng thư số ẩn dựa trên đường cong Elliptic}
+\chapter{Chứng thư số ẩn}
 Trong chương này xác định sơ đồ chứng thư số ẩn của Elliptic Curve Qu-Vanstone \index{Elliptic Curve Qu-Vanstone}(ECQV \index{ECQV}). Sơ đồ chứng thư số \index{Chứng thư số}ẩn ECQV được xem như là một lược đồ chứng thư với mục đích chung cho các ứng dụng trong các hệ thống máy tính và truyền thông. Nó đặc biệt thích hợp cho các môi trường ứng dụng nơi có các tài nguyên như băng thông, sức mạnh tính toán và lưu trữ bị hạn chế. ECQV cung cấp giải pháp thay thế hiệu quả hơn cho chứng chỉ truyền thống.
 
 Mục đích của chương này là để xem xét việc triển khai sơ đồ chứng thư số ẩn 
@@ -1760,11 +1786,12 @@ Như với quá trình tạo chứng chỉ tự ký, trích xuất khóa công k
 \chapter{Cài đặt và thử nghiệm}
 \section{Truyền file bí mật}
 \subsection*{Mục tiêu cơ bản}
-\begin{itemize}
-\item Truyền file bí mật giữa A và B.
-\item Sử dụng thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong Curve25519(biến đổi thành đương cong Twisted Edwards curve) trong trao đổi khóa đối xứng bí mật.
-\item Chống lại kiểu tấn công MITM (Man In The Middle)
-\end{itemize}
+Mục tiêu cở bản khí xây dựng ứng dụng là để truyền tin bí mật giữa hai người A và B trong ứng dụng có sử dụng thuật toán trao đổi khóa Diffe-Hellman dựa trên đường cong Curve25519 trong trao đổi khóa đối xứng bí mật.Thiết kế chống lại đường kiểu tấn công MITM (Man In The Middle)
+%\begin{itemize}
+%\item Truyền file bí mật giữa A và B.
+%\item Sử dụng thuật toán trao đổi khóa Diffie-Hellman dựa trên đường cong Curve25519(biến đổi thành đương cong Twisted Edwards curve) trong trao đổi khóa đối xứng bí mật.
+%\item Chống lại kiểu tấn công MITM (Man In The Middle)
+%\end{itemize}
 \subsection*{Các bước thực hiện chuyển file}
 \begin{itemize}
 \item Xác thực đối tượng(có đúng người cần chuyển hay ko)
@@ -1831,11 +1858,7 @@ dụng ngôn ngữ lập trình C và thư viện lbsodium để tăng tốc tí
 \end{itemize}
 \section{Chứng thư số ẩn}
 \subsection*{Mục tiêu cơ bản}
-\begin{itemize}
-\item Xác thực danh tính giữa hai người giao tiếp A và B.
-\item Sử dụng sơ đồ Elliptic Curve Qu-Vanstone Implicit Certificate Scheme (ECQV)
-\item Chống lại tấn công MITM (Man In The Middle)
-\end{itemize}
+Chương trình chứng thư số ẩn cung cấp khả năng xác thực giữa hai người A và B trong quá trình giao tiếp để họ có thể biết là mình đang nói với nhau chứ không phải là một ai khác. Chương trình sử dựng sơ đồ chứng thư số ẩn Elliptic Curve Qu-Vanstone Implicit Certificate Scheme (ECQV) và có khả năng chống lại kiểu tấn công MITM (Man In the Middle)
 \subsection*{Các bước thực hiện}
 \begin{itemize}
 \item[1. ] Yêu cầu tạo chứng thư số ẩn(cả A và B đều yêu cầu tạo chứng thư số ẩn các bước yêu cầu tạo chứng thư đã được trình bày ở chương 3)
