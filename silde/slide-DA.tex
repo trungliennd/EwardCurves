@@ -48,7 +48,7 @@
 \end{frame}
 }
 
-\title[Mật mã trên đường cong Elliptic Curves cho thiết bị IoT]{Mật mã trên đường cong Elliptic Curves cho thiết bị IoT} 
+\title[Cài đặt thư viện mật mã cho các thiết bị có cấu hình thấp]{Cài đặt thư viện mật mã cho các thiết bị có cấu hình thấp} 
 
 \author[Đặng Quang Trung]{
 Sinh viên thực hiện\\
@@ -177,7 +177,7 @@ Trên đường cong elliptic có 2 phép toán quan trọng là:
 \item Phép cộng (Add)
 \item Phép nhân đôi và cộng (Double-And-Add)
 \end{itemize}
-Phép cộng 2 trên đường cong elliptic($E$) thoả mãn tính chất:
+Phép cộng trên đường cong elliptic($E$) thoả mãn tính chất:
 \begin{itemize}
 \item Phần tử đơn vị: $P + \mathcal{O} = \mathcal{O} + P = P \ \forall P \in E$.
 \item Phần tử nghịch: $P + (-P) = \mathcal{O} \ \forall P \in E$.
@@ -305,7 +305,7 @@ $33G = (15, 21)$ & & $34G = (19, 14)$ & &$35G = \mathcal{O}$ \\
 \footnotesize{
 \begin{tabular}{lcl}
       &  Cả Alice và Bob cùng thống nhất thông số &   \\
-Alice &  số nguyên tố p, đường cong E trên trường $\mathbb{F}_p$ & Bob \\
+\ \ \ Alice &  số nguyên tố p, đường cong E trên trường $\mathbb{F}_p$ & \ \ \ \ \ Bob \\
       &  và điểm sinh G                                          &  \\
 \hline \\
       &   $p = 29, E: y^2 = x^3 + 3x + 8$ trên $\mathbb{F}_{29}$ &  \\
@@ -317,7 +317,7 @@ $\ \ \ \ \ = (26, 28) $ &                           &$\ \ \ \ \ = (20, 8)$ \\
 \hline \\
       & Tính khóa chia sẻ giữa Alice và Bob & \\
 \hline \\
-$S = n_A\cdot Q_B$ &  $S = (n_A\cdot n_B)\cdot G = (n_B\cdot n_A)\cdot G$ & $S = n_B\cdot Q_A$ \\
+$S = n_A\cdot Q_B$ &  $S = n_A\cdot (n_B\cdot G) = n_B\cdot (n_A\cdot G)$ & $S = n_B\cdot Q_A$ \\
 $\ \ \ = (28, 27)$ &                    &$\ \ \ = (28, 27)$
 \end{tabular}
 }
@@ -364,7 +364,11 @@ Sơ đồ chứng thư số ẩn bao gồm các phần:
 \section{Kết quả}
 \section*{Cài đặt}
 \begin{frame}{Cài đặt}
-
+\begin{itemize}
+\item Cài đặt truyền tin bí mật và chứng thư số ẩn.
+\item Ngôn ngữ sử dụng: C
+\item Các thư viện libsodium, openssl
+\end{itemize}
 \end{frame}
 \section*{Kết quả thu được}
 \begin{frame}{Kết quả thu được}
@@ -416,7 +420,7 @@ Sơ đồ chứng thư số ẩn bao gồm các phần:
 \begin{center}
 \begin{figure}
 \centering
-\includegraphics[width=1\linewidth]{../thanks.jpg}
+\includegraphics[width=0.9\linewidth]{../thanks.jpg}
 \end{figure}
 \end{center}
 \end{frame}
