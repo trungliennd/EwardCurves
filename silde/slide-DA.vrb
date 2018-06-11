@@ -1,0 +1,20 @@
+\frametitle{Chứng thư số}
+\begin{itemize}
+\item Tạo chứng thư
+\begin{lstlisting}
+{
+ "Identity": "Bob",
+ "Key": "WJUB/afdTcyJWSEk0Vb/S9Bb4Ct
+ 		fLkFnR+c50xJ/9wJMOlR4EJUhat0
+ 		Vwff0rwox9yOpkveHSs7eth78+SLXaA==",
+ "Public_key_ca": "m+OOuJ8lIju21m/Zu
+ 		tNPj+t0Qx4l67Wf5gURGmYBNEeFr
+ 		Qjr86o4W86oVaDE3bgpC4I2FRTw2
+ 		UZy0PIHwBmvJA==",
+ "Time_created": "Thu-May--3-22:01:39-2018",
+ "Time_expired": "Sat-Jun--2-22:01:39-2018",
+ "R": "2nq592JQVEfSWjhLj9UDlBb5xyub1ONwMNn
+ 	W/BpEBwE="
+}
+\end{lstlisting}
+\end{itemize}

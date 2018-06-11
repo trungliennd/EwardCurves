@@ -7,7 +7,7 @@
 \usepackage{amssymb}
 \usepackage[utf8]{inputenc}
 \usepackage[absolute,overlay]{textpos}
-\usepackage{listings}
+\usepackage{listings, xcolor}
 \usepackage{subcaption}
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -22,7 +22,11 @@
 \lstset{
 	language = Java,
 	frame = single,
-	tabsize = 3
+	tabsize = 3,
+	string=[s]{"}{"},
+   % stringstyle=\color{blue},
+    comment=[l]{:},
+    commentstyle=\color{black},
 }
 
 \usetheme{Warsaw}
@@ -48,9 +52,9 @@
 \end{frame}
 }
 
-\title[Cài đặt thư viện mật mã cho các thiết bị có cấu hình thấp]{Cài đặt thư viện mật mã cho các thiết bị có cấu hình thấp} 
+\title[Cài đặt thư viện mật mã cho TBCHT]{Cài đặt thư viện mật mã  \\ cho các thiết bị có cấu hình thấp} 
 
-\author[Đặng Quang Trung]{
+\author[Đặng Quang Trung - 20134145]{
 Sinh viên thực hiện\\
 Đặng Quang Trung - 20134145 \\[1em]
 Giảng viên hướng dẫn\\
@@ -98,6 +102,12 @@ TS Trần Vĩnh Đức}
 \label{fig:fig}
 \end{figure}
 \end{frame}
+\begin{frame}{Thiết bị IoT}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{../iot.jpg}
+\end{figure}
+\end{frame}
 \begin{frame}{Ứng dụng}
 \begin{itemize}
 \item Thương mại điện tử:
@@ -127,6 +137,22 @@ TS Trần Vĩnh Đức}
 \end{center}
 \end{frame}
 \subsection{Giao thức Diffe-Hellman}
+\begin{frame}{Trường hữu hạn $\mathbb{F}_p$}
+\begin{itemize}
+\item Cho trường hữu hạn $\mathbb{F}_p$ (p là số nguyên tố) với $p = 7$.
+\begin{itemize}
+\item[-] $\mathbb{F}_7 = \{1 ,2 ,3 ,4 ,5 ,6\}$.
+\item[-] Phần tử sinh $g = 3$ khi đó $\mathbb{F}_7 = \{3^0, 3^1, 3^2, 3^3, 3^4, 3^5\} \mod 7 = \{1, 3, 2, 6, 4, 5\}$ 
+\end{itemize}
+\item Phép toán $\times$:
+\begin{itemize}
+\item \textbf{Tính kết hợp:} $\forall a,b,c \in \mathbb{F}_7; (a \times b) \times c = a \times (b \times c)$.
+\item \textbf{Tính giao hoán:} $\forall a,b \in \mathbb{F}_7; (a \times b) = (b \times a)$.
+\item \textbf{Phần tử đơn vị:} $\forall a \in \mathbb{F}_7; 1 \times a = a \times 1 = a$.
+\item \textbf{Phần tử nghịch đảo:} $\forall a \in \mathbb{F}_7, \exists a^{-1} \in \mathbb{F}_7; a^{-1} \times a = a \times a^{-1}$.
+\end{itemize}
+\end{itemize}
+\end{frame}
 \begin{frame}{Diffe-Hellman}
 \begin{center}
 \begin{figure}
@@ -204,7 +230,7 @@ Hay nói cách khác tập các điểm thuộc $E$ với luật cộng tạo th
 \label{fig:fig}
 \end{figure}
 \begin{itemize}
-\item \small{$P(7, 13) + Q(8, 14) = R(15, 8) \ (mod \ 29)\in E(\mathbb{F}_{29})$}.
+\item \small{$P(7, 13) + Q(8, 14) = R'(15, 8) \ (mod \ 29)\in E(\mathbb{F}_{29})$}.
 \end{itemize}
 \end{frame}
 \begin{frame}{Phép cộng trên đường cong elliptic}
@@ -225,7 +251,7 @@ Hay nói cách khác tập các điểm thuộc $E$ với luật cộng tạo th
 \label{fig:fig}
 \end{figure}
 \begin{itemize}
-\item \small{$P(7 ,13) + P(7, 13) = 2P(7, 13) = R(21, 20) \ (mod 29) \in E(\mathbb{F}_{29})$}
+\item \small{$P(7 ,13) + P(7, 13) = 2P(7, 13) = R'(21, 20) \ (mod 29) \in E(\mathbb{F}_{29})$}
 \end{itemize}
 \end{frame}
 \begin{frame}{Phép cộng trên đường cong elliptic}
@@ -368,6 +394,63 @@ Sơ đồ chứng thư số ẩn bao gồm các phần:
 \item Cài đặt truyền tin bí mật và chứng thư số ẩn.
 \item Ngôn ngữ sử dụng: C
 \item Các thư viện libsodium, openssl
+\item Phương trình:
+\begin{itemize}
+\item \textbf{Montgomery :} $y^2 = x^3 + 486662*x^2 + x$ trên $\mathbb{F}_p$.
+\item $P = 2^{255} - 19$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Truyền file bí mật}
+\begin{itemize}
+\item ./EwardCurves -genkey Alice Alice.pub
+\item file Alice chứa khóa bí mật \\[10pt]
+--------------------------- SECERT KEY --------------------------
+cDAFuGbaTKbREotpS2AjfxeuM3hlVzLgEx3o+IL9AHg=
+------------------------------------------------------------------------
+\item file Alice.pub chứa khóa công khai \\[10pt]
+----------------------------- PUBLIC KEY -----------------------------
+8oVZoJdEDRTNVE4L2lb/aOy8dQ2FCfJWD+nFUOAACl0=
+-----------------------------------------------------------------------------
+\item ./EwardCurves -en messages.txt Alice Bob.pub ciphertext.txt
+\item ./EwardCurves -de ciphertext.txt Bob Alice.pub plain\_text.txt
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Chứng thư số ẩn}
+\begin{itemize}
+\item Yêu cầu tạo chứng thư
+\begin{lstlisting}
+{
+
+  "Identity": "Bob",
+  "Key": "LWikuuukOZ1+iHB4xAvOIgfM+
+  			/VH+v/azI4vGlkBCjOxAOQx
+  			j122tGWzoXS53u8FkL22/3x
+  			fO1rHn16PP08CDA=="
+
+}
+\end{lstlisting}
+\end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Chứng thư số}
+\begin{itemize}
+\item Tạo chứng thư
+\begin{lstlisting}
+{
+ "Identity": "Bob",
+ "Key": "WJUB/afdTcyJWSEk0Vb/S9Bb4Ct
+ 		fLkFnR+c50xJ/9wJMOlR4EJUhat0
+ 		Vwff0rwox9yOpkveHSs7eth78+SLXaA==",
+ "Public_key_ca": "m+OOuJ8lIju21m/Zu
+ 		tNPj+t0Qx4l67Wf5gURGmYBNEeFr
+ 		Qjr86o4W86oVaDE3bgpC4I2FRTw2
+ 		UZy0PIHwBmvJA==",
+ "Time_created": "Thu-May--3-22:01:39-2018",
+ "Time_expired": "Sat-Jun--2-22:01:39-2018",
+ "R": "2nq592JQVEfSWjhLj9UDlBb5xyub1ONwMNn
+ 	W/BpEBwE="
+}
+\end{lstlisting}
 \end{itemize}
 \end{frame}
 \section*{Kết quả thu được}
