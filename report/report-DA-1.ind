@@ -1,126 +1,125 @@
 \begin{theindex}
 
   \item \IeC {\DJ }\IeC {\uhorn }\IeC {\`\ohorn }ng cong Elliptic, 
-		\hyperpage{26}
+		\hyperpage{28}
   \item \IeC {\DJ }\IeC {\uhorn }\IeC {\`\ohorn }ng cong Elliptic tr\IeC {\^e}n tr\IeC {\uhorn }\IeC {\`\ohorn }ng h\IeC {\~\uhorn }u h\IeC {\d a}n, 
-		\hyperpage{31}
+		\hyperpage{33}
   \item \IeC {\DJ }\IeC {\uhorn }\IeC {\`\ohorn }ng cong curve25519, 
-		\hyperpage{46}
+		\hyperpage{48}
 
   \indexspace
 
-  \item Abelian, \hyperpage{23, 24}
-  \item AES, \hyperpage{60}
+  \item Abelian, \hyperpage{25, 26}
+  \item AES, \hyperpage{62}
 
   \indexspace
 
   \item C\IeC {\'\acircumflex }u tr\IeC {\'u}c \IeC {\dj }\IeC {\d a}i s\IeC {\'\ocircumflex }, 
-		\hyperpage{23}
+		\hyperpage{25}
   \item C\IeC {\ohorn } quan \IeC {\dj }\IeC {\u a}ng k\IeC {\'y}, 
-		\hyperpage{21}
+		\hyperpage{23}
   \item C\IeC {\ohorn } quan ch\IeC {\'\uhorn }ng th\IeC {\d \uhorn }c, 
-		\hyperpage{21}
+		\hyperpage{23}
   \item Ch\IeC {\'\uhorn }ng th\IeC {\uhorn } s\IeC {\'\ocircumflex }, 
-		\hyperpage{20, 21}, \hyperpage{50}
+		\hyperpage{22, 23}, \hyperpage{52}
   \item Ch\IeC {\~\uhorn } k\IeC {\'y} \IeC {\dj }i\IeC {\d \ecircumflex }n t\IeC {\h \uhorn }, 
-		\hyperpage{15}, \hyperpage{40}
-  \item Collision, \hyperpage{17}
+		\hyperpage{17}, \hyperpage{42}
+  \item Collision, \hyperpage{19}
 
   \indexspace
 
-  \item DES, \hyperpage{10}
-  \item Diffie-Hellman, \hyperpage{13}, \hyperpage{16}
-  \item Doubling, \hyperpage{38}, \hyperpage{40, 41}
+  \item Diffie-Hellman, \hyperpage{14}, \hyperpage{18}
+  \item Doubling, \hyperpage{40}, \hyperpage{42, 43}
 
   \indexspace
 
-  \item ECQV, \hyperpage{50, 51}
-  \item Edwards Curve, \hyperpage{26}, \hyperpage{39}
-  \item El-Gamal, \hyperpage{15}, \hyperpage{43}
-  \item Elliptic, \hyperpage{9}, \hyperpage{16}
-  \item Elliptic Curve Qu-Vanstone, \hyperpage{50}
+  \item ECQV, \hyperpage{52, 53}
+  \item Edwards Curve, \hyperpage{28}, \hyperpage{41}
+  \item El-Gamal, \hyperpage{16}, \hyperpage{45}
+  \item Elliptic, \hyperpage{9}, \hyperpage{18}
+  \item Elliptic Curve Qu-Vanstone, \hyperpage{52}
 
   \indexspace
 
-  \item H\IeC {\`a}m b\IeC {\u a}m, \hyperpage{17}, \hyperpage{50}
+  \item H\IeC {\`a}m b\IeC {\u a}m, \hyperpage{19}, \hyperpage{52}
   \item H\IeC {\`a}m b\IeC {\u a}m m\IeC {\d \ocircumflex }t s\IeC {\'\ocircumflex } nguy\IeC {\^e}n modul n, 
-		\hyperpage{51}
-  \item H\IeC {\`a}m Curve25519, \hyperpage{47}
+		\hyperpage{53}
+  \item H\IeC {\`a}m Curve25519, \hyperpage{49}
   \item H\IeC {\d \ecircumflex } th\IeC {\'\ocircumflex }ng ch\IeC {\'\uhorn }ng th\IeC {\d \uhorn }c, 
-		\hyperpage{20}
+		\hyperpage{22}
 
   \indexspace
 
-  \item IoT, \hyperpage{9}, \hyperpage{64}
+  \item IoT, \hyperpage{9}, \hyperpage{66}
 
   \indexspace
 
   \item L\IeC {\'y} thuy\IeC {\'\ecircumflex }t s\IeC {\'\ocircumflex }, 
-		\hyperpage{23}
-  \item Logarithm, \hyperpage{13}, \hyperpage{23}
-  \item logarithm, \hyperpage{23}
+		\hyperpage{25}
+  \item Logarithm, \hyperpage{14}, \hyperpage{25}
+  \item logarithm, \hyperpage{25}
   \item Lu\IeC {\d \acircumflex }t c\IeC {\d \ocircumflex }ng, 
-		\hyperpage{27}, \hyperpage{30}, \hyperpage{37}, 
-		\hyperpage{39}, \hyperpage{41}
+		\hyperpage{29}, \hyperpage{32}, \hyperpage{39}, 
+		\hyperpage{41}, \hyperpage{43}
 
   \indexspace
 
   \item M\IeC {\~a} kh\IeC {\'o}a \IeC {\dj }\IeC {\'\ocircumflex }i x\IeC {\'\uhorn }ng, 
-		\hyperpage{10, 11}
-  \item M\IeC {\~a} kh\IeC {\'o}a c\IeC {\^o}ng khai, \hyperpage{11}
-  \item Man In The Middle, \hyperpage{16}
-  \item MD5, \hyperpage{19}
-  \item Montgomery Curve, \hyperpage{26}, \hyperpage{37}
+		\hyperpage{11, 12}
+  \item M\IeC {\~a} kh\IeC {\'o}a c\IeC {\^o}ng khai, \hyperpage{12}
+  \item Man In The Middle, \hyperpage{18}
+  \item MD5, \hyperpage{21}
+  \item Montgomery Curve, \hyperpage{28}, \hyperpage{39}
 
   \indexspace
 
-  \item Nh\IeC {\'o}m, \hyperpage{23}
-  \item Nh\IeC {\'o}m v\IeC {\`o}ng, \hyperpage{26}
+  \item Nh\IeC {\'o}m, \hyperpage{25}
+  \item Nh\IeC {\'o}m v\IeC {\`o}ng, \hyperpage{28}
 
   \indexspace
 
   \item Ph\IeC {\`\acircumflex }n t\IeC {\h \uhorn } \IeC {\dj }\IeC {\ohorn }n v\IeC {\d i}, 
-		\hyperpage{23, 24}
+		\hyperpage{25, 26}
   \item Ph\IeC {\`\acircumflex }n t\IeC {\h \uhorn } ngh\IeC {\d i}ch \IeC {\dj }\IeC {\h a}o, 
-		\hyperpage{24}, \hyperpage{26}
+		\hyperpage{26}, \hyperpage{28}
   \item Ph\IeC {\`\acircumflex }n t\IeC {\h \uhorn } sinh, 
-		\hyperpage{26}, \hyperpage{36}
+		\hyperpage{28}, \hyperpage{38}
 
   \indexspace
 
-  \item Rabin, \hyperpage{14}
-  \item RSA, \hyperpage{14}
+  \item Rabin, \hyperpage{15}
+  \item RSA, \hyperpage{15}
 
   \indexspace
 
-  \item SHA, \hyperpage{20}
-  \item single-key, \hyperpage{10}
+  \item SHA, \hyperpage{22}
+  \item single-key, \hyperpage{11}
 
   \indexspace
 
   \item Th\IeC {\^o}ng s\IeC {\'\ocircumflex } mi\IeC {\`\ecircumflex }n, 
-		\hyperpage{41}
+		\hyperpage{43}
   \item Thu\IeC {\d \acircumflex }t to\IeC {\'a}n ch\IeC {\~\uhorn } k\IeC {\'y} s\IeC {\'\ocircumflex } v\IeC {\'\ohorn }i Elliptic, 
-		\hyperpage{45}
+		\hyperpage{47}
   \item Thu\IeC {\d \acircumflex }t to\IeC {\'a}n Double-and-Add, 
-		\hyperpage{36}
-  \item Timing-attack, \hyperpage{46}, \hyperpage{63}
-  \item Tr\IeC {\uhorn }\IeC {\`\ohorn }ng, \hyperpage{24}
+		\hyperpage{38}
+  \item Timing-attack, \hyperpage{48}, \hyperpage{65}
+  \item Tr\IeC {\uhorn }\IeC {\`\ohorn }ng, \hyperpage{26}
   \item Tr\IeC {\uhorn }\IeC {\`\ohorn }ng \IeC {\dj }\IeC {\d a}i s\IeC {\'\ocircumflex }, 
-		\hyperpage{13}
+		\hyperpage{14}
   \item Tr\IeC {\uhorn }\IeC {\`\ohorn }ng h\IeC {\~\uhorn }u h\IeC {\d a}n, 
-		\hyperpage{23}, \hyperpage{25}
+		\hyperpage{25}, \hyperpage{27}
   \item Trao \IeC {\dj }\IeC {\h \ocircumflex }i kh\IeC {\'o}a v\IeC {\'\ohorn }i Elliptic Diffie-Hellman, 
-		\hyperpage{42}
-  \item Trapdoor function, \hyperpage{12}
-  \item Twisted Edwards Curve, \hyperpage{26}, \hyperpage{40}
+		\hyperpage{44}
+  \item Trapdoor function, \hyperpage{13}
+  \item Twisted Edwards Curve, \hyperpage{28}, \hyperpage{42}
 
   \indexspace
 
-  \item V\IeC {\`a}nh, \hyperpage{24}
+  \item V\IeC {\`a}nh, \hyperpage{26}
 
   \indexspace
 
-  \item Weierstrass Curve, \hyperpage{26}
+  \item Weierstrass Curve, \hyperpage{28}
 
 \end{theindex}
